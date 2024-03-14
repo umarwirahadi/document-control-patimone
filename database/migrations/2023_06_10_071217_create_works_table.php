@@ -16,7 +16,7 @@ class CreateWorksTable extends Migration
         Schema::create('works', function (Blueprint $table) {
             $table->id();
             $table->string('item_no',100);
-            $table->text('pay_item');
+            $table->text('pay_item',1000);
             $table->string('unit',100);
             $table->text('description')->nullable();
             $table->string('status',1)->default(1);
@@ -24,7 +24,7 @@ class CreateWorksTable extends Migration
             $table->unsignedInteger('created_by');
             $table->unsignedInteger('updated_by')->nullable();
             $table->timestamps();
-            $table->index(['id','item_no','pay_item']);
+            $table->index(['id','item_no']);
         });
     }
 

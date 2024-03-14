@@ -10,9 +10,11 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.75",
         "laravel/sanctum": "^2.11",
+        "laravel/socialite": "^5.12",
         "laravel/tinker": "^2.5",
         "laravel/ui": "^3.4",
         "ramsey/uuid": "^4.2",
+        "socialiteproviders/zoho": "^4.1",
         "yajra/laravel-datatables-oracle": "^9.21"
     },
     "require-dev": {

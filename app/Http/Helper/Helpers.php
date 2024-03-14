@@ -29,26 +29,28 @@ if(!function_exists('packageName')) {
     }
 }
 if(!function_exists('getItem')) {
-    function getItem($cat='',$default=''){
+    function getItem($cat='',$default=null){
         try {
-            $HTML = "<option  selected disabled>--Select--</option>";
+            $HTML = "";
             if(!empty($cat)){
                 $items=MasterItem::Category($cat)->ItemStatus('1')->get();
                 if(isset($default)){
+                    
                     foreach ($items as $item) {
                         if($default==$item->item_code){
                             $HTML .="<option value='".$item->item_code."' selected='selected'>".$item->item_name."</option>";
-                        }else{
+                        } else {
                             $HTML .="<option value='".$item->item_code."'>".$item->item_name."</option>";
                         }
                     }
-                }else{
+                } else {
+                    $HTML .= "<option value=''>--Select--</option>";
                     foreach ($items as $item) {
                         $HTML .="<option value='".$item->item_code."'>".$item->item_name."</option>";
                     }
                 }
-            }else{
-                $HTML .="<option selected>Select</option>";
+            } else {
+                $HTML .="<option selected>--Select--</option>";
             }
             return $HTML;
         } catch (\Throwable $th) {

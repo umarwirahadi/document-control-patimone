@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Engineer;
 use Illuminate\Http\Request;
+use App\Models\Position;
+use App\Models\Assignment;
 use Datatables;
 
 class EngineerController extends Controller
@@ -25,7 +27,8 @@ class EngineerController extends Controller
     public function create()
     {
         try {
-            $html=view('engineer.create')->render();
+            $positions=Position::all();
+            $html=view('engineer.create',compact('positions'))->render();
             return response()->json($html);
         } catch (\Throwable $th) {
             throw $th;
@@ -35,16 +38,22 @@ class EngineerController extends Controller
     public function store(Request $request)
     {
         try {
-            if(!$request->ajax() && $request->method()<>'POST') return redirect()->route('engineer.index');
-            $validated =$this->validate($request,['eng_code'=>'required',
-            'eng_first_name'=>'required',
+            if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('engineer.index');
+            $validated =$this->validate($request,
+            ['eng_first_name'=>'required',
+            'eng_last_name'=>'required',
             'eng_last_name'=>'required',
             'eng_phone'=>'required|unique:engineers,eng_phone',
             'eng_email'=>'required|unique:engineers,eng_email'],[],['eng_email'=>'email','eng_phone'=>'Phone number','eng_first_name'=>'first name','eng_last_name'=>'last name']);
             if($validated){
                 $engineer=Engineer::create($request->all());
-                return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$engineer],200);
-            }  
+                if($engineer) {
+                    $assignment=Assignment::create(['engineer_id'=>$engineer->id,'position_id'=>$request->position_id,'status'=>'1']);
+                    if($assignment) {
+                        return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$engineer],200);
+                    }
+                }
+            }
             return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
             } catch (\Throwable $th) {
                 throw $th;
@@ -58,8 +67,6 @@ class EngineerController extends Controller
             $file=$request->file('photo_profile');
             $filename=time().'.'.$request->photo_profile->extension();
             $file->move('storage/photo',$filename);
-
-            
             $engineer=Engineer::findOrFail($request->engineer_id);
             $engineer->photo_profile=$filename;
             $engineer->save();

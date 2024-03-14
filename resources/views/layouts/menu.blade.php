@@ -13,9 +13,43 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a href="/" class="nav-link">Home</a>
-                </li>
+                </li>           
                 <li class="nav-item">
                     <a href="{{route('rfi.index')}}" class="nav-link">RFI</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" class="nav-link dropdown-toggle">Document</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="{{ route('contact.index') }}" class="dropdown-item"><span class="fa fa-angle-right"></span> Letter </a></li>
+                        <li><a href="{{route('transmittal.index')}}" class="dropdown-item"><span class="fa fa-angle-right"></span> Transmittal</a></li>
+
+                        <li class="dropdown-divider"></li>
+
+                        <li class="dropdown-submenu dropdown-hover w-100">
+                            <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Document control</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+                                <li><a href="{{route('incoming.index')}}" class="dropdown-item">Incoming</a></li>
+                                <li><a href="#" class="dropdown-item">Outgoing</a></li>
+
+                                <li class="dropdown-submenu">
+                                    <a id="dropdownSubMenu3" href="#" role="button"
+                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        class="dropdown-item dropdown-toggle">level 2</a>
+                                    <ul aria-labelledby="dropdownSubMenu3"
+                                        class="dropdown-menu border-0 shadow">
+                                        <li><a href="#" class="dropdown-item">3rd level</a></li>
+                                        <li><a href="#" class="dropdown-item">3rd level</a></li>
+                                    </ul>
+                                </li>
+
+                                <li><a href="#" class="dropdown-item">level 2</a></li>
+                                <li><a href="#" class="dropdown-item">level 2</a></li>
+                            </ul>
+                        </li>
+                    </ul>
                 </li>
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
@@ -27,7 +61,8 @@
                         <li><a href="{{route('item.index')}}" class="dropdown-item"><span class="fa fa-angle-right"></span> item</a></li>
                         <li><a href="{{route('package.index')}}" class="dropdown-item"><span class="fa fa-angle-right"></span> Package</a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Engineers</a></li>
+                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Teams</a></li>
+                        <li><a href="{{route('letter-source.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Letter source</a></li>
                         <li><a href="#" class="dropdown-item"><span class="fa fa-angle-right"></span> Contractors & SubCon</a></li>
 
                         <li class="dropdown-divider"></li>
@@ -155,7 +190,7 @@
                       @endauth
                     </button>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">my profile</a>
+                      <a class="dropdown-item" href="#">My profile</a>
                       <a class="dropdown-item" href="#">change avatar</a>
                       <a class="dropdown-item-text" href="javascript:void(0)" onclick="event.preventDefault();document.getElementById('fLogout').submit()">Logout <span class="fas fa-sign-out-alt" style="align-content: flex-end"></span></a>
                       <form action="{{ route('logout') }}" class="hidden" id="fLogout" method="POST">
@@ -163,9 +198,6 @@
                     </form>
                     </div>
                   </div>
-                {{-- <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#"
-                    role="button"><i class="fas fa-user-circle"></i></a>
-            </li> --}}
         </ul>
     </div>
 </nav>

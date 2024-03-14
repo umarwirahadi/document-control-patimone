@@ -7,20 +7,23 @@ $(document).ready(function(){
     });
     var loadingIndicator='<div class="spinner-border spinner-border-sm"></div> loading';
     toastr.options={"showDuration":100,"hideDuration": 300};
-    
 
-    
-    
+
+
+
     var tablePosition = $('#data-position').DataTable({
         processing: true,
         serverSide: true,
         responsive: false,
+        scrollY:'500px',
+        lengthMenu:[[25,50,-1],[25,50,'All']],
+        scrollCollapse:true,
         ajax: $('#data-position').attr('data-url'),
         columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
             {data: 'position_code', name: 'position_code'},
             {data: 'position_name', name: 'position_name'},
-            {data: 'category', name: 'category'},
+            {data: 'category', name: 'category',searchable:false},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -40,6 +43,24 @@ $(document).ready(function(){
         ]
     });
 
+    var tableLetterSource = $('#data-letter-source').DataTable({
+      processing: true,
+      serverSide: true,
+      responsive: false,
+      scrollY:'500px',
+      lengthMenu:[[25,50,-1],[25,50,'All']],
+      scrollCollapse:true,
+      ajax: $('#data-letter-source').attr('data-url'),
+      columns: [
+          {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
+          {data: 'source_name', name: 'source_name'},
+          {data: 'unit', name: 'unit'},
+          {data: 'description', name: 'description',searchable:false},
+          {data: 'status', name: 'status',searchable:false},
+          {data: 'action', name: 'action', orderable: false, searchable: false},
+      ]
+  });
+
 $(document).on('click','#btnCreate',function(){
     let originButton=$(this).html();
     $.ajax({
@@ -50,20 +71,20 @@ $(document).on('click','#btnCreate',function(){
             $('#btnCreate').html(loadingIndicator);
         },
         success:function(data){
-          $("#datamodal").html(data); 
+          $("#datamodal").html(data);
           $('#datamodal').modal('show');
           const attrID=document.querySelectorAll('.text-area');
           for (let i = 0; i < attrID.length; i++) {
             $.fn.createCkeditor(`#${attrID[i].id}`);
           }
-          
-          
+          $('.first-focus').focus();
+
         },error:function(){
             $('#btnCreate').html(originButton);
         },
         complete:function(){
             $('#btnCreate').html(originButton);
-            $('select').select2({theme: 'bootstrap4'});
+            $('.first-focus').focus();
         },error:function(xhr){
           if(xhr.status == 422) {
             $.each(xhr.responseJSON.errors,function(key,value){
@@ -81,6 +102,102 @@ $(document).on('click','#btnCreate',function(){
         }
       })
 });
+
+
+/* letter source */ 
+$(document).on('submit','#formLetterSource',function(e){
+  let originButton=$('#formLetterSource button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formLetterSource button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableLetterSource.ajax.reload();
+        Swal.fire(
+            'Success',
+            data.message,
+            data.success ? 'success' :'warning'
+          )
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formLetterSource button[type="submit"]').html(originButton);
+    }
+  });
+});
+$(document).on('click','#data-letter-source .edit-form',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='edit"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){       
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+        const attrID=document.querySelectorAll('.text-area');
+        for (let i = 0; i < attrID.length; i++) {
+          $.fn.createCkeditor(`#${attrID[i].id}`);
+        }
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('click','#data-letter-source .delete',function(){
+  let url=$(this).attr('data-url');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to delete this data, please ensure...!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      showConfirmButton:true,
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+          $.ajax({
+              url:url,
+              type:'DELETE',
+              dataType:'json',
+              success:function(data){
+                  Swal.fire(
+                      data.success ? 'success' : 'error',
+                      data.message,
+                      data.success ? 'success' : 'error'
+                      ).then(()=>{
+                        tableLetterSource.ajax.reload();
+                      })
+              }
+            });
+      }
+        return false;
+    });
+});
+/* end letter source */ 
+
 $(document).on('submit','#formposition',function(e){
     let originButton=$('#formposition button[type="submit"]').html();
     e.preventDefault();
@@ -102,20 +219,20 @@ $(document).on('submit','#formposition',function(e){
           $('#datamodal').modal('toggle');
       },
       error: function (a) {
-        
+
         if(a.status==422){
             $.each(a.responseJSON.errors, function (i, v) {
                 toastr.error(v)
-            })          
+            })
           } else {
             toastr.error('Error..!');
-          } 
+          }
       },
       complete:function(){
         $('#formposition button[type="submit"]').html(originButton);
       }
     });
-  });
+});
   $(document).on('click','#data-position .edit-form',function(){
     let originButton=$(this).html();
     let buttonID=$(this).attr('data-id');
@@ -127,7 +244,7 @@ $(document).on('submit','#formposition',function(e){
             $("button[id='edit"+buttonID+"']").html(loadingIndicator);
         },
         success:function(data){
-          $("#datamodal").html(data); 
+          $("#datamodal").html(data);
           $('#datamodal').modal('show');
         },error:function(){
             $("button[id='edit"+buttonID+"']").html(originButton);
@@ -171,7 +288,7 @@ $(document).on('submit','#formposition',function(e){
   $(document).on('click','#btnRefreshPosition',function(){
     window.location.href=$(this).attr('data-url');
   });
-  
+
   $(document).on('submit','#formWorkItem',function(e){
     let originButton=$('#formposition button[type="submit"]').html();
     e.preventDefault();
@@ -195,7 +312,7 @@ $(document).on('submit','#formposition',function(e){
               });
           } else {
             toastr.error('Error..!');
-          } 
+          }
       },
       complete:function(){
         $('#formWorkItem button[type="submit"]').html(originButton);
@@ -213,7 +330,7 @@ $(document).on('submit','#formposition',function(e){
             $("button[id='edit"+buttonID+"']").html(loadingIndicator);
         },
         success:function(data){
-          $("#datamodal").html(data); 
+          $("#datamodal").html(data);
           $('select').select2({theme:'bootstrap4'});
           $('#datamodal').modal('show');
         },error:function(){
@@ -262,10 +379,10 @@ $(document).on('submit','#formposition',function(e){
     ajax: $('#data-engineer').attr('data-url'),
     columns: [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        {data: 'eng_code', name: 'eng_code'},
         {data: 'fullname', name: 'fullname'},
-        {data: 'eng_phone', name: 'eng_phone'},
+        {data: 'initial', name: 'initial'},
         {data: 'eng_email', name: 'eng_email'},
+        {data: 'eng_phone', name: 'eng_phone'},
         {data: 'type', name: 'type'},
         {data: 'action', name: 'action', orderable: false, searchable: false},
     ]
@@ -294,10 +411,10 @@ $(document).on('submit','#formEngineer',function(e){
             toastr.error(v);
             // $(`<div class="text text-sm text-danger">${v}</div>`).insertAfter('input[name="'+ i+'"]');
             // $('input[name="'+ i+'"]').append(`<div class="text text-sm text-danger">${v}</div>`);
-          })          
+          })
         } else {
           toastr.error('Error..!');
-        } 
+        }
     },
     complete:function(){
       $('#formStoreEngineer button[type="submit"]').html(originButton);
@@ -315,7 +432,7 @@ $(document).on('click','#data-engineer .edit-form',function(){
           $("button[id='edit"+buttonID+"']").html(loadingIndicator);
       },
       success:function(data){
-        $("#datamodal").html(data); 
+        $("#datamodal").html(data);
         $('#datamodal').modal('show');
       },error:function(){
           $("button[id='edit"+buttonID+"']").html(originButton);
@@ -380,10 +497,10 @@ $('#formPhoto').on('submit',function(e){
         if(a.status==422){
             $.each(a.responseJSON.errors, function (i, v) {
                 toastr.error(v)
-            })          
+            })
           } else {
             toastr.error('Error..!');
-          } 
+          }
       },
       complete:function(){
         $('#formPhoto button[type="submit"]').html(originButton);
@@ -399,7 +516,7 @@ $('#photo_profile').on('change', function () {
       $('#photo-preview').attr('src', e.target.result);
     }
     readerFile.readAsDataURL(file);
-  }    
+  }
 });
 
 var tableContact = $('#data-contact').DataTable({
@@ -438,10 +555,10 @@ $(document).on('submit','#formContact',function(e){
       if(a.status==422){
           $.each(a.responseJSON.errors, function (i, v) {
             toastr.error(v);
-          })          
+          })
         } else {
           toastr.error('Error..!');
-        } 
+        }
     },
     complete:function(){
       $('#formContact button[type="submit"]').html(originButton);
@@ -459,7 +576,7 @@ $(document).on('click','#data-contact .edit-form',function(){
           $("button[id='edit"+buttonID+"']").html(loadingIndicator);
       },
       success:function(data){
-        $("#datamodal").html(data); 
+        $("#datamodal").html(data);
         $('#datamodal').modal('show');
       },error:function(){
           $("button[id='edit"+buttonID+"']").html(originButton);
@@ -514,7 +631,7 @@ var tablePackage = $('#data-package').DataTable({
   responsive: false,
   ajax: $('#data-package').attr('data-url'),
   columns: [
-    {data: 'DT_RowIndex', name: 'DT_RowIndex'},  
+    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
     {data: 'package_name', name: 'package_name'},
     {data: 'total_days', name: 'total_days'},
     {data: 'description', name: 'description'},
@@ -544,10 +661,10 @@ $(document).on('submit','#formPackage',function(e){
       if(a.status==422){
           $.each(a.responseJSON.errors, function (i, v) {
             toastr.error(v);
-          })          
+          })
         } else {
           toastr.error('Error..!');
-        } 
+        }
     },
     complete:function(){
       $('#formPackage button[type="submit"]').html(originButton);
@@ -565,7 +682,7 @@ $(document).on('click','#data-package .edit-form',function(){
           $("button[id='edit"+buttonID+"']").html(loadingIndicator);
       },
       success:function(data){
-        $("#datamodal").html(data); 
+        $("#datamodal").html(data);
         $('#datamodal').modal('show');
       },error:function(){
           $("button[id='edit"+buttonID+"']").html(originButton);
@@ -612,7 +729,7 @@ var tableItem = $('#data-item').DataTable({
   responsive: false,
   ajax: $('#data-item').attr('data-url'),
   columns: [
-    {data: 'DT_RowIndex', name: 'DT_RowIndex'},  
+    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
     {data: 'item_code', name: 'item_code'},
     {data: 'item_name', name: 'item_name'},
     {data: 'item_category', name: 'item_category'},
@@ -627,7 +744,7 @@ var tableLetter = $('#data-letter').DataTable({
   responsive: false,
   ajax: $('#data-letter').attr('data-url'),
   columns: [
-    {data: 'incoming_ref_no', name: 'incoming_ref_no'},  
+    {data: 'incoming_ref_no', name: 'incoming_ref_no'},
     {data: 'date_of_letter', name: 'date_of_letter'},
     {data: 'date_of_receive', name: 'date_of_receive'},
     {data: 'subject', name: 'subject'},
@@ -656,10 +773,10 @@ $(document).on('submit','#formItem',function(e){
       if(a.status==422){
           $.each(a.responseJSON.errors, function (i, v) {
             toastr.error(v);
-          })          
+          })
         } else {
           toastr.error('Error..!');
-        } 
+        }
     },
     complete:function(){
       $('#formItem button[type="submit"]').html(originButton);
@@ -677,7 +794,7 @@ $(document).on('click','#data-item .edit-form',function(){
           $("button[id='edit"+buttonID+"']").html(loadingIndicator);
       },
       success:function(data){
-        $("#datamodal").html(data); 
+        $("#datamodal").html(data);
         $('#datamodal').modal('show');
       },error:function(){
           $("button[id='edit"+buttonID+"']").html(originButton);
@@ -724,7 +841,7 @@ var tableTransmittal = $('#data-transmittal').DataTable({
   responsive: false,
   ajax: $('#data-transmittal').attr('data-url'),
   columns: [
-    {data: 'incoming_ref_no', name: 'incoming_ref_no'},  
+    {data: 'incoming_ref_no', name: 'incoming_ref_no'},
     {data: 'date_of_letter', name: 'date_of_letter'},
     {data: 'date_of_receive', name: 'date_of_receive'},
     {data: 'subject', name: 'subject'},
@@ -763,6 +880,14 @@ $('.date-picker-2').datepicker({
   minDate:2,
   dateFormat:'d-M-y'
 });
+$('.date-picker-3').datepicker({
+  defaultDate:'+1w',
+  changeMonth:'true',
+  numberOfMoths:1,
+  beforeShowDay:$.datepicker.noWeekends,
+  minDate:2,
+  dateFormat:'d MM y'
+});
 $('#pay_item_id').select2({
   theme:'bootstrap4',
   placeholder:'choose pay Item no',
@@ -793,9 +918,9 @@ $(document).on('click','#btnQlyRFI',function(){
           $('#btnQlyRFI').html(loadingIndicator);
       },
       success:function(data){
-        $("#datamodal").html(data); 
+        $("#datamodal").html(data);
         $.fn.createCkeditor('#detailed_description');
-      
+
         $('#datamodal').modal('show');
 
       },error:function(){
@@ -804,7 +929,7 @@ $(document).on('click','#btnQlyRFI',function(){
       complete:function(){
           $('#btnQlyRFI').html(originButton);
           $('select').select2({theme: 'bootstrap4'});
-          
+
       },error:function(xhr){
         if(xhr.status == 422) {
           $.each(xhr.responseJSON.errors,function(key,value){
@@ -831,7 +956,7 @@ $(document).on('click','#btnQtyRFI',function(){
           $('#btnQtyRFI').html(loadingIndicator);
       },
       success:function(data){
-        $("#datamodal").html(data); 
+        $("#datamodal").html(data);
         $('#datamodal').modal('show');
         $.fn.createCkeditor('#inspection_content');
       },error:function(){
@@ -840,7 +965,7 @@ $(document).on('click','#btnQtyRFI',function(){
       complete:function(){
           $('#btnQtyRFI').html(originButton);
           $('select').select2({theme: 'bootstrap4'});
-          
+
       },error:function(xhr){
         if(xhr.status == 422) {
           $.each(xhr.responseJSON.errors,function(key,value){

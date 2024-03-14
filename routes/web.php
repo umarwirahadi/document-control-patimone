@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
+
+/* OAuth */
+Route::get('/auth/redirect',function(){
+    return Socialite::driver('github')->redirect();
+})->name('oauth.login');
+
+Route::get('/auth/callback',function(){
+
+});
+
 Route::get('/', function () {
     return view('layouts.default');
 })->middleware('auth');
@@ -74,7 +85,7 @@ Route::put('/master-item/{id}/update',[App\Http\Controllers\MasterItemController
 Route::delete('/master-item/{id}',[App\Http\Controllers\MasterItemController::class,'destroy'])->name('item.destroy');
 Route::get('/master-item-fetch',[App\Http\Controllers\MasterItemController::class,'fetch'])->name('item.fetch');
 
-/* document control */ 
+/* document control */
 /* outgoing letter */
 Route::get('/incoming-letter',[App\Http\Controllers\IncomingLetterController::class,'index'])->name('incoming.index');
 Route::get('/incoming/create',[App\Http\Controllers\IncomingLetterController::class,'create'])->name('incoming.create');
@@ -100,4 +111,20 @@ Route::get('/contact/detail/{id}',[App\Http\Controllers\ContactController::class
 Route::put('/contact/{id}',[App\Http\Controllers\ContactController::class,'update'])->name('contact.update');
 Route::delete('/contact/{id}',[App\Http\Controllers\ContactController::class,'destroy'])->name('contact.destroy');
 Route::get('/contact/fetch',[App\Http\Controllers\ContactController::class,'fetch'])->name('contact.fetch');
+
+/* transmital */
+Route::get('/document-transmittal',[App\Http\Controllers\TransmittalController::class,'index'])->name('transmittal.index');
+Route::get('/document-transmittal/create',[App\Http\Controllers\TransmittalController::class,'create'])->name('transmittal.create');
+
+
+/* tools */
+/* letter source */
+    Route::get('letter-source',[App\Http\Controllers\LetterSourceController::class,'index'])->name('letter-source.index');
+    Route::get('letter-source/create',[App\Http\Controllers\LetterSourceController::class,'create'])->name('letter-source.create');
+    Route::post('letter-source',[App\Http\Controllers\LetterSourceController::class,'store'])->name('letter-source.store');
+    Route::get('letter-source/edit/{id}',[App\Http\Controllers\LetterSourceController::class,'edit'])->name('letter-source.edit');
+    Route::put('letter-source/{id}',[App\Http\Controllers\LetterSourceController::class,'update'])->name('letter-source.update');
+    Route::delete('letter-source/{id}',[App\Http\Controllers\LetterSourceController::class,'destroy'])->name('letter-source.destroy');
+    Route::get('letter-source-fetch',[App\Http\Controllers\LetterSourceController::class,'fetch'])->name('letter-source.fetch');
+/* end letter source */
 
