@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,13 +17,13 @@ use Illuminate\Support\Facades\Route;
 
 
 /* OAuth */
-Route::get('/auth/redirect',function(){
+/* Route::get('/auth/redirect',function(){
     return Socialite::driver('github')->redirect();
 })->name('oauth.login');
 
 Route::get('/auth/callback',function(){
 
-});
+}); */
 
 Route::get('/', function () {
     return view('layouts.default');
