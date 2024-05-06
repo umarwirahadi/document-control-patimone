@@ -28,8 +28,9 @@
     <script src="{{ asset('plugins/select2/js/select2.full.min.js')}}"></script>
     <script src="{{ asset('plugins/bootstrap-switch/js/bootstrap-switch.min.js')}}"></script>
     <script src="{{ asset('plugins/daterangepicker/daterangepicker.js')}}"></script>
-    <script src="{{ asset('plugins/ckeditor/ckeditor.js/')}}"></script>
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+    <script src="{{ asset('plugins/ckeditor4/ckeditor.js/')}}"></script>
+    {{-- <script src="{{ asset('plugins/ckeditor/ckeditor.js/')}}"></script> --}}
+    {{-- <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script> --}}
     <script src="{{ asset('plugins/bs-custom-file-input/bs-custom-file-input.min.js')}}"></script>
     @yield('script')
     <script src="https://unpkg.com/dropzone@6.0.0-beta.1/dist/dropzone-min.js"></script>

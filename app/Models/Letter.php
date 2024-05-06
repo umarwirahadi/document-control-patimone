@@ -59,8 +59,8 @@ class Letter extends Model
         return explode(",",$this->assign_to);
     } 
 
-    public function lettersource(){
-        return $this->belongsTo(LetterSource::class);
+    public function source(){
+        return $this->belongsTo(LetterSource::class,'letter_source_id','id');
     }
 
 

@@ -239,7 +239,7 @@
                           @foreach ($data->attachments as $key=>$attachment)
                               <tr>
                                 <td>{{++$key}}</td>
-                                <td>{{$attachment->file_name}}</td>                                
+                                <td>{!!$attachment->file_name!!}</td>
                                 <td>{{$attachment->documentType->document_type_name}}</td>
                                 <td>
                                   @if ($attachment->file_link1)

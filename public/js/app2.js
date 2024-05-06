@@ -1268,12 +1268,15 @@ var tableItem = $('#data-item').DataTable({
 var tableLetter = $('#incoming-letter').DataTable({
   processing: true,
   serverSide: true,
-  responsive: false,
+  responsive: false,  
+  scrollY:'500px',
+  lengthMenu:[[25,50,-1],[25,50,'All']],
+  scrollCollapse:true,
   ajax: $('#incoming-letter').attr('data-url'),
   columns: [
     // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
     {data: 'letter_ref_no', name: 'letter_ref_no'},
-    {data: 'source_name', name: 'letterSource.source_name',searchable:false},
+    {data: 'source_name', name: 'source_name',searchable:false},
     {data: 'letter_date', name: 'letter_date'},
     {data: 'subject', name: 'subject'},
     {data: 'status', name: 'status'},
@@ -1346,10 +1349,11 @@ $(document).on('click','#btnAddAttachment',function(){
       },
       complete:function(){
           $('#btnAddAttachment').html(originButton);
-          const attrID=document.querySelectorAll('.text-area');
-          for (let i = 0; i < attrID.length; i++) {
+          CKEDITOR.replace('file_name');
+         /* const attrID=document.querySelectorAll('.text-area');
+           for (let i = 0; i < attrID.length; i++) {
             $.fn.createCkeditor(`#${attrID[i].id}`);
-          }
+          } */
 
       },error:function(xhr){
         if(xhr.status == 422) {
@@ -1497,7 +1501,7 @@ $(document).on('click','#geneatePDFDistposition',function(e){
     }
   })
 });
-  $(document).on('shown.bs.modal',function(){
+  $(document).on('shown.bs.modal','#modal-references',function(){
     var dataUrl=$('#autocomplete_select_reference').attr('data-url');
     $("#autocomplete_select_reference" ).autocomplete({
       autoFocus:true,
@@ -1673,12 +1677,17 @@ $(document).on('click','#document-attachment .btn-edit-attachment',function(e){
       },
       success:function(data){
         $("#datamodal").html(data);
-        $('#datamodal').modal('show');
+        $('#datamodal').modal('show');        
       },error:function(){
           $("button[id='edit_"+buttonID+"']").html(originButton);
       },
       complete:function(){
           $("button[id='edit_"+buttonID+"']").html(originButton);
+          CKEDITOR.replace('file_name');
+          /* const attrID=document.querySelectorAll('.text-area');
+          for (let i = 0; i < attrID.length; i++) {
+            $.fn.createCkeditor(`#${attrID[i].id}`);
+          } */
       }
     });
 });
@@ -2004,22 +2013,32 @@ $(document).on('click','#btnQtyRFI',function(){
 bsCustomFileInput.init();
 
 
-$.fn.createCkeditor=function(id=null){
+/* $.fn.createCkeditor=function(id=null){
   ClassicEditor.create( document.querySelector( id ),{
+    fontFamily: {
+      options: [
+          'default',
+          'Ubuntu, Arial, sans-serif',
+          'Ubuntu Mono, Courier New, Courier, monospace'
+      ],
+      supportAllValues: true
+  },
     toolbar: {
         items: [
             'undo', 'redo',
+            'bold', 'italic',
             '|', 'heading',
             '|', 'link',
-            '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
+            '|', 'bulletedList', 'numberedList','fontFamily', 'outdent', 'indent'
         ],
+       
         shouldNotGroupWhenFull: false
     }
   } )
   .catch( error => {
       console.error( error );
   } );
-}
+} */
 /* document type */
 
 var tableDocumentType = $('#data-document-type').DataTable({

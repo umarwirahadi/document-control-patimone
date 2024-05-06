@@ -157,6 +157,11 @@ Route::get('/document-transmittal/create',[App\Http\Controllers\TransmittalContr
 Route::get('incoming',[App\Http\Controllers\LetterController::class,'index'])->name('letter.index');
 Route::post('letters/create',[App\Http\Controllers\LetterController::class,'create'])->name('letter.create');
 Route::post('letters/store',[App\Http\Controllers\LetterController::class,'store'])->name('letter.store');
+Route::get('letters/edit/{id}',[App\Http\Controllers\LetterController::class,'edit'])->name('letter.edit');
+Route::put('letters/update/{id}',[App\Http\Controllers\LetterController::class,'update'])->name('letter.update');
+Route::delete('letters/destroy/{id}',[App\Http\Controllers\LetterController::class,'destroy'])->name('letter.destroy');
+
+
 Route::get('incoming-letter-fetch',[App\Http\Controllers\LetterController::class,'fetchLetter'])->name('incoming.letter.fetch');
 Route::get('incoming-transmittal-fetch',[App\Http\Controllers\LetterController::class,'fetchTransmittal'])->name('incoming.transmittal.fetch');
 // Route::post('generate-pdf',[App\Http\Controllers\LetterController::class,'generatePDF'])->name('generate.pdf');

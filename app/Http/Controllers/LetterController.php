@@ -279,11 +279,16 @@ class LetterController extends Controller
         try {
             if(!$request->ajax() && $request->method() <> 'PUT') return redirect()->route('letter.index');
                 $attachment=AttachmentFile::findOrFail($id);
-                $attachment->letter_id_reference=$request->letter_id_reference;
-                $attachment->reference_number=$request->autocomplete_select_reference;
-                $attachment->source=$request->source;
-                $attachment->subject=$request->subject;
-                $attachment->status='2';
+                // $attachment->letter_id_reference=$request->letter_id_reference;
+                // $attachment->reference_number=$request->autocomplete_select_reference;
+                $attachment->file_name=$request->file_name;
+                $attachment->document_type_id=$request->document_type_id;
+                $attachment->file_link1=$request->file_link1;
+                $attachment->file_link2=$request->file_link2;
+                $attachment->file_link3=$request->file_link3;
+                $attachment->type=$request->type;
+                $attachment->description=$request->description;
+                // $attachment->tags=$request->tags;
                 $attachment->save();
                 $attachments=AttachmentFile::where('letter_id',$attachment->letter_id)->get();
                 return response()->json(['success'=>true,'message'=>'Data Updated..!','data'=>$this->getTemplateAttachment($attachments)],200);
@@ -338,9 +343,9 @@ class LetterController extends Controller
     public function store(Request $request){
         try {
             if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('letter.index');
-            $validated =$this->validate($request,['letter_id'=>'required','from'=>'required','correspondence_type'=>'required',
+            $validated =$this->validate($request,['letter_id'=>'required','letter_source_id'=>'required','correspondence_type'=>'required',
                 'letter_ref_no'=>'required','letter_date'=>'required','received_date'=>'required',
-                'attention_to'=>'required','subject'=>'required','response_required']);
+                'attention_to'=>'required','subject'=>'required','response_required'],[],['letter_source_id'=>'from/source']);
                 if($validated){
                     $letter=Letter::findOrFail($validated['letter_id']);
                     try {
@@ -407,7 +412,28 @@ class LetterController extends Controller
         }
     }
     public function edit($id){
-        
+        try {           
+            $packages=auth()->user()->load('access');
+            foreach ($packages->access as $val) {
+                $datapackage[]=[$val->package_id];
+            }
+            $letter=Letter::with(['references','assignments'])->findOrFail($id);
+            // $letter->with('assignments');
+
+            return response()->json($letter);
+            // $engineers=Engineer::engineer()->get();
+            // return view('letters.edit',['title'=> 'Edit Incoming','engineers'=>$engineers,'lettersource'=>LetterSource::active()->whereIn('package_id',$datapackage)->get(),'correspondencetype'=>CorrespondenceType::whereIn('package_id',$datapackage)->get(),'letter'=>$letter]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function update(Request $request,$id){
+
+    }
+
+    public function destroy($id){
+
     }
 
     public function copyAssignTo($letter_id,$type){
@@ -451,7 +477,10 @@ class LetterController extends Controller
     {
         try {
             if(!request()->ajax()) return route('letter.index');
-            $letters=Letter::orderBy('created_at','asc')->with('lettersource')->get();
+
+            $letters=DB::table('letters')->select('letters.id','letters.document_no','letters.letter_date','letter_ref_no','letters.received_date','letters.subject','letters.rev','letters.status','letter_sources.source_name')
+                     ->leftJoin('letter_sources','letter_sources.id','=','letters.letter_source_id')->get();
+            // $letters=Letter::orderBy('created_at','asc')->with('source')->get();
             return Datatables::of($letters)
             ->addIndexColumn()           
             ->editColumn('status',function($data){
@@ -469,10 +498,10 @@ class LetterController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $row->letter_date)->format('d-M-Y');
             })
             ->addColumn('action',function($row){
-                $edit=route('package.edit',$row->id??'');
-                $destroy=route('package.destroy',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-info btn-sm rounded-0 btn-custom edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 btn-custom delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $edit=route('letter.edit',$row->id??'');
+                $destroy=route('letter.destroy',$row->id);
+                $btn= '<a href="'.$edit.'" class="btn btn-info btn-sm rounded-0" ><i class="fas fa-pencil-alt"></i></a>
+                       <button type="button" class="btn btn-danger btn-sm rounded-0" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
             })->rawColumns(['action','status'])->make(true);          
 
