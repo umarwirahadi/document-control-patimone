@@ -22,8 +22,7 @@
       <div class="container-fluid">
           <div class="row">
               <div class="col-md-12">
-                  <div class="card card-default">
-                      
+                  <div class="card card-default">                      
                       <div class="card-body">
                         <div class="table-responsivesss">
                           <table class="table table-sm table-hover" id="data-letter-source" data-url="{{route('letter-source.fetch')}}">
@@ -32,6 +31,7 @@
                                 <th>No</th>
                                 <th>Name</th>
                                 <th>Unit</th>
+                                <th>Package name</th>
                                 <th>Description</th>
                                 <th>Status</th>
                                 <th>Action</th>
@@ -50,6 +50,5 @@
   </div>
 </div>
 <div class="modal fade" id="datamodal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  
 </div>
 @endsection

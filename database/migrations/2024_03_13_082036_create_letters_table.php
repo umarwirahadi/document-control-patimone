@@ -15,13 +15,15 @@ class CreateLettersTable extends Migration
     {
         Schema::create('letters', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->char('package_id',40);
             $table->enum('type',['IN','OUT'])->index();
             $table->string('from');
-            $table->string('correspondence_type');
+            $table->char('correspondence_type_id');
             $table->string('document_no')->index();
             $table->string('letter_ref_no')->nullable();
             $table->date('letter_date');
             $table->date('received_date')->nullable();
+            $table->string('received_by')->nullable();
             $table->string('attention_to');
             $table->text('subject')->nullable();
             $table->text('reference')->nullable();
@@ -31,11 +33,12 @@ class CreateLettersTable extends Migration
             $table->string('cc_to_letter_out')->nullable();
             $table->date('delivery_date')->nullable();
             $table->date('document_control_date')->nullable();
-            $table->string('assign_to');
-            $table->string('for_reference')->nullable();
+            $table->text('assign_to')->nullable();
+            $table->text('for_reference')->nullable();
             $table->date('due_date');
             $table->string('engineer_ref_no')->nullable();
             $table->string('engineer_res_date')->nullable();
+            $table->string('rev',10)->default('0');
             $table->string('status');
             $table->text('description')->nullable();
             $table->string('created_by');

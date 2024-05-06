@@ -14,11 +14,12 @@ class LetterSource extends Model
     use SoftDeletes;
 
     protected $table='letter_sources';
-    protected $casts = [
-        'id' => 'string'
-    ];
+    protected $keyType = 'string';
 
-    protected $fillable=['source_name','unit','description','status'];
+    public $incrementing = false;  
+    protected $casts = ['id'=>'string'];  
+
+    protected $fillable=['source_name','unit','description','package_id','status'];
     public static function boot(){
         parent::boot();
         static::creating(function($data){
@@ -31,10 +32,14 @@ class LetterSource extends Model
         });
     }
 
-    public function scopeLetterSourceStatus($query,$param)
+    public function scopeActive($query)
     {
-        return $query->where('status',$param)->orderBy('created_at','desc');
+        return $query->where('status','1');
         
+    }
+
+    public function package(){
+        return $this->belongsTo(Package::class);
     }
 
 }

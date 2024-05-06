@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSocialIdAndSocialTypeFieldToUsersTable extends Migration
+class AddTemplateToCorrespondenceType extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddSocialIdAndSocialTypeFieldToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('social_id')->nullable();
-            $table->string('social_type')->nullable();
+        Schema::table('correspondence_types', function (Blueprint $table) {
+            $table->string('content_template')->after('correspondence_type')->nullable();
         });
     }
 
@@ -26,9 +25,7 @@ class AddSocialIdAndSocialTypeFieldToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('social_id');
-            $table->dropColumn('social_type');
+        Schema::table('correspondence_types', function (Blueprint $table) {
             //
         });
     }

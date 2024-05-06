@@ -1,4 +1,4 @@
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <form action="{{ route('item.store') }}" method="POST" id="formItem">
                 <div class="modal-header bg-gradient-gray-dark">
@@ -25,6 +25,8 @@
                                 <option value="letter-type">letter-type</option>
                                 <option value="type-of-action">type-of-action</option>
                                 <option value="user-type">User type</option>
+                                <option value="to-attention">toAttention</option>
+                                <option value="response-request">Response Request</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>

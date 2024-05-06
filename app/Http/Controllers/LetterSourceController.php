@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\LetterSource;
+use App\Models\Package;
 use Illuminate\Http\Request;
 use Datatables;
 
@@ -22,7 +23,8 @@ class LetterSourceController extends Controller
 
     public function create(){
         try {
-            $html=view('lettersource.create')->render();
+            $packages=Package::all();
+            $html=view('lettersource.create',compact('packages'))->render();
             return response()->json($html);
         } catch (\Throwable $th) {
             throw $th;
@@ -61,7 +63,9 @@ class LetterSourceController extends Controller
                 $request->validate(
                     ['unit'=>'required']);
                     $lettersource=LetterSource::findOrFail($id);
+                    $lettersource->source_name= $request->source_name;
                     $lettersource->unit= $request->unit;
+                    $lettersource->package_id= $request->package_id;
                     $lettersource->description= $request->description;
                     $lettersource->status= $request->status;
                     $lettersource->save();
@@ -87,15 +91,18 @@ class LetterSourceController extends Controller
 
     public function fetch(){
         try {
-            if(!request()->ajax()) return route('item.index');
-            $lettersources=LetterSource::orderBy('created_at','asc')->get();
+            if(!request()->ajax()) return route('letter-source.index');
+            $lettersources=LetterSource::orderBy('created_at','asc')->with('package')->get();
             return DataTables::of($lettersources)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('letter-source.edit',$row->id??'');
                 $destroy=route('letter-source.destroy',$row->id);
                 $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-primary btn-sm rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
                        <button type="button" class="btn btn-danger btn-sm rounded-0 delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
                 return $btn;
-            })->editColumn('status',function($data){
+            })->editColumn('description',function($row){
+                return strip_tags($row->description);
+            })
+            ->editColumn('status',function($data){
                 if($data->status==1){
                     $status='<span class="badge badge-success">Active</span>';
                 } else {
@@ -103,7 +110,7 @@ class LetterSourceController extends Controller
                 }
                 return $status;
             })
-            ->rawColumns(['action','status'])->make(true);
+            ->rawColumns(['action','status','description'])->make(true);
 
         } catch (\Throwable $th) {
             throw $th;

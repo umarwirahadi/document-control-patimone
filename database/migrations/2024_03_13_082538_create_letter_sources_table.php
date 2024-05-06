@@ -18,6 +18,7 @@ class CreateLetterSourcesTable extends Migration
             $table->string('source_name');
             $table->string('unit')->nullable();
             $table->text('description')->nullable();
+            $table->char('package_id',40)->nullable();
             $table->string('status',1)->default('1');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

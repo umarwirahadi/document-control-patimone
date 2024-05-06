@@ -32,11 +32,13 @@
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>Name</th>
+                                <th>Full name</th>
+                                <th>Nickname</th>
                                 <th>Initial</th>
-                                <th>Email</th>
                                 <th>Phone</th>
                                 <th>Type</th>
+                                <th>Position</th>
+                                <th>Status</th>
                                 <th>Action</th>
                               </tr>
                             </thead>

@@ -55,6 +55,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     {{ __('Login') }}
                                 </button>
+                                <a href="https://login.microsoftonline.com/f30422d3-4271-4d42-80c3-a93e99050c3a/oauth2/v2.0/authorize" class="btn btn-danger">Login with Office 365</a>
 
                                 @if (Route::has('password.request'))
                                     <a class="btn btn-link" href="{{ route('password.request') }}">

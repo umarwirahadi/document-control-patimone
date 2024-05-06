@@ -14,15 +14,15 @@ class CreateWorksTable extends Migration
     public function up()
     {
         Schema::create('works', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('item_no',100);
-            $table->text('pay_item',1000);
+            $table->text('pay_item');
             $table->string('unit',100);
             $table->text('description')->nullable();
             $table->string('status',1)->default(1);
             $table->softDeletes();
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
             $table->index(['id','item_no']);
         });

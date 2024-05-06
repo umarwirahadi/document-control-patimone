@@ -20,8 +20,8 @@ class CreateMasterItemsTable extends Migration
             $table->string('item_category')->index();
             $table->string('item_status',1)->default(1);
             $table->longText('item_description')->nullable();
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

@@ -25,7 +25,6 @@
           <div class="row">
               <div class="col-md-12">
                   <div class="card card-default">
-                      
                       <div class="card-body">
                         <div class="table-responsivesss">
                           <table class="table table-sm table-hover" id="data-package" data-url="{{route('package.fetch')}}">

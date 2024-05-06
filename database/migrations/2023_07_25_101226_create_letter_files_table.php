@@ -14,7 +14,7 @@ class CreateLetterFilesTable extends Migration
     public function up()
     {
         Schema::create('letter_files', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('number')->index();
             $table->longText('subject')->index();
             $table->date('date')->index();
@@ -22,8 +22,8 @@ class CreateLetterFilesTable extends Migration
             $table->string('category')->nullable();
             $table->string('status',10)->nullable();
             $table->longText('links')->nullable();
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

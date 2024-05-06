@@ -26,7 +26,9 @@ class RfiController extends Controller
     {
         try {
             $rfi=Rfi::create(['submitted_date'=>date('Y-m-d'),'submitted_time'=>date('h:m:s'),'reference_no'=>'0','doc_number'=>'0','specification_std'=>'-','status'=>'0']);
-            return redirect()->route('rfi.create',$rfi->id);
+            return view('rfi.create',$rfi);
+            // dd($rfi);
+            // return redirect()->route('rfi.create',$rfi->id);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -36,7 +38,7 @@ class RfiController extends Controller
     {
         try {
             $rfi=Rfi::findOrFail($id);
-            return view('rfi.create',['title'=>'Create RFI','data'=>$rfi]);
+            // return view('rfi.create',['title'=>'Create RFI','data'=>$rfi]);
         } catch (\Throwable $th) {
             throw $th;
         }

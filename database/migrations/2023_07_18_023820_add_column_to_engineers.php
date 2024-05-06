@@ -14,7 +14,7 @@ class AddColumnToEngineers extends Migration
     public function up()
     {
         Schema::table('engineers', function (Blueprint $table) {
-            $table->string('initial',50)->nullable()->after('eng_last_name');
+            // $table->string('initial',50)->nullable()->after('eng_last_name');
             $table->enum('type',['engineer','inspector','ss','other'])->default('engineer')->after('initial');
             $table->string('photo_profile')->nullable()->after('type');
             $table->text('dicipline')->after('photo_profile')->nullable();

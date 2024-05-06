@@ -1,4 +1,3 @@
-
 $(document).ready(function(){
     $.ajaxSetup({
         headers: {
@@ -9,8 +8,118 @@ $(document).ready(function(){
     toastr.options={"showDuration":100,"hideDuration": 300};
 
 
+    /* data user */
+    
+var tableUser=$('#data-users').DataTable(
+  {
+    processing: true,
+    serverSide: true,
+    responsive: false,
+    scrollY:'500px',
+    lengthMenu:[[25,50,-1],[25,50,'All']],
+    scrollCollapse:true,
+    ajax: $('#data-users').attr('data-url'),
+    columns: [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
+        {data: 'name', name: 'name'},
+        {data: 'email', name: 'email'},
+        {data: 'level', name: 'level',searchable:false},
+        {data: 'status', name: 'status',searchable:false},
+        {data: 'action', name: 'action', orderable: false, searchable: false},
+    ]
+}  
+);
 
 
+$(document).on('click','#data-users .assign-form',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='assign-"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){       
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='assign-"+buttonID+"']").html(originButton);
+      },
+      complete:function(){        
+          $("button[id='assign-"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('submit','#formAssignUserPackage',function(e){
+  let originButton=$('#formAssignUserPackage button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formAssignUserPackage button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableLetterSource.ajax.reload();
+        Swal.fire(
+            'Success',
+            data.message,
+            data.success ? 'success' :'warning'
+          )
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formAssignUserPackage button[type="submit"]').html(originButton);
+    }
+  });
+});
+$(document).on('click','#data-assign-package .delete-assign-user',function(){
+  let url=$(this).attr('data-url');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: 'You want to delete this data, please ensure...!',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      showConfirmButton:true,
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+          $.ajax({
+              url:url,
+              type:'DELETE',
+              dataType:'json',
+              success:function(data){
+                console.log(data);
+                  Swal.fire(
+                      data.success ? 'success' : 'error',
+                      data.message,
+                      data.success ? 'success' : 'error'
+                      ).then(()=>{
+                        tableLetterSource.ajax.reload();
+                      })
+              }
+            });
+      }
+        return false;
+    });
+});
+
+/* end data user */
     var tablePosition = $('#data-position').DataTable({
         processing: true,
         serverSide: true,
@@ -43,23 +152,24 @@ $(document).ready(function(){
         ]
     });
 
-    var tableLetterSource = $('#data-letter-source').DataTable({
+    var tableCorrespondence = $('#data-correspondence-type').DataTable({
       processing: true,
       serverSide: true,
       responsive: false,
       scrollY:'500px',
       lengthMenu:[[25,50,-1],[25,50,'All']],
       scrollCollapse:true,
-      ajax: $('#data-letter-source').attr('data-url'),
+      ajax: $('#data-correspondence-type').attr('data-url'),
       columns: [
           {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
-          {data: 'source_name', name: 'source_name'},
-          {data: 'unit', name: 'unit'},
+          {data: 'correspondence_type', name: 'correspondence_type'},
+          {data: 'type', name: 'type'},
           {data: 'description', name: 'description',searchable:false},
+          {data: 'package.package_name', name: 'package_name',searchable:false},
           {data: 'status', name: 'status',searchable:false},
           {data: 'action', name: 'action', orderable: false, searchable: false},
       ]
-  });
+    });
 
 $(document).on('click','#btnCreate',function(){
     let originButton=$(this).html();
@@ -105,6 +215,24 @@ $(document).on('click','#btnCreate',function(){
 
 
 /* letter source */ 
+var tableLetterSource = $('#data-letter-source').DataTable({
+  processing: true,
+  serverSide: true,
+  responsive: false,
+  scrollY:'500px',
+  lengthMenu:[[25,50,-1],[25,50,'All']],
+  scrollCollapse:true,
+  ajax: $('#data-letter-source').attr('data-url'),
+  columns: [
+      {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
+      {data: 'source_name', name: 'source_name'},
+      {data: 'unit', name: 'unit'},
+      {data: 'package.package_name', name: 'package_name'},
+      {data: 'description', name: 'description',searchable:false},
+      {data: 'status', name: 'status',searchable:false},
+      {data: 'action', name: 'action', orderable: false, searchable: false},
+  ]
+});
 $(document).on('submit','#formLetterSource',function(e){
   let originButton=$('#formLetterSource button[type="submit"]').html();
   e.preventDefault();
@@ -197,6 +325,207 @@ $(document).on('click','#data-letter-source .delete',function(){
     });
 });
 /* end letter source */ 
+
+/* correspondence-type */
+$(document).on('submit','#formCorrespondence-type',function(e){
+  let originButton=$('#formCorrespondence-type button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formCorrespondence-type button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableCorrespondence.ajax.reload();
+        Swal.fire(
+            'Success',
+            data.message,
+            data.success ? 'success' :'warning'
+          )
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formCorrespondence-type button[type="submit"]').html(originButton);
+    }
+  });
+});
+$(document).on('click','#data-correspondence-type .edit-form',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='edit"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){       
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+        const attrID=document.querySelectorAll('.text-area');
+        for (let i = 0; i < attrID.length; i++) {
+          $.fn.createCkeditor(`#${attrID[i].id}`);
+        }
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('click','#data-correspondence-type .delete',function(){
+  let url=$(this).attr('data-url');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to delete this data, please ensure...!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      showConfirmButton:true,
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+          $.ajax({
+              url:url,
+              type:'DELETE',
+              dataType:'json',
+              success:function(data){
+                  Swal.fire(
+                      data.success ? 'success' : 'error',
+                      data.message,
+                      data.success ? 'success' : 'error'
+                      ).then(()=>{
+                        tableCorrespondence.ajax.reload();
+                      })
+              }
+            });
+      }
+        return false;
+    });
+});
+/* end correspondence-type */
+
+/* type of action */
+var tableTypeOfAction = $('#data-type-of-action').DataTable({
+  processing: true,
+  serverSide: true,
+  responsive: false,
+  scrollY:'500px',
+  lengthMenu:[[25,50,-1],[25,50,'All']],
+  scrollCollapse:true,
+  ajax: $('#data-type-of-action').attr('data-url'),
+  columns: [
+      {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
+      {data: 'type_of_action', name: 'type_of_action'},
+      {data: 'description', name: 'description'},
+      {data: 'package.package_name', name: 'package_name'},
+      {data: 'status', name: 'status',searchable:false},
+      {data: 'action', name: 'action', orderable: false, searchable: false},
+  ]
+});
+$(document).on('submit','#formTypeOfAction',function(e){
+  let originButton=$('#formTypeOfAction button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formTypeOfAction button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableTypeOfAction.ajax.reload();
+        Swal.fire(
+            'Success',
+            data.message,
+            data.success ? 'success' :'warning'
+          )
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formTypeOfAction button[type="submit"]').html(originButton);
+    }
+  });
+});
+$(document).on('click','#data-type-of-action .edit-form',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='edit"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('click','#data-type-of-action .delete',function(){
+  let url=$(this).attr('data-url');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to delete this data, please ensure...!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      showConfirmButton:true,
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+          $.ajax({
+              url:url,
+              type:'DELETE',
+              dataType:'json',
+              success:function(data){
+                  Swal.fire(
+                      data.success ? 'success' : 'error',
+                      data.message,
+                      data.success ? 'success' : 'error'
+                      ).then(()=>{
+                        tableTypeOfAction.ajax.reload();
+                      })
+              }
+            });
+      }
+        return false;
+    });
+});
+/* end type of action */
 
 $(document).on('submit','#formposition',function(e){
     let originButton=$('#formposition button[type="submit"]').html();
@@ -371,23 +700,26 @@ $(document).on('submit','#formposition',function(e){
         return false;
       });
   });
-
   var tableEngineer = $('#data-engineer').DataTable({
     processing: true,
     serverSide: true,
     responsive: false,
+    scrollY:'500px',
+    lengthMenu:[[25,50,-1],[25,50,'All']],
+    scrollCollapse:true,  
     ajax: $('#data-engineer').attr('data-url'),
     columns: [
         {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-        {data: 'fullname', name: 'fullname'},
+        {data: 'full_name', name: 'full_name'},
+        {data: 'nickname', name: 'nickname'},
         {data: 'initial', name: 'initial'},
-        {data: 'eng_email', name: 'eng_email'},
-        {data: 'eng_phone', name: 'eng_phone'},
+        {data: 'phone1', name: 'phone1'},
         {data: 'type', name: 'type'},
+        {data: 'position_name', name: 'position_name'},
+        {data: 'status', name: 'status'},
         {data: 'action', name: 'action', orderable: false, searchable: false},
     ]
 });
-
 
 $(document).on('submit','#formEngineer',function(e){
   let originButton=$('#formStoreEngineer button[type="submit"]').html();
@@ -476,6 +808,80 @@ $(document).on('click','#data-engineer .delete',function(){
         return false;
     });
 });
+$(document).on('click','#data-engineer .assignment',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='assignment"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='assignment"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+          $('select[name="position_id"]').select2({theme: 'bootstrap4'});
+          $("button[id='assignment"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('click','#data-engineer .add-email',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='show"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='show"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+          $("button[id='show"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('submit','#formAssignEngineer',function(e){
+  let originButton=$('#formAssignEngineer button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formAssignEngineer button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableEngineer.ajax.reload();
+        Swal.fire('Success',data.message,data.success ? 'success' :'warning')
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+            });
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formAssignEngineer button[type="submit"]').html(originButton);
+    }
+  });
+});
+
 $('#formPhoto').on('submit',function(e){
   e.preventDefault();
   let originButton=$('#formPhoto button[type="submit"]').html();
@@ -517,6 +923,127 @@ $('#photo_profile').on('change', function () {
     }
     readerFile.readAsDataURL(file);
   }
+});
+
+$(document).on('click','#btnCreateEmail',function(){
+  let originButton=$(this).html();
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $('#btnCreateEmail').html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');       
+      },error:function(){
+          $('#btnCreateEmail').html(originButton);
+      },
+      complete:function(){
+          $('#btnCreateEmail').html(originButton);          
+      },error:function(xhr){
+        if(xhr.status == 422) {
+          $.each(xhr.responseJSON.errors,function(key,value){
+            toastr.error(value);
+          });
+        } else {
+          Swal.fire(
+            'Error',
+            'Error occurred..!',
+            'error'
+          ).then(function(){
+            window.location.reload();
+          })
+        }
+      }
+    })
+});
+
+$(document).on('submit','#formEmail',function(e){
+  let originButton=$('#formEmail button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formEmail button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      const data2=data.data;      
+      toastr.success(data.message);
+      $('#engineerEmail').html('').append(data2);
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+            toastr.error(v);
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formEmail button[type="submit"]').html(originButton);
+    }
+  });
+});
+$(document).on('click','#engineerEmail .edit-form',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='edit"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){       
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+        const attrID=document.querySelectorAll('.text-area');
+        for (let i = 0; i < attrID.length; i++) {
+          $.fn.createCkeditor(`#${attrID[i].id}`);
+        }
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('click','#engineerEmail .delete',function(){
+  let url=$(this).attr('data-url');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to delete this data, please ensure...!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!'
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+          $.ajax({
+              url:url,
+              type:'DELETE',
+              dataType:'json',
+              success:function(data){
+                  Swal.fire(
+                      data.success ? 'success' : 'error',
+                      data.message,
+                      data.success ? 'success' : 'error'
+                      ).then(()=>{
+                        $('#engineerEmail').html('').append(data.data);
+                      })
+              }
+            });
+      }
+      return false;
+    });
 });
 
 var tableContact = $('#data-contact').DataTable({
@@ -737,22 +1264,504 @@ var tableItem = $('#data-item').DataTable({
     {data: 'action', name: 'action', orderable: false, searchable: false}
   ]
 });
-
-var tableLetter = $('#data-letter').DataTable({
+/* letter disini */
+var tableLetter = $('#incoming-letter').DataTable({
   processing: true,
   serverSide: true,
   responsive: false,
-  ajax: $('#data-letter').attr('data-url'),
+  ajax: $('#incoming-letter').attr('data-url'),
   columns: [
-    {data: 'incoming_ref_no', name: 'incoming_ref_no'},
-    {data: 'date_of_letter', name: 'date_of_letter'},
-    {data: 'date_of_receive', name: 'date_of_receive'},
+    // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+    {data: 'letter_ref_no', name: 'letter_ref_no'},
+    {data: 'source_name', name: 'letterSource.source_name',searchable:false},
+    {data: 'letter_date', name: 'letter_date'},
     {data: 'subject', name: 'subject'},
-    {data: 'references', name: 'references'},
     {data: 'status', name: 'status'},
     {data: 'action', name: 'action', orderable: false, searchable: false}
   ]
 });
+/* var tableTransmittal = $('#incoming-transmittal').DataTable({
+  processing: true,
+  serverSide: true,
+  responsive: false,
+  ajax: $('#incoming-transmittal').attr('data-url'),
+  columns: [
+    {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+    {data: 'letter_ref_no', name: 'letter_ref_no'},
+    {data: 'letter_date', name: 'letter_date'},
+    {data: 'subject', name: 'subject'},
+    {data: 'status', name: 'status'},
+    {data: 'action', name: 'action', orderable: false, searchable: false}
+  ]
+}); */
+
+$(document).on('click','#btnAddReference',function(){
+  let originButton=$(this).html();
+  $.ajax({
+      url:$(this).attr('data-url'),
+      dataType:'json',
+      beforeSend:function(){
+          $('#btnAddReference').html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $('#btnAddReference').html(originButton);
+      },
+      complete:function(){
+          $('#btnAddReference').html(originButton);
+          $('#formLetterRefference select').select2({theme: 'bootstrap4'});
+
+      },error:function(xhr){
+        if(xhr.status == 422) {
+          $.each(xhr.responseJSON.errors,function(key,value){
+            toastr.error(value);
+          });
+        } else {
+          Swal.fire(
+            'Error',
+            'Error occurred..!',
+            'error'
+          ).then(function(){
+            window.location.reload();
+          })
+        }
+      }
+    })
+});
+$(document).on('click','#btnAddAttachment',function(){
+  let originButton=$(this).html();
+  $.ajax({
+      url:$(this).attr('data-url'),
+      dataType:'json',
+      beforeSend:function(){
+          $('#btnAddAttachment').html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $('#btnAddAttachment').html(originButton);
+      },
+      complete:function(){
+          $('#btnAddAttachment').html(originButton);
+          const attrID=document.querySelectorAll('.text-area');
+          for (let i = 0; i < attrID.length; i++) {
+            $.fn.createCkeditor(`#${attrID[i].id}`);
+          }
+
+      },error:function(xhr){
+        if(xhr.status == 422) {
+          $.each(xhr.responseJSON.errors,function(key,value){
+            toastr.error(value);
+          });
+        } else {
+          Swal.fire(
+            'Error',
+            'Error occurred..!',
+            'error'
+          ).then(function(){
+            window.location.reload();
+          })
+        }
+      }
+    })
+});
+
+$(document).ready(function(){
+  if(typeof(assignTo)=='string'){
+    if(assignTo){
+      let assignSelected=JSON.parse(assignTo);
+      for (let i = 0; i < assignSelected.length; i++) {    
+        let newOpt= new Option(assignSelected[i].text,assignSelected[i].id,true,true);
+        $assignment.append(newOpt).trigger('change');
+      } 
+    }
+  }
+  if(typeof(forReferences)=='string'){
+    if(forReferences){
+      let referenceSelected=JSON.parse(forReferences);
+      for (let i = 0; i < referenceSelected.length; i++) {    
+        let newOptRef= new Option(referenceSelected[i].text,referenceSelected[i].id,true,true);
+        $references.append(newOptRef).trigger('change');
+      } 
+    }
+  }
+})
+
+
+/* $('#assign_to').select2({theme:'classic',placeholder:'please select data'});
+$('#for_reference').select2({theme:'classic',placeholder:'select for reference'}); */
+
+
+var $assignment=$('#assign_to').select2({
+  theme: 'classic',
+  allowClear: true,
+  ajax:{
+    url:$('#assign_to').attr('data-url'),
+    dataType:'json',
+    method:'POST',
+    data:function(params){
+      var query={
+        search:params.term
+      }
+      return query;
+    },
+    processResults:function(data){
+      return {
+        results:data
+      }
+    },
+    cache:true
+}});
+var $references=$('#for_reference').select2({
+  theme: 'classic',
+  allowClear: true,
+  ajax:{
+    url:$('#for_reference').attr('data-url'),
+    dataType:'json',
+    method:'POST',
+    data:function(params){
+      var query={
+        search:params.term
+      }
+      return query;
+    },
+    processResults:function(data){
+      return {
+        results:data
+      }
+    },
+    cache:true
+}});
+$(document).on('select change','#correspondence_type',function(e){
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('data-url'),
+    type: 'POST',
+    data: {id:$(this).val(),letter_date:$('#letter_date').val(),from:$('#letter_source_id').val()},
+    dataType: 'json',    
+    success: function (data) {
+      $('#letter_ref_no').val(data.ref_no);
+      $('#attention_to').val(data.to_attention);      
+      $('#letter_ref_no').focus();
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+            toastr.error(v);
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },   
+  });
+});
+$(document).on('submit','#formSubmitLetter',function(e){
+  let originButton=$('#formSubmitLetter button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formSubmitLetter button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+        Swal.fire('Success',data.message,data.success ? 'success' :'warning')        
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+            toastr.error(v);
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formSubmitLetter button[type="submit"]').html(originButton);
+    }
+  });
+})
+$(document).on('click','#geneatePDFDistposition',function(e){
+  e.preventDefault();
+  $.ajax({
+    url:$(this).attr('data-url'),
+    type:'post',
+    dataType:'json',
+    success:function(data){
+      console.log(data);
+    }
+  })
+});
+  $(document).on('shown.bs.modal',function(){
+    var dataUrl=$('#autocomplete_select_reference').attr('data-url');
+    $("#autocomplete_select_reference" ).autocomplete({
+      autoFocus:true,
+      source: function(req,res){
+        $.ajax({
+          url:dataUrl,
+          type:'POST',
+          dataType:'json',
+          data:{
+            term:req.term
+          },
+          success:function(data){
+            res(data)
+          }
+        });        
+      },
+      minLength:2,
+      select:function(event,ui){
+        $('#autocomplete_select_reference').val(ui.item.label);
+        $('#letter_id_reference').val(ui.item.value);
+        $('#ref_subject').val(ui.item.subject);
+        return false;
+      },
+      change:function(ev,ui){
+        if(!ui.item){
+          $(this).val('');
+        }
+      }
+    })
+    .autocomplete('instance')._renderItem = function(ul,item){
+      let sliced=item.subject ? item.subject.slice(0,50):'';
+      return $('<li>').append('<div>'+item.label+' - '+sliced+'</div>').appendTo(ul);
+    }
+  });
+  $(document).on('click','#formLetterRefference button[type="reset"]',function(){
+    $('#autocomplete_select_reference').trigger('focus');
+  });
+  
+  $(document).on('submit','#formLetterRefference',function(e){
+    let originButton=$('#formLetterRefference button[type="submit"]').html();
+    e.preventDefault();
+    $.ajax({
+      url: $(this).attr('action'),
+      type: $(this).attr('method'),
+      data: $(this).serialize(),
+      dataType: 'json',
+      beforeSend:function(){
+        $('#formLetterRefference button[type="submit"]').html(loadingIndicator);
+      },success: function (data) {
+        data.success ? toastr.success(data.message) : toastr.errors(data.message);
+        $('#formLetterRefference button[type="reset"]').trigger('click');
+        $('#document-reference').html('').append(data.data);
+      },
+      error: function (a) {
+        if(a.status==422){
+            $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v);
+            })
+          } else {
+            toastr.error('Error..!');
+          }
+      },
+      complete:function(){
+        $('#formLetterRefference button[type="submit"]').html(originButton);        
+      }
+    });
+  });
+  $(document).on('click','#document-reference .btn-edit-reference',function(e){
+    let originButton=$(this).html();
+    let buttonID=$(this).attr('data-id');
+    $.ajax({
+        url:$(this).attr('data-url'),
+        type:'GET',
+        dataType:'json',
+        beforeSend:function(){
+            $("button[id='edit_"+buttonID+"']").html(loadingIndicator);
+        },
+        success:function(data){
+          $("#datamodal").html(data);
+          $('#datamodal').modal('show');
+        },error:function(){
+            $("button[id='edit_"+buttonID+"']").html(originButton);
+        },
+        complete:function(){
+            $("button[id='edit_"+buttonID+"']").html(originButton);
+        }
+      });
+  });
+  $(document).on('click','#document-reference .btn-delete-reference',function(){
+    let url=$(this).attr('data-url');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to delete this data, please ensure...!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        showConfirmButton:true,
+      }).then((isConfirmed) => {
+        if (isConfirmed.value) {
+            $.ajax({
+                url:url,
+                type:'DELETE',
+                dataType:'json',
+                success:function(data){
+                  Swal.fire(data.success ? 'success' : 'error',data.message,data.success ? 'success' : 'error')
+                  $('#document-reference').html('').append(data.data);                                  
+                }
+              });
+        }
+          return false;
+      });
+  });
+$(document).on('click','.btnCopyAssign',function(){
+  $.ajax({
+    url:$(this).attr('data-url'),
+    type:'GET',
+    dataType:'json',
+    success:function(data){
+      if(data){
+        navigator.clipboard.writeText(data);
+        toastr.options={
+          "positionClass":"toast-top-center",
+          "timeOut":"200"
+        }
+        toastr.info('email action copied..!');
+      } else {
+        toastr.error('failed to copy email..!');
+      }      
+    }
+  })
+})
+
+$(document).on('submit','#formAttachment',function(e){
+  let originButton=$('#formAttachment button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formAttachment button[type="submit"]').html(loadingIndicator);
+    },success: function (data) {
+      data.success ? toastr.success(data.message) : toastr.errors(data.message);
+      $('#formAttachment button[type="reset"]').trigger('click');
+      $('#document-attachment').html('').append(data.data);
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+            toastr.error(v);
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formAttachment button[type="submit"]').html(originButton);        
+    }
+  });
+});
+$(document).on('click','#document-attachment .btn-edit-attachment',function(e){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='edit_"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='edit_"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+          $("button[id='edit_"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('click','#document-attachment .btn-delete-attachment',function(){
+  let url=$(this).attr('data-url');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to delete this data, please ensure...!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      showConfirmButton:true,
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+          $.ajax({
+              url:url,
+              type:'DELETE',
+              dataType:'json',
+              success:function(data){
+                Swal.fire(data.success ? 'success' : 'error',data.message,data.success ? 'success' : 'error')
+                $('#document-attachment').html('').append(data.data);                                  
+              }
+            });
+      }
+        return false;
+    });
+});
+
+
+$(document).on('click','#btnCloseLetterSection',function(){
+  const dataUrl=$(this).attr('data-url');
+  const dataCallback=$(this).attr('data-callback');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you wanto close this letter ?, please ensure...!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, close it!',
+      showConfirmButton:true,
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+        $.ajax({
+          url:dataUrl,
+          type:'post',
+          dataType:'json',
+          success:function(data){
+            Swal.fire(data.success ? 'success' : 'error',data.message,data.success ? 'success' : 'error').then(function(){
+              window.location.href=dataCallback;
+            });
+          }
+        });
+      }
+      return false;
+    });
+});
+/* end od letter */
+
+
+/* inspector */ 
+var dataInspector = $('#data-inspector').DataTable({
+  processing: true,
+  serverSide: true,
+  responsive: false,
+  scrollY:'500px',
+  lengthMenu:[[25,50,-1],[25,50,'All']],
+  scrollCollapse:true,  
+  ajax: $('#data-inspector').attr('data-url'),
+  columns: [
+      {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+      {data: 'full_name', name: 'full_name'},
+      {data: 'nickname', name: 'nickname'},
+      {data: 'initial', name: 'initial'},
+      {data: 'phone1', name: 'phone1'},
+      {data: 'status', name: 'status'},
+      {data: 'action', name: 'action', orderable: false, searchable: false},
+  ]
+});
+
+
 $(document).on('submit','#formItem',function(e){
   let originButton=$('#formItem button[type="submit"]').html();
   e.preventDefault();
@@ -872,6 +1881,14 @@ $('#data-rfi-rejected').DataTable();
 //   height :'80'
 // });
 
+$('.date-picker-1').datepicker({
+  defaultDate:'+1w',
+  changeMonth:'true',
+  numberOfMoths:1,
+  beforeShowDay:$.datepicker.noWeekends,
+  minDate:2,
+  dateFormat:'d-M-y'
+});
 $('.date-picker-2').datepicker({
   defaultDate:'+1w',
   changeMonth:'true',
@@ -1003,6 +2020,112 @@ $.fn.createCkeditor=function(id=null){
       console.error( error );
   } );
 }
+/* document type */
 
+var tableDocumentType = $('#data-document-type').DataTable({
+  processing: true,
+  serverSide: true,
+  responsive: false,
+  scrollY:'500px',
+  lengthMenu:[[25,50,-1],[25,50,'All']],
+  scrollCollapse:true,
+  ajax: $('#data-document-type').attr('data-url'),
+  columns: [
+      {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false,width:'5%'},
+      {data: 'document_type_name', name: 'document_type_name',width:'45%'},
+      {data: 'category_id', name: 'category_id',width:'10%'},
+      {data: 'package.package_name', name: 'package_name',width:'10%'},
+      {data: 'status', name: 'status',searchable:false,width:'10%'},
+      {data: 'action', name: 'action', orderable: false, searchable: false,width:'10%'},
+  ]
+});
+$(document).on('submit','#formDocumentType',function(e){
+  let originButton=$('#formDocumentType button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formDocumentType button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableDocumentType.ajax.reload();
+        Swal.fire(
+            'Success',
+            data.message,
+            data.success ? 'success' :'warning'
+          )
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formTypeOfAction button[type="submit"]').html(originButton);
+    }
+  });
+});
+$(document).on('click','#data-type-of-action .edit-form',function(){
+  let originButton=$(this).html();
+  let buttonID=$(this).attr('data-id');
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $("button[id='edit"+buttonID+"']").html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');
+      },error:function(){
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      },
+      complete:function(){
+          $("button[id='edit"+buttonID+"']").html(originButton);
+      }
+    });
+});
+$(document).on('click','#data-type-of-action .delete',function(){
+  let url=$(this).attr('data-url');
+  Swal.fire({
+      title: 'Are you sure?',
+      text: "You want to delete this data, please ensure...!",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, delete it!',
+      showConfirmButton:true,
+    }).then((isConfirmed) => {
+      if (isConfirmed.value) {
+          $.ajax({
+              url:url,
+              type:'DELETE',
+              dataType:'json',
+              success:function(data){
+                  Swal.fire(
+                      data.success ? 'success' : 'error',
+                      data.message,
+                      data.success ? 'success' : 'error'
+                      ).then(()=>{
+                        tableDocumentType.ajax.reload();
+                      })
+              }
+            });
+      }
+        return false;
+    });
+});
+/* end document type */
 
 })

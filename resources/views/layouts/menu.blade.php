@@ -14,80 +14,130 @@
                 <li class="nav-item">
                     <a href="/" class="nav-link">Home</a>
                 </li>           
-                <li class="nav-item">
-                    <a href="{{route('rfi.index')}}" class="nav-link">RFI</a>
-                </li>
+                
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false" class="nav-link dropdown-toggle">Document</a>
+                        aria-expanded="false" class="nav-link dropdown-toggle">Correspondence</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
-                        <li><a href="{{ route('contact.index') }}" class="dropdown-item"><span class="fa fa-angle-right"></span> Letter </a></li>
-                        <li><a href="{{route('transmittal.index')}}" class="dropdown-item"><span class="fa fa-angle-right"></span> Transmittal</a></li>
+                        <li><a href="{{route('letter.index') }}" class="dropdown-item"><span class="fas fa-exchange-alt"></span> incoming </a></li>
+                        <li><a href="{{route('transmittal.index')}}" class="dropdown-item"><span class="fas fa-exchange-alt"></span> outgoing</a></li>
 
                         <li class="dropdown-divider"></li>
 
                         <li class="dropdown-submenu dropdown-hover w-100">
                             <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"
-                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Document control</a>
+                                class="dropdown-item dropdown-toggle"><span class="fas fa-long-arrow-alt-right"></span> RFI</a>
                             <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-                                <li><a href="{{route('incoming.index')}}" class="dropdown-item">Incoming</a></li>
-                                <li><a href="#" class="dropdown-item">Outgoing</a></li>
-
-                                <li class="dropdown-submenu">
-                                    <a id="dropdownSubMenu3" href="#" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        class="dropdown-item dropdown-toggle">level 2</a>
-                                    <ul aria-labelledby="dropdownSubMenu3"
-                                        class="dropdown-menu border-0 shadow">
-                                        <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                        <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                    </ul>
-                                </li>
-
-                                <li><a href="#" class="dropdown-item">level 2</a></li>
-                                <li><a href="#" class="dropdown-item">level 2</a></li>
+                                <li><a href="{{route('incoming.index')}}" class="dropdown-item">Schadule</a></li>
+                                <li><a href="#" class="dropdown-item">Inspector</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" class="nav-link dropdown-toggle">Inspection</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="{{route('inspector.index')}}" class="dropdown-item"><span class="fas fa-users"></span> Inspectors</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-balance-scale"></span> RFI</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-briefcase"></span> Schadule </a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Shop Drawings</a></li>                       
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" class="nav-link dropdown-toggle">Document</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Contract Document </a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Method statement</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Shop Drawings</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> MoM</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Code and Standards</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> ITP</a></li>                      
+                    </ul>
+                </li>
+              
+              
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false" class="nav-link dropdown-toggle">Master</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="{{ route('contact.index') }}" class="dropdown-item"><span class="fa fa-angle-right"></span> Contact </a></li>
-                        <li><a href="{{ route('position.index') }}" class="dropdown-item"><span class="fa fa-angle-right"></span> Position </a></li>
-                        <li><a href="{{route('work.index')}}" class="dropdown-item"><span class="fa fa-angle-right"></span> Pay items</a></li>
-                        <li><a href="{{route('item.index')}}" class="dropdown-item"><span class="fa fa-angle-right"></span> item</a></li>
-                        <li><a href="{{route('package.index')}}" class="dropdown-item"><span class="fa fa-angle-right"></span> Package</a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Teams</a></li>
-                        <li><a href="{{route('letter-source.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Letter source</a></li>
-                        <li><a href="#" class="dropdown-item"><span class="fa fa-angle-right"></span> Contractors & SubCon</a></li>
-
+                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Full teams</a></li>                       
+                        
+                        <li class="dropdown-divider"></li>                     
+                        <li class="dropdown-submenu dropdown-hover w-100">
+                            <a id="dropdownSubMenu" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Data</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+                                <li><a href="{{ route('engineer.index') }}" class="dropdown-item"> <span class="fas fa-users-cog"></span> engineers</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{ route('user.index') }}" class="dropdown-item"> <span class="fas fa-users"></span> Credentials</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{ route('position.index') }}" class="dropdown-item"> <span class="fas fa-user-check"></span> Position</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{route('work.index')}}" class="dropdown-item"> <span class="fas fa-handshake"></span> Pay items</a></li>                             
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{route('package.index')}}" class="dropdown-item"><span class="fas fa-box-open"></span> Packages</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="#" class="dropdown-item"><span class="fas fa-award"></span> Contractors</a></li>
+                            </ul>
+                        </li>
                         <li class="dropdown-divider"></li>
-
                         <li class="dropdown-submenu dropdown-hover w-100">
                             <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"
-                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Document control</a>
+                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Utility</a>
                             <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
-                                <li><a href="{{route('incoming.index')}}" class="dropdown-item">Incoming</a></li>
-                                <li><a href="#" class="dropdown-item">Outgoing</a></li>
-
-                                <li class="dropdown-submenu">
-                                    <a id="dropdownSubMenu3" href="#" role="button"
-                                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                        class="dropdown-item dropdown-toggle">level 2</a>
-                                    <ul aria-labelledby="dropdownSubMenu3"
-                                        class="dropdown-menu border-0 shadow">
-                                        <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                        <li><a href="#" class="dropdown-item">3rd level</a></li>
-                                    </ul>
-                                </li>
-
-                                <li><a href="#" class="dropdown-item">level 2</a></li>
-                                <li><a href="#" class="dropdown-item">level 2</a></li>
+                                <li><a href="{{route('item.index')}}" class="dropdown-item"><span class="fas fa-sitemap"></span> item</a></li>
+                                <li><a href="{{route('letter-source.index')}}" class="dropdown-item"> <span class="fab fa-sourcetree"></span> Letter source</a></li>
+                                <li><a href="{{route('corres-type.index')}}" class="dropdown-item"> <span class="far fa-file-archive"></span> Correspondence type</a></li>
+                                <li><a href="{{route('action-type.index')}}" class="dropdown-item"> <span class="fas fa-archive"></span> Type of action</a></li>
+                                <li><a href="{{route('documenttype.index')}}" class="dropdown-item"> <span class="fas fa-archive"></span> Document type</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" class="nav-link dropdown-toggle">Report</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-medical-alt"></span> Outstanding letters </a></li>
+                        <li class="dropdown-divider"></li>
+                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Full teams</a></li>                       
+                        
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown-submenu dropdown-hover w-100">
+                            <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Data</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+                                <li><a href="{{ route('engineer.index') }}" class="dropdown-item"> <span class="fas fa-users-cog"></span> Members</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{ route('user.index') }}" class="dropdown-item"> <span class="fas fa-users"></span> Users</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{ route('position.index') }}" class="dropdown-item"> <span class="fas fa-user-check"></span> Position</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{route('work.index')}}" class="dropdown-item"> <span class="fas fa-handshake"></span> Pay items</a></li>                             
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{route('package.index')}}" class="dropdown-item"><span class="fas fa-box-open"></span> Packages</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="#" class="dropdown-item"><span class="fas fa-award"></span> Contractors</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-divider"></li>
+                        <li class="dropdown-submenu dropdown-hover w-100">
+                            <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Utility</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+                                <li><a href="{{route('item.index')}}" class="dropdown-item"><span class="fas fa-sitemap"></span> item</a></li>
+                                <li><a href="{{route('letter-source.index')}}" class="dropdown-item"> <span class="fab fa-sourcetree"></span> Letter source</a></li>
+                                <li><a href="{{route('corres-type.index')}}" class="dropdown-item"> <span class="far fa-file-archive"></span> Correspondence type</a></li>
+                                <li><a href="{{route('action-type.index')}}" class="dropdown-item"> <span class="fas fa-archive"></span> Type of action</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -96,6 +146,9 @@
         </div>
 
         <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
+            <li class="nav-item dropdown">
+                <a href="#" class="nav-link">{!!UserPackageNameActive(Auth::user()->package_id)!!}</a>
+            </li>
             <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
                     <i class="fas fa-comments"></i>
@@ -190,7 +243,7 @@
                       @endauth
                     </button>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">My profile</a>
+                      <a class="dropdown-item" href="{{route('profile.me')}}">My profile</a>
                       <a class="dropdown-item" href="#">change avatar</a>
                       <a class="dropdown-item-text" href="javascript:void(0)" onclick="event.preventDefault();document.getElementById('fLogout').submit()">Logout <span class="fas fa-sign-out-alt" style="align-content: flex-end"></span></a>
                       <form action="{{ route('logout') }}" class="hidden" id="fLogout" method="POST">

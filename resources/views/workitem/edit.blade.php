@@ -40,8 +40,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-sm btn-danger rounded-0" data-dismiss="modal"><i class="fas fa-times-circle"></i> Close</button>
                 <button type="submit" class="btn btn-sm btn-primary rounded-0"><i class="fas fa-save"></i> Update</button>
+                <button type="button" class="btn btn-sm btn-danger rounded-0" data-dismiss="modal"><i class="fas fa-times-circle"></i> Close</button>
             </div>
         </form>
     </div>

@@ -18,6 +18,9 @@ class CreateCorrespondenceTypesTable extends Migration
             $table->string('correspondence_type');
             $table->text('description')->nullable();
             $table->enum('type',['IN','OUT'])->default('IN');
+            $table->string('status',1)->default('1');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

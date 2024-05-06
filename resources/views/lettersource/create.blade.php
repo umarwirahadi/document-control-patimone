@@ -18,8 +18,14 @@
                         <input type="text" class="form-control" placeholder="unit name" name="unit">
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Package</label>
+                        <select name="package_id" class="form-control">
+                            {!!packageName()!!}
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Description</label>
-                        <div class="text-area" id="description" name="description"></div>                        
+                        <textarea class="text-area" id="description" name="description" cols="30" rows="10"></textarea>
                     </div>                    
             </div>
             <div class="modal-footer">
