@@ -20,7 +20,6 @@ class CreateRfisTable extends Migration
             $table->string('reference_no');
             $table->string('doc_number',30);
             $table->text('specification_std');
-            $table->foreignUuid('work_id')->nullable()->references('id')->on('works');
             $table->text('contractor_notes')->nullable();
             $table->string('contractor_pic')->nullable();
             $table->string('sub_contractor_pic')->nullable();
@@ -35,6 +34,7 @@ class CreateRfisTable extends Migration
             $table->index('reference_no');
             $table->index('doc_number');
             $table->index('specification_std');
+            // $table->foreignUuid('work_id')->nullable()->references('id')->on('works');            
         });
     }
 

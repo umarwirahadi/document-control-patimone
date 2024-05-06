@@ -45,7 +45,7 @@
                     <div class="tab-pane fade active show" id="custom-tabs-two-home" role="tabpanel" aria-labelledby="custom-tabs-two-home-tab">
                       <span class="badge badge-dark mb-4">Draft list</span>
                       <div class="table-responsives">
-                        <table class="table table-sm table-bordered table-hover" id="data-rfi-draft" data-url="{{route('incoming.fetch.letter')}}" width="100%">
+                        <table class="table table-sm table-bordered table-hover" id="data-rfi-draft" data-url="" width="100%">
                           <thead>
                             <tr>
                               <th>No</th>
@@ -65,7 +65,7 @@
                     <div class="tab-pane fade" id="custom-tabs-two-profile" role="tabpanel" aria-labelledby="custom-tabs-two-profile-tab">
                       <span class="badge badge-dark mb-4">sent list</span>
                       <div class="table-responsive">
-                        <table class="table table-sm table-bordered table-hover" id="data-rfi-sent" data-url="{{route('incoming.fetch.letter')}}" width="100%">
+                        <table class="table table-sm table-bordered table-hover" id="data-rfi-sent" data-url="" width="100%">
                           <thead>
                             <tr>
                               <th>No</th>
@@ -85,7 +85,7 @@
                     <div class="tab-pane fade" id="custom-tabs-two-messages" role="tabpanel" aria-labelledby="custom-tabs-two-messages-tab">
                       <span class="badge badge-dark mb-4">approved list</span>
                       <div class="table-responsive">
-                        <table class="table table-sm table-bordered table-hover" id="data-rfi-approved" data-url="{{route('incoming.fetch.letter')}}" width="100%">
+                        <table class="table table-sm table-bordered table-hover" id="data-rfi-approved" data-url="" width="100%">
                           <thead>
                             <tr>
                               <th>No</th>
@@ -105,7 +105,7 @@
                     <div class="tab-pane fade" id="custom-tabs-two-settings" role="tabpanel" aria-labelledby="custom-tabs-two-settings-tab">
                       <span class="badge badge-dark mb-4">rejected list</span>
                       <div class="table-responsives">
-                        <table class="table table-sm table-bordered table-hover" id="data-rfi-rejected" data-url="{{route('incoming.fetch.letter')}}" width="100%">
+                        <table class="table table-sm table-bordered table-hover" id="data-rfi-rejected" data-url="" width="100%">
                           <thead>
                             <tr>
                               <th>No</th>

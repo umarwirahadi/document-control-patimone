@@ -35,8 +35,7 @@ class WorkController extends Controller
     public function store(Request $request)
     {
         try {
-            if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('work.index');
-                
+            if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('work.index');                
             $request->validate(
                     ['item_no'=>'required|string|unique:works,item_no',
                     'pay_item'=>'required|string',

@@ -25,8 +25,8 @@ class CreateContactsTable extends Migration
             $table->string('profile')->nullable();
             $table->enum('type',['contractor','subcontractor','engineer','employeer'])->default('contractor');
             $table->string('status',1)->default(1);
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->softDeletes();
             $table->timestamps();
             $table->index(['first_name','phone_1','primary_email']);

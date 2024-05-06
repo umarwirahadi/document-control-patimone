@@ -10,7 +10,7 @@
               <div class="col-sm-6">
                   <div class="float-right">
                       <button type="button" class="btn btn-sm btn-primary rounded-0" data-url="{{route('engineer.create')}}" id="btnCreate"><i
-                              class="fas fa-plus-circle"></i> Add</button>
+                              class="fas fa-plus-circle"></i> Create</button>
                       <button type="button" class="btn btn-sm btn-success rounded-0" id="btnRefreshPosition" data-url="{{route('engineer.index')}}"><i
                               class="fas fa-history"></i> Refresh</button>
 
@@ -32,11 +32,13 @@
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>Code</th>
-                                <th>Name</th>
-                                <th>Email</th>
+                                <th>Full name</th>
+                                <th>Nickname</th>
+                                <th>Initial</th>
                                 <th>Phone</th>
                                 <th>Type</th>
+                                <th>Position</th>
+                                <th>Status</th>
                                 <th>Action</th>
                               </tr>
                             </thead>

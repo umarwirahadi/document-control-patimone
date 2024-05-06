@@ -4,7 +4,7 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="base_url" content="{{ url('/') }}">
 
-<title>Patimone | RFI</title>
+<title>{{config('app.name')}}</title>
 <link rel="stylesheet" href="{{ asset('dist/css/fontawesome/all.min.css') }}">
 <link rel="stylesheet" href="{{ asset('dist/css/adminlte.min.css') }}">
 <link rel="stylesheet" href="{{ asset('plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
@@ -28,8 +28,11 @@
     .ck-editor__editable_inline {
     height: 150px;
     }
-    .cke_dialog
-{
-    z-index: 10055 !important;
-}
+    .cke_dialog {
+        z-index: 10055 !important;
+    }
+
+    .ui-front {
+        z-index: 2000 !important;
+    }
 </style>

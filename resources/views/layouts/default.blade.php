@@ -35,18 +35,32 @@
                           </div>
                       </div>
                       <div class="card-body">
-                        <div class="card-columns">
-                            <div class="card bg-primary">
-                                <div class="card-body text-center">
-                                    <a href="" class="text text-link">PACKAGE 1</a>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="container">
+                                    <div class="card" style="width: 30%">
+
+                                    </div>
                                 </div>
                             </div>
-                            <div class="card bg-primary">
+                        </div>
+                        <div class="container">
+
+                        </div>
+                        <div class="container">
+                            <div class="card bg-default" style="width: 25%;padding:15px;">
+                                <img src="{{asset('storage/img/man.png')}}" alt="" class="card-img-top" >
+                                <div class="card-body text-center">
+
+                                    <a href="" class="btn btn-primary rounded-0 stretched-link">Engineers</a>
+                                </div>
+                            </div>
+                            <div class="card bg-primary" style="width: 25%">
                                 <div class="card-body text-center">
                                     PACKAGE 2
                                 </div>
                             </div>
-                            <div class="card bg-primary">
+                            <div class="card bg-primary" style="width: 25%">
                                 <div class="card-body text-center">
                                     PACKAGE 3
                                 </div>

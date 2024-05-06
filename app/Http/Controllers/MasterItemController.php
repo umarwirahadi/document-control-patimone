@@ -35,12 +35,11 @@ class MasterItemController extends Controller
             if(!$request->ajax() && $request->method()<>'POST') return redirect()->route('item.index');
             $validated =$this->validate($request,['item_code'=>'required',
             'item_name'=>'required',
-            'item_category'=>'required',
-            'item_status'=>'required']);
+            'item_category'=>'required']);
             if($validated){
-                $item=MasterItem::create($request->all());
+                $item=MasterItem::create(['item_code'=>$request->item_code,'item_name'=>$request->item_name,'item_category'=>$request->item_category,'item_description'=>$request->item_description,'item_status'=>1]);
                 return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$item],200);
-            }  
+            }
             return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
             } catch (\Throwable $th) {
                 throw $th;
@@ -100,7 +99,7 @@ class MasterItemController extends Controller
             return Datatables::of($items)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('item.edit',$row->id??'');
                 $destroy=route('item.destroy',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-info btn-sm rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
+                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-primary btn-sm rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
                        <button type="button" class="btn btn-danger btn-sm rounded-0 delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
                 return $btn;
             })->editColumn('item_status',function($data){

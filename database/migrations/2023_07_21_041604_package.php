@@ -14,16 +14,16 @@ class Package extends Migration
     public function up()
     {
         Schema::create('packages', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('package_name');
             $table->integer('total_days')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->text('description')->nullable();
-            $table->string('status')->default(0)->comment('1:active, 0:inActive');
+            $table->string('status')->default(1)->comment('1:active, 0:inActive');
             $table->softDeletes();
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
             $table->index('id');
             $table->index('package_name');

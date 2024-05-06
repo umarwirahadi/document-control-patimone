@@ -1,7 +1,7 @@
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <form action="{{ route('package.store') }}" method="POST" id="formPackage">
-                <div class="modal-header">
+                <div class="modal-header bg-gradient-gray-dark">
                     <h5 class="modal-title" id="staticBackdropLabel">Create data</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -32,8 +32,8 @@
                         </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-sm btn-danger rounded-0" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-sm btn-primary rounded-0">Save</button>
+                    <button type="submit" class="btn btn-sm btn-primary rounded-0"><i class='fas fa-save'></i> Save</button>
+                    <button type="button" class="btn btn-sm btn-danger rounded-0" data-dismiss="modal"><i class='fas fa-times'></i> Close</button>
                 </div>
             </form>
         </div>

@@ -14,14 +14,14 @@ class CreatePositionsTable extends Migration
     public function up()
     {
         Schema::create('positions', function (Blueprint $table) {
-            $table->id();
+            $table->uuid('id')->primary();
             $table->string('position_code');
             $table->string('position_name');
             $table->string('category')->comment('Engineer,inspector,SS,other');
             $table->string('description')->nullable();
             $table->softDeletes();
-            $table->unsignedInteger('created_by');
-            $table->unsignedInteger('updated_by')->nullable();
+            $table->string('created_by');
+            $table->string('updated_by')->nullable();
             $table->timestamps();
         });
     }

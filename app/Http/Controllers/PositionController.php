@@ -37,18 +37,17 @@ class PositionController extends Controller
         try {
             if(!$request->ajax() && $request->method()<>'POST') return redirect()->route('position.index');
             $validated =$this->validate($request,['position_code'=>'required|unique:positions,position_code',
-            'position_name'=>'required',
-            'category'=>'required']);
+            'position_name'=>'required','category'=>'required']);
             if($validated){
                 $position=Position::create($request->all());
                 return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$position],200);
-            }  
-            return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
-            } catch (\Throwable $th) {
-                throw $th;
             }
+            return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
-    
+
     public function edit($id)
     {
         try {
@@ -66,10 +65,10 @@ class PositionController extends Controller
         try {
             if(!$request->ajax() && $request->method()<>'PUT') return redirect()->route('position.index');
                 $request->validate(
-                    ['position_code'=>'required',
-                    'position_name'=>'required',
+                    ['position_name'=>'required',
                     'category'=>'required']);
                     $position=Position::findOrFail($id);
+                    /* $position->position_code=$request->position_code; */
                     $position->position_name=$request->position_name;
                     $position->category=$request->category;
                     $position->save();
@@ -90,9 +89,9 @@ class PositionController extends Controller
                         return response()->json(['success'=>true,'message'=>'Data deleted..!','data'=>null],200);
                     }
                     return response()->json(['success'=>false,'message'=>'Failed to delete data..!, please check first','data'=>null],200);
-            } catch (\Throwable $th) {
-                throw $th;
-            }
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 
     public function fetch(Request $request)
@@ -103,7 +102,7 @@ class PositionController extends Controller
             return Datatables::of($position)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('position.edit',$row->id??'');
                 $destroy=route('position.destroy',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-success btn-sm rounded-0 btn-custom edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
+                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-primary btn-sm rounded-0 btn-custom edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-edit"></i> Edit</button>
                        <button type="button" class="btn btn-danger btn-sm rounded-0 btn-custom delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
                 return $btn;
             })->rawColumns(['action'])->make(true);
