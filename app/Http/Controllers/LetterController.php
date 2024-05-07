@@ -480,7 +480,6 @@ class LetterController extends Controller
 
             $letters=DB::table('letters')->select('letters.id','letters.document_no','letters.letter_date','letter_ref_no','letters.received_date','letters.subject','letters.rev','letters.status','letter_sources.source_name')
                      ->leftJoin('letter_sources','letter_sources.id','=','letters.letter_source_id')->get();
-            // $letters=Letter::orderBy('created_at','asc')->with('source')->get();
             return Datatables::of($letters)
             ->addIndexColumn()           
             ->editColumn('status',function($data){
@@ -514,7 +513,9 @@ class LetterController extends Controller
     {
         try {
             if(!request()->ajax()) return route('letter.index');
-            $transmittals=Letter::transmittal(auth()->user()->package_id)->get();
+            // $transmittals=Letter::transmittal(auth()->user()->package_id)->get();
+            $transmittals=DB::table('letters')->select('letters.id','letters.document_no','letters.letter_date','letter_ref_no','letters.received_date','letters.subject','letters.rev','letters.status','letter_sources.source_name')
+                     ->leftJoin('letter_sources','letter_sources.id','=','letters.letter_source_id')->whereIn('')->get();
             return Datatables::of($transmittals)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('package.edit',$row->id??'');
                 $destroy=route('package.destroy',$row->id);

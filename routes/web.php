@@ -46,6 +46,7 @@ Route::put('/user-assign/{id}/update',[App\Http\Controllers\UserController::clas
 Route::delete('/user-assign/{id}/destroy',[App\Http\Controllers\UserController::class,'destroyAssign'])->name('user.assign.destroy');
 
 Route::get('/me',App\Http\Controllers\ProfileController::class)->name('profile.me');
+Route::post('/change-password',[App\Http\Controllers\UserController::class,'changepassword'])->name('user.change.password');
 
 
 

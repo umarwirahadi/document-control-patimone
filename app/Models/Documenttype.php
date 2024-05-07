@@ -18,6 +18,11 @@ class Documenttype extends Model
     protected $keyType='string';
     protected $casts=['id'=>'string'];
     public $incrementing=false;
+
+    protected static function packages(){
+        
+    }
+
     public static function boot(){
         parent::boot();
         static::creating(function($data){

@@ -132,4 +132,23 @@ class UserController extends Controller
             throw $th;
         }
     }
+
+    public function changepassword(Request $request){
+        try {
+            if(!$request->ajax()) return route('profile.me');
+            $request->validate(['password' => 'required|confirmed|min:8','current_password'=>['required',function($attribute,$value,$fail){
+                /* check if incorect current password */
+                if(!\Hash::check($value,auth()->user()->passwird)){
+                    return $fail(__('The current password is incorrect.'));
+                }
+            }]]);
+            $me=User::findOrFail(auth()->user()->id);
+            $me->password = Hash::make($request->password);
+            $me->save();
+            return response()->json(['success'=>true,'message'=>'Password changed..!','data'=>$me],200);
+
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

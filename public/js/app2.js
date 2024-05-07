@@ -8,7 +8,7 @@ $(document).ready(function(){
     toastr.options={"showDuration":100,"hideDuration": 300};
 
 
-    /* data user */
+    /* data user disini */
     
 var tableUser=$('#data-users').DataTable(
   {
@@ -118,6 +118,20 @@ $(document).on('click','#data-assign-package .delete-assign-user',function(){
         return false;
     });
 });
+$(document).on('submit','#formChangePassword',function(e){
+  e.preventDefault();
+  $.ajax({
+    url:$(this).attr('action'),
+    type:$(this).attr('method'),
+    dataType:'json',
+    success:function(data){
+      console.log(data);
+    },error:function(e){
+      console.log(e);
+    }
+  })
+})
+
 
 /* end data user */
     var tablePosition = $('#data-position').DataTable({
@@ -380,9 +394,10 @@ $(document).on('click','#data-correspondence-type .edit-form',function(){
       },
       complete:function(){
         const attrID=document.querySelectorAll('.text-area');
-        for (let i = 0; i < attrID.length; i++) {
-          $.fn.createCkeditor(`#${attrID[i].id}`);
-        }
+        CKEDITOR.replace('description');
+        // for (let i = 0; i < attrID.length; i++) {
+        //   $.fn.createCkeditor(`#${attrID[i].id}`);
+        // }
           $("button[id='edit"+buttonID+"']").html(originButton);
       }
     });
@@ -1264,7 +1279,7 @@ var tableItem = $('#data-item').DataTable({
     {data: 'action', name: 'action', orderable: false, searchable: false}
   ]
 });
-/* letter disini */
+/* letter */
 var tableLetter = $('#incoming-letter').DataTable({
   processing: true,
   serverSide: true,

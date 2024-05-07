@@ -47,7 +47,7 @@
                 </li>
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
-                        aria-expanded="false" class="nav-link dropdown-toggle">Document</a>
+                        aria-expanded="false" class="nav-link dropdown-toggle">Documents</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Contract Document </a></li>
                         <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Method statement</a></li>
@@ -84,6 +84,8 @@
                                 <li><a href="{{route('package.index')}}" class="dropdown-item"><span class="fas fa-box-open"></span> Packages</a></li>
                                 <li class="dropdown-divider"></li>
                                 <li><a href="#" class="dropdown-item"><span class="fas fa-award"></span> Contractors</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{route('user.index')}}" class="dropdown-item"><span class="fas fa-award"></span> Users</a></li>
                             </ul>
                         </li>
                         <li class="dropdown-divider"></li>

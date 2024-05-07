@@ -52,14 +52,15 @@
                            alt="User profile picture">
                     </div>
     
-                    <h3 class="profile-username text-center">{{$user['name']}}</h3>
+                    <h3 class="profile-username text-center">{{$user['name']??''}}</h3>
     
-                    <p class="text-muted text-center">{{$user['level']}}</p>
+                    <p class="text-muted text-center">{{$user['level']??''}}</p>
     
                     <ul class="list-group list-group-unbordered mb-3">
 
-                        @foreach ($user->access as $item)
+                        @foreach ($useraccess as $item)
                         <li class="list-group-item">
+                          {{-- <b>{{$item->package->package_name}}</b> --}}
                             {{-- <b>Package</b> <a class="float-right">1,322</a> --}}
                             <b>{{$item->package->package_name}}</b> <a class="float-right">{!!$item->package->status == 1 ? '<i class="text text-primary">Active</i>' : '<i class="text text-danger">Not Active</i>'!!}</a>
                           </li>      
@@ -297,23 +298,24 @@
                       <!-- /.tab-pane -->
     
                       <div class="tab-pane" id="settings">
-                        <form class="form-horizontal">
+                        <form class="form-horizontal" action="{{route('user.change.password')}}" method="POST" id="formChangePassword">
+                          @csrf
                           <div class="form-group row">
                             <label for="inputName" class="col-sm-2 col-form-label">Current Password</label>
                             <div class="col-sm-10">
-                              <input type="email" class="form-control" id="inputName" placeholder="Current password" autocomplete="off">
+                              <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Current password" autocomplete="off">
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label for="inputEmail" class="col-sm-2 col-form-label">New Password</label>
+                            <label for="password" class="col-sm-2 col-form-label">New Password</label>
                             <div class="col-sm-10">
-                              <input type="password" class="form-control" id="inputEmail" placeholder="New password" autocomplete="off">
+                              <input type="password" class="form-control" id="password" name="password" placeholder="New password" autocomplete="off">
                             </div>
                           </div>
                           <div class="form-group row">
-                            <label for="inputName2" class="col-sm-2 col-form-label">Confrim Password</label>
+                            <label for="password_confirmation" class="col-sm-2 col-form-label">Confrim Password</label>
                             <div class="col-sm-10">
-                              <input type="password" class="form-control" id="inputName2" placeholder="Confirm password" autocomplete="off">
+                              <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Confirm password" autocomplete="off">
                             </div>
                           </div>                                                   
                           <div class="form-group row">

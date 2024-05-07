@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-md" role="document">
+<div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <form action="{{ route('user.assign.store') }}" method="POST" id="formAssignUserPackage">
             <div class="modal-header bg-gradient-gray-dark">
@@ -34,7 +34,7 @@
                     <div class="mb-3">
                         <div class="table-responsive">                           
                             <table class="table table-sm table-bordered table-hover" id="data-assign-package">
-                                <thead>
+                                <thead class="thead-dark">
                                     <tr>
                                         <th>Package</th>
                                         <th>Level</th>
