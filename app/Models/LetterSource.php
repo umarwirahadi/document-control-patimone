@@ -14,12 +14,12 @@ class LetterSource extends Model
     use SoftDeletes;
 
     protected $table='letter_sources';
+    protected $fillable=['source_name','unit','description','package_id','status'];
     protected $keyType = 'string';
 
     public $incrementing = false;  
     protected $casts = ['id'=>'string'];  
 
-    protected $fillable=['source_name','unit','description','package_id','status'];
     public static function boot(){
         parent::boot();
         static::creating(function($data){

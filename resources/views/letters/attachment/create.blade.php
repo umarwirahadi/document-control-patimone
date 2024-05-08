@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <form action="{{ route('letter.store.attachment') }}" method="POST" id="formAttachment">
             <div class="modal-header bg-gradient-gray-dark">

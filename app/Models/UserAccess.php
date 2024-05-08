@@ -32,7 +32,10 @@ class UserAccess extends Model
     }
 
     public function package(){
-        return $this->hasMany(Package::class);
+        // return $this->hasMany(Package::class,'id','package_id');
+        return $this->belongsTo(Package::class);
+
     }
+
     
 }

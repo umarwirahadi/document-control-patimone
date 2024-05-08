@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <form action="{{ route('corres-type.update',$id) }}" method="POST" id="formCorrespondence-type">
             <div class="modal-header bg-gradient-gray-dark">
@@ -24,6 +24,11 @@
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea class="text-area" id="description" name="description" rows="2">{{$description ?? ''}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        {{-- <textarea class="text-area" id="description" name="description" rows="2">{{$description ?? ''}}</textarea> --}}
+                        <input type="text" class="form-control form-control-sm" name="content_template" id="content_template" value="{{$content_template??''}}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Status</label>

@@ -5,10 +5,11 @@ $(document).ready(function(){
         }
     });
     var loadingIndicator='<div class="spinner-border spinner-border-sm"></div> loading';
+    const base_url=$('meta[name="base_url"').attr('content');
     toastr.options={"showDuration":100,"hideDuration": 300};
 
 
-    /* data user */
+    /* data user disini */
     
 var tableUser=$('#data-users').DataTable(
   {
@@ -29,6 +30,85 @@ var tableUser=$('#data-users').DataTable(
     ]
 }  
 );
+
+$(document).on('change','#formUser #engineer_id',function(e){
+  const dataID=$(this).val();
+  $.ajax({
+    url:base_url + '/engineer/get/'+dataID,
+    dataType:'json',
+    success:function(data){      
+      if(typeof(data.data.email) ==='object' ){
+        const user=data.data;
+        $('#formUser #name').val(user.full_name);
+          if(user.email.length > 0 ){
+            $('#formUser #email').val(user.email[0].email);
+          } else {
+            $('#formUser #email').val('');
+          }
+      }
+    }
+  })
+});
+
+$(document).on('shown.bs.modal','#formUser',function(){
+
+  var $assignment=$('#formUser #engineer_id').select2({
+    theme: 'classic',
+    allowClear: true,
+    ajax:{
+      url:$('#assign_to').attr('data-url'),
+      dataType:'json',
+      method:'POST',
+      data:function(params){
+        var query={
+          search:params.term
+        }
+        return query;
+      },
+      processResults:function(data){
+        return {
+          results:data
+        }
+      },
+      cache:true
+  }});
+
+  /* 
+  var dataUrl=$('#autocomplete_select_reference').attr('data-url');
+  $("#autocomplete_select_reference" ).autocomplete({
+    autoFocus:true,
+    source: function(req,res){
+      $.ajax({
+        url:dataUrl,
+        type:'POST',
+        dataType:'json',
+        data:{
+          term:req.term
+        },
+        success:function(data){
+          res(data)
+        }
+      });        
+    },
+    minLength:2,
+    select:function(event,ui){
+      $('#autocomplete_select_reference').val(ui.item.label);
+      $('#letter_id_reference').val(ui.item.value);
+      $('#ref_subject').val(ui.item.subject);
+      return false;
+    },
+    change:function(ev,ui){
+      if(!ui.item){
+        $(this).val('');
+      }
+    }
+  })
+  .autocomplete('instance')._renderItem = function(ul,item){
+    let sliced=item.subject ? item.subject.slice(0,50):'';
+    return $('<li>').append('<div>'+item.label+' - '+sliced+'</div>').appendTo(ul);
+  } */
+});
+
 
 
 $(document).on('click','#data-users .assign-form',function(){
@@ -118,6 +198,31 @@ $(document).on('click','#data-assign-package .delete-assign-user',function(){
         return false;
     });
 });
+$(document).on('submit','#formChangePassword',function(e){
+  e.preventDefault();
+  $.ajax({
+    url:$(this).attr('action'),
+    type:$(this).attr('method'),
+    data: $(this).serialize(),
+    dataType:'json',
+    success:function(data){
+      Swal.fire(
+        'Success',
+        data.message,
+        data.success ? 'success' :'warning'
+      )
+    },error:function(a){
+      if(a.status==422){
+        $.each(a.responseJSON.errors, function (i, v) {
+            toastr.error(v)
+        })
+      } else {
+        toastr.error('Error..!');
+      }
+    }
+  })
+})
+
 
 /* end data user */
     var tablePosition = $('#data-position').DataTable({
@@ -183,6 +288,10 @@ $(document).on('click','#btnCreate',function(){
         success:function(data){
           $("#datamodal").html(data);
           $('#datamodal').modal('show');
+          /* find element */
+          $('.modal-body').find('.control-select2').select2({theme:'bootstrap4'});
+
+
           const attrID=document.querySelectorAll('.text-area');
           for (let i = 0; i < attrID.length; i++) {
             $.fn.createCkeditor(`#${attrID[i].id}`);
@@ -380,9 +489,10 @@ $(document).on('click','#data-correspondence-type .edit-form',function(){
       },
       complete:function(){
         const attrID=document.querySelectorAll('.text-area');
-        for (let i = 0; i < attrID.length; i++) {
-          $.fn.createCkeditor(`#${attrID[i].id}`);
-        }
+        CKEDITOR.replace('description');
+        // for (let i = 0; i < attrID.length; i++) {
+        //   $.fn.createCkeditor(`#${attrID[i].id}`);
+        // }
           $("button[id='edit"+buttonID+"']").html(originButton);
       }
     });
@@ -975,6 +1085,7 @@ $(document).on('submit','#formEmail',function(e){
       const data2=data.data;      
       toastr.success(data.message);
       $('#engineerEmail').html('').append(data2);
+      // $('#formEmail input[tye').get(0).reset();
     },
     error: function (a) {
       if(a.status==422){
@@ -1264,16 +1375,19 @@ var tableItem = $('#data-item').DataTable({
     {data: 'action', name: 'action', orderable: false, searchable: false}
   ]
 });
-/* letter disini */
+/* letter */
 var tableLetter = $('#incoming-letter').DataTable({
   processing: true,
   serverSide: true,
-  responsive: false,
+  responsive: false,  
+  scrollY:'500px',
+  lengthMenu:[[25,50,-1],[25,50,'All']],
+  scrollCollapse:true,
   ajax: $('#incoming-letter').attr('data-url'),
   columns: [
     // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
     {data: 'letter_ref_no', name: 'letter_ref_no'},
-    {data: 'source_name', name: 'letterSource.source_name',searchable:false},
+    {data: 'source_name', name: 'source_name',searchable:false},
     {data: 'letter_date', name: 'letter_date'},
     {data: 'subject', name: 'subject'},
     {data: 'status', name: 'status'},
@@ -1346,10 +1460,11 @@ $(document).on('click','#btnAddAttachment',function(){
       },
       complete:function(){
           $('#btnAddAttachment').html(originButton);
-          const attrID=document.querySelectorAll('.text-area');
-          for (let i = 0; i < attrID.length; i++) {
+          CKEDITOR.replace('file_name');
+         /* const attrID=document.querySelectorAll('.text-area');
+           for (let i = 0; i < attrID.length; i++) {
             $.fn.createCkeditor(`#${attrID[i].id}`);
-          }
+          } */
 
       },error:function(xhr){
         if(xhr.status == 422) {
@@ -1497,7 +1612,7 @@ $(document).on('click','#geneatePDFDistposition',function(e){
     }
   })
 });
-  $(document).on('shown.bs.modal',function(){
+  $(document).on('shown.bs.modal','#modal-references',function(){
     var dataUrl=$('#autocomplete_select_reference').attr('data-url');
     $("#autocomplete_select_reference" ).autocomplete({
       autoFocus:true,
@@ -1673,12 +1788,17 @@ $(document).on('click','#document-attachment .btn-edit-attachment',function(e){
       },
       success:function(data){
         $("#datamodal").html(data);
-        $('#datamodal').modal('show');
+        $('#datamodal').modal('show');        
       },error:function(){
           $("button[id='edit_"+buttonID+"']").html(originButton);
       },
       complete:function(){
           $("button[id='edit_"+buttonID+"']").html(originButton);
+          CKEDITOR.replace('file_name');
+          /* const attrID=document.querySelectorAll('.text-area');
+          for (let i = 0; i < attrID.length; i++) {
+            $.fn.createCkeditor(`#${attrID[i].id}`);
+          } */
       }
     });
 });
@@ -2004,22 +2124,32 @@ $(document).on('click','#btnQtyRFI',function(){
 bsCustomFileInput.init();
 
 
-$.fn.createCkeditor=function(id=null){
+/* $.fn.createCkeditor=function(id=null){
   ClassicEditor.create( document.querySelector( id ),{
+    fontFamily: {
+      options: [
+          'default',
+          'Ubuntu, Arial, sans-serif',
+          'Ubuntu Mono, Courier New, Courier, monospace'
+      ],
+      supportAllValues: true
+  },
     toolbar: {
         items: [
             'undo', 'redo',
+            'bold', 'italic',
             '|', 'heading',
             '|', 'link',
-            '|', 'bulletedList', 'numberedList', 'outdent', 'indent'
+            '|', 'bulletedList', 'numberedList','fontFamily', 'outdent', 'indent'
         ],
+       
         shouldNotGroupWhenFull: false
     }
   } )
   .catch( error => {
       console.error( error );
   } );
-}
+} */
 /* document type */
 
 var tableDocumentType = $('#data-document-type').DataTable({

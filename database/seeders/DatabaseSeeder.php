@@ -15,15 +15,18 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             
+        /*      
             ItemSeeder::class,
-        /*  UserSeeder::class,
+            UserSeeder::class,
             WorkSeeder::class,
             PositionSeeder::class,
             PackageSeeder::class,
             TypeOfActionSeeder::class, 
             LetterSourceSeeder::class,
             CorrespondenceTypeSeeder::class,
+            
             */
+            PermissionSeeder::class,
 
         ]);
 

@@ -70,13 +70,12 @@
                   <table class="table table-sm table-bordered table-hover" id="incoming-letter" data-url="{{route('incoming.letter.fetch')}}" width="100%">
                     <thead>
                       <tr>
-                        {{-- <th>No</th> --}}
-                        <th>Number</th>
-                        <th>From</th>
-                        <th>Date</th>
-                        <th>Subject</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th style="width: 15%;">Number</th>
+                        <th style="width: 10%;">From</th>
+                        <th style="width: 10%;">Date</th>
+                        <th style="width: 40%;">Subject</th>
+                        <th style="width: 5%;">Status</th>
+                        <th style="width: 10%;">Action</th>
                       </tr>
                     </thead>
                     <tbody class="table-tbody">                        

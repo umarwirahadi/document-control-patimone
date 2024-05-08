@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-lg" role="document">
+<div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
         <form action="{{ route('letter.update.attachment',$attachment->id) }}" method="POST" id="formAttachment">
             <div class="modal-header bg-gradient-gray-dark">
@@ -10,11 +10,10 @@
             <div class="modal-body">
                 @csrf
                 @method('put')
-                <input type="hidden" name="letter_id" id="letter_id" value="{{$attachment->letter_id}}">
+                {{-- <input type="hidden" name="letter_id" id="letter_id" value="{{$attachment->letter_id}}"> --}}
                 <div class="mb-3">
                     <label class="form-label">Doc Name/File name</label>
                     <textarea class="text-area" id="file_name" name="file_name" cols="30" rows="2">{{$attachment->file_name ?? ''}}</textarea>
-                    {{-- <input type="text" name="file_name" id="file_name" class="form-control form-control-sm rounded-0" placeholder="File name of attachment" value="{{$attachment->file_name ?? ''}}"> --}}
                 </div>
                 <div class="mb-3">                        
                     <label class="form-label">Link</label>

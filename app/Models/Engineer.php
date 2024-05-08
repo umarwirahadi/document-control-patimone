@@ -21,6 +21,7 @@ class Engineer extends Model
     protected $casts=['id'=>'string'];
     public $incrementing=false;
 
+
     public static function boot(){
         parent::boot();
         static::creating(function($data){
@@ -35,7 +36,6 @@ class Engineer extends Model
         });
     }
 
-
     public function scopeEngineer($query){
         return $query->where('type', 'engineer')->where('status','1');
     }
@@ -46,11 +46,12 @@ class Engineer extends Model
 
     public function scopeWithPositionAssignment($query){
         return $query->leftjoin('assignments','engineers.id','=','assignments.engineer_id')->leftjoin('positions','positions.id','=','assignments.position_id')
-                ->addSelect('engineers.id as id','assignments.id as assignment_id', 'engineers.full_name as full_name', 'engineers.nickname as nickname', 'engineers.initial as initial', 'engineers.type as type', 'engineers.phone1 as phone1', 'engineers.status as status', 'positions.position_code as position_code', 'positions.position_name as position_name')
-                ->where('engineers.type','=','engineer');
+                ->addSelect('engineers.id as id','assignments.id as assignment_id', 'engineers.full_name as full_name', 'engineers.nickname as nickname', 'engineers.initial as initial', 'engineers.type as type', 'engineers.phone1 as phone1', 'engineers.status as status', 'positions.position_code as position_code', 'positions.position_name as position_name');
+                // ->where('engineers.type','=','engineer');
     }
 
     public function email(){
-        return $this->hasMany(Email::class,'engineer_id')->where('status',1);
-    }
+        return $this->hasMany(Email::class,'engineer_id')->where('status',1)->select(['id','email','status']);
+    }    
+
 }
