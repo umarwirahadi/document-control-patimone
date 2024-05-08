@@ -1,23 +1,6 @@
 @extends('layouts.index')
 @section('content')
-<div class="content-wrapper">
-  {{-- <div class="content-header">
-      <div class="container-fluid">
-          <div class="row mb-2">
-              <div class="col-sm-6">
-                  <h4 class="m-0 text-dark"> {{ $data['title'] ?? '' }}</h4>
-              </div>
-              <div class="col-sm-6">
-                  <div class="float-right">
-                      <button type="button" class="btn btn-sm btn-success btn-custom rounded-0" data-url="{{route('position.create')}}" id="btnCreate"><i
-                              class="fas fa-pencil-alt"></i> Create</button>
-                      <button type="button" class="btn btn-sm btn-primary btn-custom rounded-0" id="btnRefreshPosition" data-url="{{route('position.index')}}"><i
-                              class="fas fa-history"></i> Refresh</button>
-                  </div>
-              </div>
-          </div>
-      </div>
-  </div> --}}
+<div class="content-wrapper"> 
   <div class="content">
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
@@ -25,7 +8,7 @@
           <div class="container-fluid">
             <div class="row mb-2">
               <div class="col-sm-6">
-                <h1>Profile</h1>
+                <h1>My Profile</h1>
               </div>
               <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -48,13 +31,14 @@
                   <div class="card-body box-profile">
                     <div class="text-center">
                       <img class="profile-user-img img-fluid img-circle"
-                           src="../../dist/img/user4-128x128.jpg"
+                           src="../../dist/img/avatar5.png"
                            alt="User profile picture">
                     </div>
     
-                    <h3 class="profile-username text-center">{{$user['name']??''}}</h3>
+                    <h3 class="profile-username text-center">{{$activeUser->name ?? '-'}}</h3>
     
-                    <p class="text-muted text-center">{{$user['level']??''}}</p>
+                    <p class="text-muted text-center">{{$activeUser->level ?? '-'}}</p>
+                    <p class="text-center text-bg-blue">{{$activeUser->email}}</p>
     
                     <ul class="list-group list-group-unbordered mb-3">
 
@@ -82,7 +66,7 @@
                     <ul class="nav nav-pills">
                       <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
                       <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                      <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
+                      <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Change Password</a></li>
                     </ul>
                   </div><!-- /.card-header -->
                   <div class="card-body">
@@ -264,23 +248,16 @@
                               </div>
                             </div>
                           </div>
-                          <!-- END timeline item -->
-                          <!-- timeline time label -->
                           <div class="time-label">
                             <span class="bg-success">
                               3 Jan. 2014
                             </span>
                           </div>
-                          <!-- /.timeline-label -->
-                          <!-- timeline item -->
                           <div>
-                            <i class="fas fa-camera bg-purple"></i>
-    
+                            <i class="fas fa-camera bg-purple"></i>    
                             <div class="timeline-item">
-                              <span class="time"><i class="far fa-clock"></i> 2 days ago</span>
-    
-                              <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>
-    
+                              <span class="time"><i class="far fa-clock"></i> 2 days ago</span>    
+                              <h3 class="timeline-header"><a href="#">Mina Lee</a> uploaded new photos</h3>    
                               <div class="timeline-body">
                                 <img src="https://placehold.it/150x100" alt="...">
                                 <img src="https://placehold.it/150x100" alt="...">
@@ -303,7 +280,7 @@
                           <div class="form-group row">
                             <label for="inputName" class="col-sm-2 col-form-label">Current Password</label>
                             <div class="col-sm-10">
-                              <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Current password" autocomplete="off">
+                              <input type="password" class="form-control" id="current_password" name="current_password" placeholder="Current password" value="">
                             </div>
                           </div>
                           <div class="form-group row">
@@ -320,7 +297,8 @@
                           </div>                                                   
                           <div class="form-group row">
                             <div class="offset-sm-2 col-sm-10">
-                              <button type="submit" class="btn btn-primary rounded-0">Change password</button>
+                              <button type="submit" class="btn btn-sm btn-success rounded-0"><i class='fas fa-save'></i> Submit</button>
+                              <button type="reset" class="btn btn-sm btn-danger rounded-0"><i class='fas fa-times'></i> Cancel</button>
                             </div>
                           </div>
                         </form>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Engineer;
 use App\Models\User;
 use App\Models\UserAccess;
 use Illuminate\Http\Request;
@@ -24,7 +25,8 @@ class UserController extends Controller
     }
     public function create(){
         try {
-            $html=view('useraccess.create')->render();
+            $engineers=Engineer::all();
+            $html=view('useraccess.create',compact('engineers'))->render();
             return response()->json($html);
         } catch (\Throwable $th) {
             throw $th;
@@ -76,10 +78,10 @@ class UserController extends Controller
         try {
             if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('user.index');                
             $validated =$this->validate($request,[
-                'user_id'=>['required',Rule::unique('user_accesses')->where(function($query) use ($request){
+                'package_id'=>['required',Rule::unique('user_accesses')->where(function($query) use ($request){
                     return $query->where('user_id',$request->user_id)->Where('package_id',$request->package_id);
                 })],
-                'status'=>'required','level'=>'required']);
+                'status'=>'required','level'=>'required'],[],['package_id'=>'Package']);
                 if($validated){
                     $user=UserAccess::create($request->all());
                     $data=UserAccess::where('user_id',$user->user_id)->get();
@@ -138,7 +140,7 @@ class UserController extends Controller
             if(!$request->ajax()) return route('profile.me');
             $request->validate(['password' => 'required|confirmed|min:8','current_password'=>['required',function($attribute,$value,$fail){
                 /* check if incorect current password */
-                if(!\Hash::check($value,auth()->user()->passwird)){
+                if(!\Hash::check($value,auth()->user()->password)){
                     return $fail(__('The current password is incorrect.'));
                 }
             }]]);

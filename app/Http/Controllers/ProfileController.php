@@ -20,9 +20,9 @@ class ProfileController extends Controller
     {
         // $user = auth()->user();
         // $user->load("access"); 
+        $activeUser=User::findOrFail(auth()->user()->id);
         $useraccess=UserAccess::where('user_id','=',auth()->user()->id)->get();   
         // return response()->json($useraccess);   
-        $data=['title'=>'My Profile'];
-        return view('profile.me',compact('useraccess','data'));
+        return view('profile.me',compact('useraccess','activeUser'));
     }
 }

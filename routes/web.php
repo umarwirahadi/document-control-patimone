@@ -86,6 +86,7 @@ Route::get('/engineer/detail/{id}',[App\Http\Controllers\EngineerController::cla
 Route::put('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'update'])->name('engineer.update');
 Route::delete('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'destroy'])->name('engineer.destroy');
 Route::get('/engineer/fetch',[App\Http\Controllers\EngineerController::class,'fetch'])->name('engineer.fetch');
+Route::get('/engineer/get/{id}',[App\Http\Controllers\EngineerController::class,'getEngineerByID'])->name('engineer.getbyid');
 
 
 Route::get('inspector',[App\Http\Controllers\InspectorController::class,'index'])->name('inspector.index');

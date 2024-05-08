@@ -35,8 +35,8 @@ class User extends Authenticatable
     public static function boot(){
         parent::boot();
         static::creating(function($data){
-            $data->id=Uuid::uuid4()->toString();
-            $data->status=1;
+            // $data->id=Uuid::uuid4()->toString();
+            // $data->status=1;
         });        
     }
     public function access(){

@@ -9,14 +9,22 @@
             </div>
             <div class="modal-body">
                 @csrf
+                    <div class="mb-3">                        
+                        <label class="form-label">Select from engineer(s)</label>
+                        <select class="form-control control-select2" name="engineer_id" id="engineer_id">
+                            @foreach ($engineers as $engineer)
+                                <option value="{{$engineer->id}}">{{$engineer->full_name}}</option>                                
+                            @endforeach
+                        </select> 
+                    </div>
                     <div class="mb-3">
                         <label class="form-label">Full name</label>
-                        <input type="text" class="form-control" placeholder="full name" name="name">
+                        <input type="text" class="form-control" placeholder="full name" name="name" id="name">
                         <input type="hidden" class="form-control" name="engineer_id">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">email</label>
-                        <input type="email" class="form-control" placeholder="email" name="email">
+                        <input type="email" class="form-control" placeholder="email" name="email" id="email">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Level</label>

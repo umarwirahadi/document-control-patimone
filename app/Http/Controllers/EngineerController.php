@@ -8,6 +8,7 @@ use App\Models\Position;
 use App\Models\Assignment;
 use App\Models\Email;
 use Datatables;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class EngineerController extends Controller
@@ -220,8 +221,7 @@ class EngineerController extends Controller
         try {
             if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('engineer.index');
             $validated =$this->validate($request,
-            ['email'=>'required|email|unique:emails,email',
-            'status'=>'required']);
+            ['email'=>'required|email|unique:emails,email','status'=>'required']);
             if($validated){
                 $email=Email::create($request->all());
                 if($email) {
@@ -303,6 +303,11 @@ class EngineerController extends Controller
         }
     }
 
+    private function getPrimaryEmail($engineer_id){
+        $email=DB::table('emails')->Where('engineer_id','=',$engineer_id)->where('status','=','1')->select('email')->get();
+        return $email;
+    }
+
     public function select2(Request $request){        
         if($request->ajax() && $request->method() <> 'POST') return false;
         if($request->search == ''){
@@ -317,6 +322,26 @@ class EngineerController extends Controller
             $response[]=array('id'=>$engineer->id,'text'=>$engineer->full_name,'caption'=>$engineer->full_name);
         }
         return response()->json($response);
+    }
+
+    public function getEngineerByID($id){
+        try {
+            if(!request()->ajax()) return false;
+            $engineer=Engineer::findOrFail($id);
+            if($engineer){
+                $engineer->email;
+                
+/*                 foreach ($engineer->email as $email) {
+                    $email=$email->email;
+                } */
+                $response=['success'=>true,'message'=>'success','data'=>$engineer];
+            } else {
+                $response=['success'=>false,'message'=>'failed','data'=>null];
+            }
+            return response()->json($response);
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
     }
 
 
