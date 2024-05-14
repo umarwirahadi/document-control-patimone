@@ -25,11 +25,44 @@ var tableUser=$('#data-users').DataTable(
         {data: 'name', name: 'name'},
         {data: 'email', name: 'email'},
         {data: 'level', name: 'level',searchable:false},
-        {data: 'status', name: 'status',searchable:false},
         {data: 'action', name: 'action', orderable: false, searchable: false},
     ]
 }  
 );
+$(document).on('submit','#formUser',function(e){
+  let originButton=$('#formUser button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formUser button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableUser.ajax.reload();
+        Swal.fire(
+            'Success',
+            data.message,
+            data.success ? 'success' :'warning'
+          )
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formUser button[type="submit"]').html(originButton);
+    }
+  });
+});
 
 $(document).on('change','#formUser #engineer_id',function(e){
   const dataID=$(this).val();

@@ -14,7 +14,7 @@ class Engineer extends Model
     use SoftDeletes;
 
     protected $table='engineers';
-    protected $fillable=['code','full_name','nickname','initial','type','photo_profile','dicipline','phone1','phone2','status','description'];
+    protected $fillable=['code','full_name','nickname','initial','type','photo_profile','dicipline','phone1','phone2','status','description','sex'];
 
     
     protected $keyType='string';

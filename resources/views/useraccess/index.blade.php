@@ -26,13 +26,12 @@
                       <div class="card-body">
                         <div class="table-responsivesss">
                           <table class="table table-sm table-hover table-bordered" id="data-users" data-url="{{route('user.fetch')}}">
-                            <thead>
+                            <thead class="bg-cyan">
                               <tr>
                                 <th style="width: 10%">No</th>
                                 <th style="width: 25%">Name</th>
                                 <th style="width: 25%">Email</th>
                                 <th style="width: 10%">Level</th>
-                                <th style="width: 10%">Status</th>
                                 <th style="width: 20%">Action</th>
                               </tr>
                             </thead>

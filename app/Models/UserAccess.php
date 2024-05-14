@@ -10,6 +10,7 @@ use Ramsey\Uuid\Uuid;
 class UserAccess extends Model
 {
     use HasFactory;
+    protected $table='user_accesses';
     protected $fillable = ['user_id','package_id','level','status'];
     protected $casts = [
         'id' => 'string'

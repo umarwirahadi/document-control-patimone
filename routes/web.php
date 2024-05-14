@@ -77,16 +77,18 @@ Route::get('/request-for-inspection/edit',[App\Http\Controllers\RfiController::c
 Route::put('/request-for-inspection/edit',[App\Http\Controllers\RfiController::class,'index'])->name('rfi.update');
 Route::delete('/request-for-inspection',[App\Http\Controllers\RfiController::class,'index'])->name('rfi.destroy');
 
-Route::get('/engineer',[App\Http\Controllers\EngineerController::class,'index'])->name('engineer.index');
-Route::get('/engineer/create',[App\Http\Controllers\EngineerController::class,'create'])->name('engineer.create');
-Route::post('/engineer',[App\Http\Controllers\EngineerController::class,'store'])->name('engineer.store');
-Route::post('/engineer/photo',[App\Http\Controllers\EngineerController::class,'storePhoto'])->name('engineer.storephoto');
-Route::get('/engineer/edit/{id}',[App\Http\Controllers\EngineerController::class,'edit'])->name('engineer.edit');
-Route::get('/engineer/detail/{id}',[App\Http\Controllers\EngineerController::class,'show'])->name('engineer.show');
-Route::put('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'update'])->name('engineer.update');
-Route::delete('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'destroy'])->name('engineer.destroy');
-Route::get('/engineer/fetch',[App\Http\Controllers\EngineerController::class,'fetch'])->name('engineer.fetch');
-Route::get('/engineer/get/{id}',[App\Http\Controllers\EngineerController::class,'getEngineerByID'])->name('engineer.getbyid');
+Route::group(['middleware'=>'role:admin'],function(){
+    Route::get('/engineer',[App\Http\Controllers\EngineerController::class,'index'])->name('engineer.index');
+    Route::get('/engineer/create',[App\Http\Controllers\EngineerController::class,'create'])->name('engineer.create');
+    Route::post('/engineer',[App\Http\Controllers\EngineerController::class,'store'])->name('engineer.store');
+    Route::post('/engineer/photo',[App\Http\Controllers\EngineerController::class,'storePhoto'])->name('engineer.storephoto');
+    Route::get('/engineer/edit/{id}',[App\Http\Controllers\EngineerController::class,'edit'])->name('engineer.edit');
+    Route::get('/engineer/detail/{id}',[App\Http\Controllers\EngineerController::class,'show'])->name('engineer.show');
+    Route::put('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'update'])->name('engineer.update');
+    Route::delete('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'destroy'])->name('engineer.destroy');
+    Route::get('/engineer/fetch',[App\Http\Controllers\EngineerController::class,'fetch'])->name('engineer.fetch');
+    Route::get('/engineer/get/{id}',[App\Http\Controllers\EngineerController::class,'getEngineerByID'])->name('engineer.getbyid');
+});
 
 
 Route::get('inspector',[App\Http\Controllers\InspectorController::class,'index'])->name('inspector.index');

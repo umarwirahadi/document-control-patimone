@@ -66,7 +66,7 @@
                         <li><a href="{{ route('contact.index') }}" class="dropdown-item"><span class="fa fa-angle-right"></span> Contact </a></li>
                         <li class="dropdown-divider"></li>
                         <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Full teams</a></li>                       
-                        
+                        @role(['admin','dc'])
                         <li class="dropdown-divider"></li>                     
                         <li class="dropdown-submenu dropdown-hover w-100">
                             <a id="dropdownSubMenu" href="#" role="button" data-toggle="dropdown"
@@ -88,6 +88,7 @@
                                 <li><a href="{{route('user.index')}}" class="dropdown-item"><span class="fas fa-award"></span> Users</a></li>
                             </ul>
                         </li>
+                        @endrole
                         <li class="dropdown-divider"></li>
                         <li class="dropdown-submenu dropdown-hover w-100">
                             <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
@@ -148,10 +149,10 @@
         </div>
 
         <ul class="order-1 order-md-3 navbar-nav navbar-no-expand ml-auto">
-            <li class="nav-item dropdown">
-                <a href="#" class="nav-link">{!!UserPackageNameActive(Auth::user()->package_id)!!}</a>
-            </li>
-            <li class="nav-item dropdown">
+            {{-- <li class="nav-item dropdown">
+                <a href="#" class="nav-link">{{Auth::user()->packages->pluck('package_name')->implode(',')}}</a>
+            </li> --}}
+            {{-- <li class="nav-item dropdown">
                 <a class="nav-link" data-toggle="dropdown" href="#">
                     <i class="fas fa-comments"></i>
                     <span class="badge badge-danger navbar-badge">3</span>
@@ -236,7 +237,7 @@
                     <div class="dropdown-divider"></div>
                     <a href="#" class="dropdown-item dropdown-footer">See All Notifications</a>
                 </div>
-            </li>
+            </li> --}}
             <li class="nav-item">
                 <div class="dropdown">
                     <button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
@@ -245,9 +246,8 @@
                       @endauth
                     </button>
                     <div class="dropdown-menu">
-                      <a class="dropdown-item" href="{{route('profile.me')}}">My profile</a>
-                      <a class="dropdown-item" href="#">change avatar</a>
-                      <a class="dropdown-item-text" href="javascript:void(0)" onclick="event.preventDefault();document.getElementById('fLogout').submit()">Logout <span class="fas fa-sign-out-alt" style="align-content: flex-end"></span></a>
+                      <a class="dropdown-item" href="{{route('profile.me')}}">Profile</a>
+                      <a class="dropdown-item-text" href="javascript:void(0)" onclick="event.preventDefault();document.getElementById('fLogout').submit()">Logout</a>
                       <form action="{{ route('logout') }}" class="hidden" id="fLogout" method="POST">
                         @csrf
                     </form>

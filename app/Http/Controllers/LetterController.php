@@ -62,7 +62,7 @@ class LetterController extends Controller
 
             $letter=Letter::create(['type'=>$data['type'],
                 'letter_source_id'=>'-',
-                'package_id'=>$data['package_id'],
+                'package_id'=>'-',
                 'correspondence_type'=>'',
                 'document_no'=>'000000',
                 'letter_date'=>date('Y-m-d'),

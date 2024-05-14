@@ -18,7 +18,7 @@ class UserController extends Controller
     }
     public function index(){
         try {
-            return view('useraccess.index',['title'=>'User access credentials']);
+            return view('useraccess.index',['title'=>'User role access']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -38,14 +38,15 @@ class UserController extends Controller
         $request->validate(
                 ['name'=>'required|string|unique:users,name',
                 'engineer_id'=>'required',
-                'password'=>'required|min:6',
                 'level'=>'required']);
                 $user=User::create([
                     'name'=> $request->name,
+                    'email'=> $request->email,
                     'engineer_id'=> $request->engineer_id,
                     'level'=> $request->level,
-                    'password'=> Hash::make($request->password),
+                    'password'=> Hash::make('patimone1234'),
                 ]);
+                $user->assignRole('user');
                 return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$user],200);
         } catch (\Throwable $th) {
             throw $th;
@@ -112,23 +113,19 @@ class UserController extends Controller
     {
         try {
             if(!$request->ajax()) return route('user.index');
-            $users=User::latest()->get();
-            $users->load('engineer');            
+            $users=User::latest()->get();         
 
             return Datatables::of($users)->addIndexColumn()->addColumn('action',function($row){
                 $edit       =route('user.edit',$row->id??'');
                 $destroy    =route('user.destroy',$row->id);
                 $assign     =route('user.assign.create',$row->id);
 
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-success btn-sm btn-custom rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-edit"></i> Edit</button>
-                       <button type="button" data-url="'.$assign.'" class="btn btn-info btn-sm btn-custom rounded-0 assign-form" id="assign-'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Assign</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 btn-custom delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-default btn-sm btn-custom rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-edit"></i> Edit</button>
+                       <button type="button" data-url="'.$assign.'" class="btn btn-default btn-sm btn-custom rounded-0 assign-form" id="assign-'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-box-open"></i> Package</button>
+                       <button type="button" data-url="" class="btn btn-default btn-sm rounded-0 role-form" id="role_'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-box-open"></i> Role</button>
+                       <button type="button" class="btn btn-default btn-sm rounded-0 delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
                 return $btn;
-            }) ->addColumn('status',function($row){
-                $status = $row->engineer->status ==1 ?'<span class="badge badge-primary">Active</span>':'<span class="badge badge-danger">Not Active</span>';
-                return $status;
-            }) 
-            ->rawColumns(['action','status'])->make(true);
+            })->rawColumns(['action','status'])->make(true);
 
         } catch (\Throwable $th) {
             throw $th;
