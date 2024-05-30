@@ -38,19 +38,19 @@
                 <input type="hidden" name="package_id" value="">                                          
                 <div class="col-md-1">
                   <div class="form-group">                    
-                    <label class="form-label">Document date:</label>
+                    <label class="form-label">Doc. date</label>
                     <input type="text" name="letter_date" class="form-control form-control-sm date-picker" placeholder="--select--" id="letter_date" value="{{Carbon\carbon::parse($data->letter_date)->format('d-M-y')}}">
                   </div>
                 </div>
                 <div class="col-md-1">
                   <div class="form-group">                    
-                    <label class="form-label">Received date:</label>
+                    <label class="form-label">Receive date</label>
                     <input type="text" name="received_date" class="form-control form-control-sm date-picker" placeholder="--select--" value="{{Carbon\carbon::parse($data->received_date)->format('d-M-y')}}">
                   </div>
                 </div> 
                 <div class="col-md-1">
                   <div class="form-group">                    
-                    <label class="form-label">Received by:</label>
+                    <label class="form-label">Receive by</label>
                     <select name="received_by" id="received_by" class="form-control form-control-sm">
                       {!!getItem('receive-letter-by',$data->received_by)!!}
                     </select>
@@ -126,7 +126,7 @@
                  <div class="col-md-6">
                   <div class="form-group">
                     <label>For reference(s):</label>
-                    @php
+                      @php
                           $refs = array();
                       @endphp
                       @foreach ($data->references as $ref)

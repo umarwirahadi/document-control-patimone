@@ -50,7 +50,6 @@ class LetterController extends Controller
             $refferences=Letter::find(Session::get('letter_id'));
             $engineers=Engineer::engineer()->get();
             $refferences->load('assignments.engineer');
-            // return response()->json($refferences);
             return view('letters.create',['title'=> 'Letters','engineers'=>$engineers,'lettersource'=>LetterSource::active()->whereIn('package_id',$datapackage)->get(),'correspondencetype'=>CorrespondenceType::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
         } catch (\Throwable $th) {
             throw $th;
@@ -367,8 +366,8 @@ class LetterController extends Controller
                             'cc_to_letter_out'=>$request->cc_to_letter_out,
                             'delivery_date'=>$request->delivery_date,
                             'document_control_date'=>$request->document_control_date,
-                            'assign_to'=>implode(",",$request->assign_to),
-                            'for_reference'=>isset($request->for_reference) ? implode(",",$request->for_reference):'',
+                            // 'assign_to'=>implode(",",$request->assign_to),
+                            // 'for_reference'=>isset($request->for_reference) ? implode(",",$request->for_reference):'',
                             'due_date'=>Carbon::createFromFormat('d-M-y', $request->received_date)->format('Y-m-d'),
                             'engineer_ref_no'=>$request->engineer_ref_no,
                             'engineer_res_date'=>$request->engineer_res_date,
@@ -384,14 +383,14 @@ class LetterController extends Controller
                         /* take for action */ 
                         if(isset($request->assign_to)){
                             foreach ($request->assign_to as $key => $value) {
-                                AssignmentLetter::updateOrCreate(['engineer_id'=>$value,'letter_id'=>$letter_id],['id'=>Uuid::uuid4()->toString(),'action'=>'1','priority'=>$key+1,'status'=>'1','created_by'=>auth()->user()->id]);
+                                AssignmentLetter::updateOrCreate(['engineer_id'=>$value,'letter_id'=>$letter_id],['id'=>Uuid::uuid4()->toString(),'action'=>'1','priority'=>$key+1,'status'=>'1','created_by'=>auth()->user()->id,'name'=>'assign']);
                             }
                         }                       
 
                         /* take for reference */
                         if(isset($request->for_reference)){
                             foreach ($request->for_reference as $key => $value) {
-                                AssignmentLetter::updateOrCreate(['engineer_id'=>$value,'letter_id'=>$letter_id],['id'=>Uuid::uuid4()->toString(),'action'=>'2','priority'=>$key + 1,'status'=>'1','created_by'=>auth()->user()->id]);
+                                AssignmentLetter::updateOrCreate(['engineer_id'=>$value,'letter_id'=>$letter_id],['id'=>Uuid::uuid4()->toString(),'action'=>'2','priority'=>$key + 1,'status'=>'1','created_by'=>auth()->user()->id,'name'=>'reference']);
                             }
                         }
                         /* 

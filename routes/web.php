@@ -91,8 +91,6 @@ Route::group(['middleware'=>'role:admin'],function(){
 });
 
 
-Route::get('inspector',[App\Http\Controllers\InspectorController::class,'index'])->name('inspector.index');
-Route::get('inspector/fetch',[App\Http\Controllers\InspectorController::class,'fetch'])->name('inspector.fetch');
 
 Route::get('engineer/email/create/{engineer_id}',[App\Http\Controllers\EngineerController::class,'createEmail'])->name('engineer.email.create');
 Route::get('engineer/email/show/{engineer_id}/create',[App\Http\Controllers\EngineerController::class,'createEmail2'])->name('engineer.show.email');
@@ -103,6 +101,11 @@ Route::delete('engineer/email/{id}',[App\Http\Controllers\EngineerController::cl
 
 Route::get('engineer-assignment/{engineer_id}',[App\Http\Controllers\EngineerController::class,'assignment'])->name('engineer.assignment');
 Route::post('engineer-assignment/store',[App\Http\Controllers\EngineerController::class,'assignmentStore'])->name('engineer.assignment.store');
+
+Route::get('inspector',[App\Http\Controllers\InspectorController::class,'index'])->name('inspector.index');
+Route::get('inspector/fetch',[App\Http\Controllers\InspectorController::class,'fetch'])->name('inspector.fetch');
+Route::get('inspector/sync-from-ldap',[App\Http\Controllers\InspectorController::class,'sync'])->name('inspector.sync');
+Route::post('inspector/sync-from-ldap',[App\Http\Controllers\InspectorController::class,'doSync'])->name('inspector.do.sync');
 
 
 Route::post('engineer/select2',[App\Http\Controllers\EngineerController::class,'select2'])->name('engineer.select2');
@@ -243,3 +246,6 @@ Route::prefix('utility')->group(function(){
     /* end type of action */
 
 
+
+
+    Route::get('/ldap',[App\Http\Controllers\LdapController::class,'index'])->name('ldap.index');

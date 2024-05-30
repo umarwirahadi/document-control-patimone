@@ -17,6 +17,7 @@ class CreateAssignmentLettersTable extends Migration
             $table->uuid('id')->primary();
             $table->char('letter_id',40);
             $table->char('engineer_id',40);
+            $table->string('name')->nullable();
             $table->string('action',40)->nullable();
             $table->integer('priority')->default(0);
             $table->string("status")->default("1");

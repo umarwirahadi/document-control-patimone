@@ -9,8 +9,10 @@
               </div>
               <div class="col-sm-6">
                   <div class="float-right">
-                      <button type="button" class="btn btn-sm btn-primary rounded-0" data-url="{{route('engineer.create')}}" id="btnCreate"><i
+                      <button type="button" class="btn btn-sm btn-primary rounded-0 btn-create" data-url="{{route('engineer.create')}}" id="btnCreate"><i
                               class="fas fa-plus-circle"></i> Create</button>
+                    <button type="button" class="btn btn-sm btn-info rounded-0 btn-syn" data-url="{{route('inspector.sync')}}" id="btnSyncInspector"><i
+                              class="fas fa-sync-alt"></i> Sync LDAP Server</button>
                       <button type="button" class="btn btn-sm btn-success rounded-0" id="btnRefreshPosition" data-url="{{route('engineer.index')}}"><i
                               class="fas fa-history"></i> Refresh</button>
 

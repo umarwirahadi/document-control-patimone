@@ -86,6 +86,8 @@
                                 <li><a href="#" class="dropdown-item"><span class="fas fa-award"></span> Contractors</a></li>
                                 <li class="dropdown-divider"></li>
                                 <li><a href="{{route('user.index')}}" class="dropdown-item"><span class="fas fa-award"></span> Users</a></li>
+                                <li class="dropdown-divider"></li>
+                                <li><a href="{{route('ldap.index')}}" class="dropdown-item"><span class="fas fa-award"></span> LDAP</a></li>
                             </ul>
                         </li>
                         @endrole
