@@ -19,7 +19,7 @@ class InspectorController extends Controller
     public function index()
     {
         try {
-            return view('engineer.inspector.index',['title'=>'Inspectors']);
+            return view('engineer.inspector.index',['title'=>'List of inspectors']);
         } catch (\Throwable $th) {
             throw $th;
         }

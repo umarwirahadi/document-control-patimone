@@ -33,8 +33,8 @@ class CreateLettersTable extends Migration
             $table->string('cc_to_letter_out')->nullable();
             $table->date('delivery_date')->nullable();
             $table->date('document_control_date')->nullable();
-            $table->text('assign_to')->nullable();
-            $table->text('for_reference')->nullable();
+            // $table->text('assign_to')->nullable();
+            // $table->text('for_reference')->nullable();
             $table->date('due_date');
             $table->string('engineer_ref_no')->nullable();
             $table->string('engineer_res_date')->nullable();

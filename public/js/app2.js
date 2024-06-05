@@ -1493,12 +1493,7 @@ $(document).on('click','#btnAddAttachment',function(){
       },
       complete:function(){
           $('#btnAddAttachment').html(originButton);
-          CKEDITOR.replace('file_name');
-         /* const attrID=document.querySelectorAll('.text-area');
-           for (let i = 0; i < attrID.length; i++) {
-            $.fn.createCkeditor(`#${attrID[i].id}`);
-          } */
-
+          CKEDITOR.replace('file_names');        
       },error:function(xhr){
         if(xhr.status == 422) {
           $.each(xhr.responseJSON.errors,function(key,value){

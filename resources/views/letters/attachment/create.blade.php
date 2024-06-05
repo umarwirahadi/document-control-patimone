@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-xl" role="document">
+<div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <form action="{{ route('letter.store.attachment') }}" method="POST" id="formAttachment">
             <div class="modal-header bg-gradient-gray-dark">
@@ -12,7 +12,7 @@
                 <input type="hidden" name="letter_id" id="letter_id" value="{{session('letter_id')}}">
                 <div class="mb-3">
                     <label class="form-label">Doc Name/File name</label>
-                    <textarea class="text-area" id="file_name" name="file_name" cols="30" rows="2"></textarea>                    
+                    <textarea class="form-control form-control-sm rounded-0 text-area" id="file_name" name="file_name" cols="30" rows="2"></textarea>                    
                     {{-- <input type="text" name="file_name" id="file_name" class="form-control form-control-sm rounded-0" placeholder="File name of attachment"> --}}
                 </div>
                 <div class="mb-3">                        
