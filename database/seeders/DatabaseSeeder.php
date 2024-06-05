@@ -15,8 +15,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             
-            UserSeeder::class,
-            /*      
             ItemSeeder::class,
             WorkSeeder::class,
             PositionSeeder::class,
@@ -24,6 +22,9 @@ class DatabaseSeeder extends Seeder
             TypeOfActionSeeder::class, 
             LetterSourceSeeder::class,
             CorrespondenceTypeSeeder::class,
+            /*      
+            RoleSeeder::class,
+            UserSeeder::class,
             
             PermissionSeeder::class,
             */

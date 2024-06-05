@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Datatables;
 use Ramsey\Uuid\Uuid;
 
+use function PHPUnit\Framework\isNull;
+
 class InspectorController extends Controller
 {
     public function __construct()
@@ -39,12 +41,23 @@ class InspectorController extends Controller
             if(!$request->ajax() && $request->method() != 'POST') return false;
             $inspectors = User::withGlobalScope('inspector',new OnlyInspectors)->get();
             $dataInspector=array();
+            $dataInspector2=array();
             foreach ($inspectors as $key => $value) {        
-
-                $dataInspector[]=Engineer::updateOrCreate(
+                // $initialName=implode("",$value->initials[0]);
+                // $initialName=isNull($value->initials) ? '' : $value->initial[0];
+                // $initialName=trim(!isNull($value->initials) ? $value->initial[0]:'','');
+                // $dataInspector2[]= [$initialName,$value->getName()];
+                $dataInspector2[]= [$value];
+                if($value->userAccountControl[0] == '512' || $value->userAccountControl[0] == '66048') {
+                    $status='1';
+                } else {
+                    $status='0';
+                }
+               /*  $dataInspector[]=Engineer::updateOrCreate(
                     ['code'=>$value->usncreated[0]],
-                    ['full_name'=>$value->getName(),'nickname'=>$value->givenname[0],'initial'=>'unknown','type'=>'inspector','phone1'=>implode(",",(array)$value->mobile),'description'=>'ldap','status'=>$value->userAccountControl[0] === '66048' ? '1' : '0']
-                );
+                    ['full_name'=>$value->getName(),'nickname'=>$value->givenname[0],'initial'=>$initialName,'type'=>'inspector','phone1'=>implode(",",(array)$value->mobile),'description'=>'ldap','status'=>$status]
+                ); */
+
                 /* $dataInspector[]=[
                     ['code'=>$value->usncreated[0]],
                     ['id'=>Uuid::uuid4()->toString(),'code'=>$value->usncreated[0],'full_name'=>$value->getName(),'nickname'=>$value->givenname[0],'initial'=>'unknown','type'=>'inspector','phone1'=>implode(",",(array)$value->mobile),'description'=>'ldap','created_by'=>auth()->user()->id]
@@ -52,7 +65,7 @@ class InspectorController extends Controller
             }
             // Engineer::insert($dataInspector);
             // Engineer::updateOrInsert($dataInspector);
-            return response()->json(['success'=>true,'message'=>'Synchronization process successfuly','data'=>$dataInspector]);
+            return response()->json(['success'=>true,'message'=>'Synchronization process successfuly','data'=>$dataInspector2]);
 
 
         } catch (\Throwable $th) {
