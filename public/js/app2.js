@@ -25,11 +25,44 @@ var tableUser=$('#data-users').DataTable(
         {data: 'name', name: 'name'},
         {data: 'email', name: 'email'},
         {data: 'level', name: 'level',searchable:false},
-        {data: 'status', name: 'status',searchable:false},
         {data: 'action', name: 'action', orderable: false, searchable: false},
     ]
 }  
 );
+$(document).on('submit','#formUser',function(e){
+  let originButton=$('#formUser button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formUser button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      tableUser.ajax.reload();
+        Swal.fire(
+            'Success',
+            data.message,
+            data.success ? 'success' :'warning'
+          )
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v)
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formUser button[type="submit"]').html(originButton);
+    }
+  });
+});
 
 $(document).on('change','#formUser #engineer_id',function(e){
   const dataID=$(this).val();
@@ -1881,6 +1914,72 @@ var dataInspector = $('#data-inspector').DataTable({
   ]
 });
 
+$(document).on('click','#btnSyncInspector',function(){
+  let originButton=$(this).html();
+  $.ajax({
+      url:$(this).attr('data-url'),
+      type:'GET',
+      dataType:'json',
+      beforeSend:function(){
+          $('#btnSyncInspector').html(loadingIndicator);
+      },
+      success:function(data){
+        $("#datamodal").html(data);
+        $('#datamodal').modal('show');        
+      },error:function(){
+          $('#btnSyncInspector').html(originButton);
+      },
+      complete:function(){
+          $('#btnSyncInspector').html(originButton);
+          $('.first-focus').focus();
+      },error:function(xhr){
+        if(xhr.status == 422) {
+          $.each(xhr.responseJSON.errors,function(key,value){
+            toastr.error(value);
+          });
+        } else {
+          Swal.fire(
+            'Error',
+            'Error occurred..!',
+            'error'
+          ).then(function(){
+            window.location.reload();
+          })
+        }
+      }
+    })
+});
+
+$(document).on('submit','#formSyncInspector',function(e){
+  let originButton=$('#formSyncInspector button[type="submit"]').html();
+  e.preventDefault();
+  $.ajax({
+    url: $(this).attr('action'),
+    type: $(this).attr('method'),
+    data: $(this).serialize(),
+    dataType: 'json',
+    beforeSend:function(){
+      $('#formSyncInspector button[type="submit"]').html(loadingIndicator);
+    },
+    success: function (data) {
+      dataInspector.ajax.reload();
+        Swal.fire('Success',data.message,data.success ? 'success' :'warning')
+        $('#datamodal').modal('toggle');
+    },
+    error: function (a) {
+      if(a.status==422){
+          $.each(a.responseJSON.errors, function (i, v) {
+            toastr.error(v);
+          })
+        } else {
+          toastr.error('Error..!');
+        }
+    },
+    complete:function(){
+      $('#formSyncInspector button[type="submit"]').html(originButton);
+    }
+  });
+});
 
 $(document).on('submit','#formItem',function(e){
   let originButton=$('#formItem button[type="submit"]').html();

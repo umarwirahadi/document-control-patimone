@@ -39,21 +39,8 @@
     
                     <p class="text-muted text-center">{{$activeUser->level ?? '-'}}</p>
                     <p class="text-center text-bg-blue">{{$activeUser->email}}</p>
+                    <p class="text-center m-2"><span class="badge bg-gradient-info p-2">{{Auth::user()->packages->pluck('package_name')->implode(',')}}</span></p>                   
     
-                    <ul class="list-group list-group-unbordered mb-3">
-
-                        @foreach ($useraccess as $item)
-                        <li class="list-group-item">
-                          {{-- <b>{{$item->package->package_name}}</b> --}}
-                            {{-- <b>Package</b> <a class="float-right">1,322</a> --}}
-                            <b>{{$item->package->package_name}}</b> <a class="float-right">{!!$item->package->status == 1 ? '<i class="text text-primary">Active</i>' : '<i class="text text-danger">Not Active</i>'!!}</a>
-                          </li>      
-                        @endforeach
-                      
-                      
-                    </ul>
-    
-                    <a href="#" class="btn btn-primary btn-block"><b>Update</b></a>
                   </div>
                   <!-- /.card-body -->
                 </div>               

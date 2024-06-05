@@ -27,14 +27,16 @@
                     <div class="row">
                         <div class="col-md-4">
                             <div class="mb-3">
-                                <label class="form-label">Phone number</label>
-                                <input type="text" class="form-control" placeholder="Phone number ex: +628" name="phone1">
+                                <label class="form-label">Sex</label>
+                                <select name="sex" class="form-control">
+                                    {!!getItem('sex')!!}
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="mb-3">
-                                <label class="form-label">Phone number 2</label>
-                                <input type="text" class="form-control" placeholder="Phone number ex: +628" name="phone2">
+                                <label class="form-label">Phone number</label>
+                                <input type="text" class="form-control" placeholder="Phone number ex: +628" name="phone">
                             </div>
                         </div>                                             
                         <div class="col-md-4">

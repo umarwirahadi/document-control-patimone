@@ -20,7 +20,7 @@
                     <div class="mb-3">
                         <label class="form-label">Full name</label>
                         <input type="text" class="form-control" placeholder="full name" name="name" id="name">
-                        <input type="hidden" class="form-control" name="engineer_id">
+                        {{-- <input type="hidden" class="form-control" name="engineer_id"> --}}
                     </div>
                     <div class="mb-3">
                         <label class="form-label">email</label>
@@ -28,7 +28,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Level</label>
-                        <select name="unit" class="form-control">
+                        <select name="level" class="form-control">
                             <option value="user">User</option>
                             <option value="engineer">engineer</option>
                             <option value="dc">Document Controller</option>

@@ -21,7 +21,6 @@ class CreateUsersTable extends Migration
             $table->string('social_id')->nullable();
             $table->string('social_type')->nullable();
             $table->string('engineer_id')->nullable();
-            $table->string('package_id')->nullable();
             $table->string('level')->default('user');
             $table->string('password');
             $table->rememberToken();

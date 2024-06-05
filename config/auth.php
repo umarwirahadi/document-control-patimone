@@ -60,6 +60,12 @@ return [
     */
 
     'providers' => [
+        /* 'users'=>[
+            'driver'=>'ldap',
+            'model'=>LdapRecord\Models\ActiveDirectory\User::class,
+            'rules'=>[]
+        ] */
+        /* for eloquent user */
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,

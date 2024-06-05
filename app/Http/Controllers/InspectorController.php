@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Ldap\Scopes\OnlyInspectors;
+use App\Ldap\User;
 use App\Models\Engineer;
 use Illuminate\Http\Request;
 use Datatables;
+use Ramsey\Uuid\Uuid;
 
 class InspectorController extends Controller
 {
@@ -17,6 +20,41 @@ class InspectorController extends Controller
     {
         try {
             return view('engineer.inspector.index',['title'=>'Inspectors']);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function sync(){
+        try {
+            $html=view('engineer.inspector.sync')->render();
+            return response()->json($html);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function doSync(Request $request){
+        try {
+            if(!$request->ajax() && $request->method() != 'POST') return false;
+            $inspectors = User::withGlobalScope('inspector',new OnlyInspectors)->get();
+            $dataInspector=array();
+            foreach ($inspectors as $key => $value) {        
+
+                $dataInspector[]=Engineer::updateOrCreate(
+                    ['code'=>$value->usncreated[0]],
+                    ['full_name'=>$value->getName(),'nickname'=>$value->givenname[0],'initial'=>'unknown','type'=>'inspector','phone1'=>implode(",",(array)$value->mobile),'description'=>'ldap','status'=>$value->userAccountControl[0] === '66048' ? '1' : '0']
+                );
+                /* $dataInspector[]=[
+                    ['code'=>$value->usncreated[0]],
+                    ['id'=>Uuid::uuid4()->toString(),'code'=>$value->usncreated[0],'full_name'=>$value->getName(),'nickname'=>$value->givenname[0],'initial'=>'unknown','type'=>'inspector','phone1'=>implode(",",(array)$value->mobile),'description'=>'ldap','created_by'=>auth()->user()->id]
+                ]; */
+            }
+            // Engineer::insert($dataInspector);
+            // Engineer::updateOrInsert($dataInspector);
+            return response()->json(['success'=>true,'message'=>'Synchronization process successfuly','data'=>$dataInspector]);
+
+
         } catch (\Throwable $th) {
             throw $th;
         }

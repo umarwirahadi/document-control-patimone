@@ -10,7 +10,8 @@ use Ramsey\Uuid\Uuid;
 class AssignmentLetter extends Model
 {
     use HasFactory;
-    protected $fillable = ['letter_id','engineer_id','action','priority','status'];
+    protected $table='assignment_letters';
+    protected $fillable = ['letter_id','engineer_id','name','action','priority','status'];
     protected $keyType='string';
     protected $casts=['id'=>'string'];
     public $incrementing=false;

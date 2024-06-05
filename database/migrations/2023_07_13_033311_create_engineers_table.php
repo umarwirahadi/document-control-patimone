@@ -19,6 +19,7 @@ class CreateEngineersTable extends Migration
             $table->string('full_name',100);
             $table->string('nickname',70);
             $table->string('initial',100);
+            $table->string('sex',100)->nullable();
             $table->string('phone1',50)->nullable();
             $table->string('phone2',100)->nullable();
             $table->string('status',1)->default(1);

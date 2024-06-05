@@ -10,7 +10,7 @@ use Ramsey\Uuid\Uuid;
 class Letter extends Model
 {
     use HasFactory;
-    protected $fillable = ['type','package_id','letter_source_id','correspondence_type','document_no','letter_ref_no','letter_date','received_date','attention_to','subject','reference','pic_letter_out','attachment','attachment_type','cc_to_letter_out','delivery_date','document_control_date','assign_to','for_reference','due_date','engineer_ref_no','engineer_res_date','status','description','response_required','rev','received_by'];
+    protected $fillable = ['type','package_id','letter_source_id','correspondence_type','document_no','letter_ref_no','letter_date','received_date','attention_to','subject','reference','pic_letter_out','attachment','attachment_type','cc_to_letter_out','delivery_date','document_control_date','due_date','engineer_ref_no','engineer_res_date','status','description','response_required','rev','received_by'];
     protected $keyType = 'string';
 
     public $incrementing = false;  
@@ -44,7 +44,7 @@ class Letter extends Model
         /* if you want to use separatly between assignment and reference please uncomment
             return $this->hasMany(AssignmentLetter::class,'letter_id','id')->where('action',1);        
         */
-        return $this->hasMany(AssignmentLetter::class,'letter_id','id');
+        return $this->hasMany(AssignmentLetter::class,'letter_id','id')->orderBy('name')->orderBy('action');
     }
 
     public function references(){

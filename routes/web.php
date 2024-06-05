@@ -77,20 +77,20 @@ Route::get('/request-for-inspection/edit',[App\Http\Controllers\RfiController::c
 Route::put('/request-for-inspection/edit',[App\Http\Controllers\RfiController::class,'index'])->name('rfi.update');
 Route::delete('/request-for-inspection',[App\Http\Controllers\RfiController::class,'index'])->name('rfi.destroy');
 
-Route::get('/engineer',[App\Http\Controllers\EngineerController::class,'index'])->name('engineer.index');
-Route::get('/engineer/create',[App\Http\Controllers\EngineerController::class,'create'])->name('engineer.create');
-Route::post('/engineer',[App\Http\Controllers\EngineerController::class,'store'])->name('engineer.store');
-Route::post('/engineer/photo',[App\Http\Controllers\EngineerController::class,'storePhoto'])->name('engineer.storephoto');
-Route::get('/engineer/edit/{id}',[App\Http\Controllers\EngineerController::class,'edit'])->name('engineer.edit');
-Route::get('/engineer/detail/{id}',[App\Http\Controllers\EngineerController::class,'show'])->name('engineer.show');
-Route::put('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'update'])->name('engineer.update');
-Route::delete('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'destroy'])->name('engineer.destroy');
-Route::get('/engineer/fetch',[App\Http\Controllers\EngineerController::class,'fetch'])->name('engineer.fetch');
-Route::get('/engineer/get/{id}',[App\Http\Controllers\EngineerController::class,'getEngineerByID'])->name('engineer.getbyid');
+Route::group(['middleware'=>'role:admin'],function(){
+    Route::get('/engineer',[App\Http\Controllers\EngineerController::class,'index'])->name('engineer.index');
+    Route::get('/engineer/create',[App\Http\Controllers\EngineerController::class,'create'])->name('engineer.create');
+    Route::post('/engineer',[App\Http\Controllers\EngineerController::class,'store'])->name('engineer.store');
+    Route::post('/engineer/photo',[App\Http\Controllers\EngineerController::class,'storePhoto'])->name('engineer.storephoto');
+    Route::get('/engineer/edit/{id}',[App\Http\Controllers\EngineerController::class,'edit'])->name('engineer.edit');
+    Route::get('/engineer/detail/{id}',[App\Http\Controllers\EngineerController::class,'show'])->name('engineer.show');
+    Route::put('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'update'])->name('engineer.update');
+    Route::delete('/engineer/{id}',[App\Http\Controllers\EngineerController::class,'destroy'])->name('engineer.destroy');
+    Route::get('/engineer/fetch',[App\Http\Controllers\EngineerController::class,'fetch'])->name('engineer.fetch');
+    Route::get('/engineer/get/{id}',[App\Http\Controllers\EngineerController::class,'getEngineerByID'])->name('engineer.getbyid');
+});
 
 
-Route::get('inspector',[App\Http\Controllers\InspectorController::class,'index'])->name('inspector.index');
-Route::get('inspector/fetch',[App\Http\Controllers\InspectorController::class,'fetch'])->name('inspector.fetch');
 
 Route::get('engineer/email/create/{engineer_id}',[App\Http\Controllers\EngineerController::class,'createEmail'])->name('engineer.email.create');
 Route::get('engineer/email/show/{engineer_id}/create',[App\Http\Controllers\EngineerController::class,'createEmail2'])->name('engineer.show.email');
@@ -101,6 +101,11 @@ Route::delete('engineer/email/{id}',[App\Http\Controllers\EngineerController::cl
 
 Route::get('engineer-assignment/{engineer_id}',[App\Http\Controllers\EngineerController::class,'assignment'])->name('engineer.assignment');
 Route::post('engineer-assignment/store',[App\Http\Controllers\EngineerController::class,'assignmentStore'])->name('engineer.assignment.store');
+
+Route::get('inspector',[App\Http\Controllers\InspectorController::class,'index'])->name('inspector.index');
+Route::get('inspector/fetch',[App\Http\Controllers\InspectorController::class,'fetch'])->name('inspector.fetch');
+Route::get('inspector/sync-from-ldap',[App\Http\Controllers\InspectorController::class,'sync'])->name('inspector.sync');
+Route::post('inspector/sync-from-ldap',[App\Http\Controllers\InspectorController::class,'doSync'])->name('inspector.do.sync');
 
 
 Route::post('engineer/select2',[App\Http\Controllers\EngineerController::class,'select2'])->name('engineer.select2');
@@ -241,3 +246,6 @@ Route::prefix('utility')->group(function(){
     /* end type of action */
 
 
+
+
+    Route::get('/ldap',[App\Http\Controllers\LdapController::class,'index'])->name('ldap.index');

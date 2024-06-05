@@ -28,14 +28,14 @@ class User extends Authenticatable
         'password',
         'social_id',
         'social_type',
-        'package_id',
+        'engineer_id',
         'level'
     ];
 
     public static function boot(){
         parent::boot();
         static::creating(function($data){
-            // $data->id=Uuid::uuid4()->toString();
+            $data->id=Uuid::uuid4()->toString();
             // $data->status=1;
         });        
     }
@@ -53,6 +53,11 @@ class User extends Authenticatable
     public function package(){
         return $this->hasMany(Package::class);
     }
+
+    public function packages(){
+        return $this->belongsToMany(Package::class,'user_accesses','user_id','package_id');
+    }
+    
 
 
 

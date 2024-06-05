@@ -38,20 +38,20 @@
                 <input type="hidden" name="package_id" value="">                                          
                 <div class="col-md-1">
                   <div class="form-group">                    
-                    <label class="form-label">Document date:</label>
-                    <input type="text" name="letter_date" class="form-control d-inline date-picker" placeholder="--select--" id="letter_date" value="{{Carbon\carbon::parse($data->letter_date)->format('d-M-y')}}">
+                    <label class="form-label">Doc. date</label>
+                    <input type="text" name="letter_date" class="form-control form-control-sm date-picker" placeholder="--select--" id="letter_date" value="{{Carbon\carbon::parse($data->letter_date)->format('d-M-y')}}">
                   </div>
                 </div>
                 <div class="col-md-1">
                   <div class="form-group">                    
-                    <label class="form-label">Received date:</label>
-                    <input type="text" name="received_date" class="form-control d-inline date-picker" placeholder="--select--" value="{{Carbon\carbon::parse($data->received_date)->format('d-M-y')}}">
+                    <label class="form-label">Receive date</label>
+                    <input type="text" name="received_date" class="form-control form-control-sm date-picker" placeholder="--select--" value="{{Carbon\carbon::parse($data->received_date)->format('d-M-y')}}">
                   </div>
                 </div> 
                 <div class="col-md-1">
                   <div class="form-group">                    
-                    <label class="form-label">Received by:</label>
-                    <select name="received_by" id="received_by" class="form-control">
+                    <label class="form-label">Receive by</label>
+                    <select name="received_by" id="received_by" class="form-control form-control-sm">
                       {!!getItem('receive-letter-by',$data->received_by)!!}
                     </select>
                   </div>
@@ -59,7 +59,7 @@
                 <div class="col-md-2">
                   <div class="form-group">                    
                     <label class="form-label">From:</label>
-                    <select name="letter_source_id" id="letter_source_id" class="form-control">
+                    <select name="letter_source_id" id="letter_source_id" class="form-control form-control-sm">
                         @foreach ($lettersource as $item)
                             <option value="{{$item->id}}">{{$item->source_name}}</option>
                         @endforeach
@@ -69,7 +69,7 @@
                 <div class="col-md-2">
                   <div class="form-group">                    
                     <label class="form-label">Correspondence type:</label>
-                    <select name="correspondence_type" id="correspondence_type" class="form-control" data-url="{{route('letter.get.content.template')}}">
+                    <select name="correspondence_type" id="correspondence_type" class="form-control form-control-sm" data-url="{{route('letter.get.content.template')}}">
                       @foreach ($correspondencetype as $item)
                           <option value="{{$item->id}}">{{$item->correspondence_type}}</option>
                       @endforeach
@@ -79,13 +79,13 @@
                 <div class="col-md-2">
                     <div class="form-group">                      
                       <label>To/attention:</label>
-                      <input type="text" name="attention_to" id="attention_to" class="form-control" placeholder="type the name specified" value="{{$data->attention_to ?? ''}}">
+                      <input type="text" name="attention_to" id="attention_to" class="form-control form-control-sm" placeholder="type the name specified" value="{{$data->attention_to ?? ''}}">
                     </div>
                   </div>
                 <div class="col-md-3">
                     <div class="form-group">                      
                       <label>Letter Ref. no:</label>                      
-                      <input type="text" name="letter_ref_no" class="form-control" value="{{$data->letter_ref_no ?? ''}}" id="letter_ref_no">
+                      <input type="text" name="letter_ref_no" class="form-control form-control-sm" value="{{$data->letter_ref_no ?? ''}}" id="letter_ref_no">
                     </div>
                   </div>
               </div>
@@ -93,7 +93,7 @@
                 <div class="col-md-12">
                   <div class="form-group">
                     <label>Subject:</label>
-                    <input type="text" name="subject" id="subject" class="form-control" value="{{$data->subject ?? ''}}">
+                    <input type="text" name="subject" id="subject" class="form-control form-control-sm" value="{{$data->subject ?? ''}}">
                   </div>
                 </div>
               </div>
@@ -113,8 +113,8 @@
                       @endforeach
                       <input type="hidden" value="{{json_encode($assigns)}}" id="datajsonAssign">
                     </label>
-                    <div class="input-group mb-3">
-                      <select class="form-control" name="assign_to[]" id="assign_to" multiple="multiple" data-url="{{route('engineer.select2')}}">                  
+                    <div class="input-group input-group-sm mb-3">
+                      <select class="form-control form-control-sm" name="assign_to[]" id="assign_to" multiple="multiple" data-url="{{route('engineer.select2')}}">                  
                       </select> 
                       <div class="input-group-append">
                         <button type="button" class="btn btn-sm btn-primary btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'1'])}}" title="copy email list for action"><i class="fas fa-copy"></i></button>
@@ -126,7 +126,7 @@
                  <div class="col-md-6">
                   <div class="form-group">
                     <label>For reference(s):</label>
-                    @php
+                      @php
                           $refs = array();
                       @endphp
                       @foreach ($data->references as $ref)
@@ -135,8 +135,8 @@
                       @endphp    
                       @endforeach
                       <input type="hidden" value="{{json_encode($refs)}}" id="datajsonReference">
-                      <div class="input-group sm-3">
-                        <select class="form-control" name="for_reference[]" id="for_reference" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
+                      <div class="input-group input-group-sm sm-3">
+                        <select class="form-control form-control-sm" name="for_reference[]" id="for_reference" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
                         </select>
                         <div class="input-group-append">
                           <button type="button" class="btn btn-sm btn-info btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'2'])}}" title="copy email list for reference(s)"><i class="fas fa-copy"></i></button>
@@ -149,7 +149,7 @@
                   <div class="col-md-3">
                     <div class="form-group">
                       <label>Response request:</label>
-                      <select name="response_required" id="response_required" class="form-control rounded-0 d-inline data-select" >
+                      <select name="response_required" id="response_required" class="form-control form-control-sm data-select" >
                         {!!getItem('response-request',$data->response_required)!!}
                       </select>
                     </div>
@@ -157,7 +157,7 @@
                   <div class="col-md-2">
                     <div class="form-group">
                       <label>Rev:</label>
-                      <select name="rev" id="rev" class="form-control rounded-0 d-inline data-select" >
+                      <select name="rev" id="rev" class="form-control form-control-sm data-select" >
                         <option value="0" {{$data->rev ? "selected" : ""}}>0</option>
                         <option value="1" {{$data->rev ? "selected" : ""}}>1</option>
                         <option value="2" {{$data->rev ? "selected" : ""}}>2</option>
@@ -181,7 +181,7 @@
                   <div class="col-md-7">
                     <div class="form-group">
                       <label>Description:</label>
-                      <input type="text" name="description" id="description" class="form-control rounded-0">
+                      <input type="text" name="description" id="description" class="form-control form-control-sm">
                     </div>
                   </div>                                           
                 </div> 

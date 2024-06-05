@@ -5,16 +5,16 @@
       <div class="container">
           <div class="row mb-2">
               <div class="col-sm-6">
-                  <h4 class="m-0 text-dark"> {{ $data->title ?? 'RFI' }}</h4>
+                  <h4 class="m-0 text-dark"> {{ $data->title ?? 'Welcome '.Auth()->user()->name }}</h4>
               </div>
               <div class="col-sm-6">
-                  <div class="float-right">
+                  {{-- <div class="float-right">
                       <button type="button" class="btn btn-sm btn-primary rounded-0"><i
                               class="fas fa-plus-circle"></i> Add</button>
                       <button type="button" class="btn btn-sm btn-success rounded-0"><i
                               class="fas fa-history"></i> Refresh</button>
 
-                  </div>
+                  </div> --}}
 
               </div>
           </div>
@@ -47,24 +47,16 @@
                         <div class="container">
 
                         </div>
-                        <div class="container">
-                            <div class="card bg-default" style="width: 25%;padding:15px;">
-                                <img src="{{asset('storage/img/man.png')}}" alt="" class="card-img-top" >
-                                <div class="card-body text-center">
-
-                                    <a href="" class="btn btn-primary rounded-0 stretched-link">Engineers</a>
-                                </div>
-                            </div>
+                        <div class="container">                            
+                            @forelse (Auth::user()->packages as $package)
                             <div class="card bg-primary" style="width: 25%">
                                 <div class="card-body text-center">
-                                    PACKAGE 2
+                                    <span class="far fa-check-circle"></span> {{$package->package_name ?? ''}}                                   
                                 </div>
-                            </div>
-                            <div class="card bg-primary" style="width: 25%">
-                                <div class="card-body text-center">
-                                    PACKAGE 3
-                                </div>
-                            </div>
+                            </div>    
+                            @empty
+                                <span>No Package assigned, please contact admin..!</span>
+                            @endforelse
                         </div>
                         </div>
                       <div class="card-footer"></div>
