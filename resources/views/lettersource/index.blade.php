@@ -11,7 +11,7 @@
                   <div class="float-right">
                       <button type="button" class="btn btn-sm btn-success btn-custom rounded-0" data-url="{{route('letter-source.create')}}" id="btnCreate"><i
                               class="fas fa-pencil-alt"></i> Create</button>
-                      <button type="button" class="btn btn-sm btn-primary btn-custom rounded-0" id="btnRefreshPosition" data-url="{{route('position.index')}}"><i
+                      <button type="button" class="btn btn-sm btn-primary btn-custom rounded-0" id="btnRefresh" data-url="{{route('letter-source.index')}}"><i
                               class="fas fa-history"></i> Refresh</button>
                   </div>
               </div>
