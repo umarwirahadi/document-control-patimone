@@ -102,6 +102,7 @@
                                 <li><a href="{{route('corres-type.index')}}" class="dropdown-item"> <span class="far fa-file-archive"></span> Correspondence type</a></li>
                                 <li><a href="{{route('action-type.index')}}" class="dropdown-item"> <span class="fas fa-archive"></span> Type of action</a></li>
                                 <li><a href="{{route('documenttype.index')}}" class="dropdown-item"> <span class="fas fa-archive"></span> Document type</a></li>
+                                <li><a href="{{route('log.index')}}" class="dropdown-item"> <span class="fas fa-archive"></span> Log user</a></li>
                             </ul>
                         </li>
                     </ul>

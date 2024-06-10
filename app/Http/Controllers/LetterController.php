@@ -41,6 +41,7 @@ class LetterController extends Controller
             if(!Session::has('letter_id')){
                 $this->validate($request,['type'=> 'required']);              
                 $letter = $this->generateLetter($request->all());
+                activity()->performedOn($letter)->log('create');
                 Session::put('letter_id', $letter['id']);
             }
             $packages=auth()->user()->load('access');

@@ -16,6 +16,7 @@
         "laravel/ui": "^3.4",
         "ramsey/uuid": "^4.2",
         "socialiteproviders/microsoft": "^4.2",
+        "spatie/laravel-activitylog": "^3.17",
         "spatie/laravel-permission": "5.6",
         "yajra/laravel-datatables-oracle": "^9.21"
     },

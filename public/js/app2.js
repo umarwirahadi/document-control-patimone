@@ -14,6 +14,10 @@ $(document).on('click','#btnRefresh',function(){
 });
 /* end for */
 
+/* log activity */
+$('#data-log').DataTable();
+/* end log activity */
+
 
     /* data user disini */
     
@@ -1569,6 +1573,26 @@ var $references=$('#for_reference').select2({
   allowClear: true,
   ajax:{
     url:$('#for_reference').attr('data-url'),
+    dataType:'json',
+    method:'POST',
+    data:function(params){
+      var query={
+        search:params.term
+      }
+      return query;
+    },
+    processResults:function(data){
+      return {
+        results:data
+      }
+    },
+    cache:true
+}});
+var $confirmation=$('#confirmation').select2({
+  theme: 'classic',
+  allowClear: true,
+  ajax:{
+    url:$('#confirmation').attr('data-url'),
     dataType:'json',
     method:'POST',
     data:function(params){

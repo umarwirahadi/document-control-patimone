@@ -156,7 +156,7 @@
                       @endphp    
                       @endforeach                     
                       <div class="input-group input-group-sm sm-3">
-                        <select class="form-control form-control-sm" name="for_reference[]" id="for_reference" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
+                        <select class="form-control form-control-sm" name="confirmation[]" id="confirmation" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
                         </select>
                         <div class="input-group-append">
                           <button type="button" class="btn btn-sm btn-info btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'2'])}}" title="copy email list for reference(s)"><i class="fas fa-copy"></i></button>

@@ -209,6 +209,12 @@ Route::prefix('utility')->group(function(){
         Route::delete('document-type/{id}',[App\Http\Controllers\DocumenttypeController::class,'destroy'])->name('documenttype.destroy');
         Route::get('document-type-fetch',[App\Http\Controllers\DocumenttypeController::class,'fetch'])->name('documenttype.fetch');
         /* end Document type */
+
+
+        /* log user */
+        Route::get('/logs',[App\Http\Controllers\LogController::class,'index'])->name('log.index');
+        Route::get('/logs-fetch',[App\Http\Controllers\LogController::class,'fetch'])->name('log.fetch');
+        /* end log user */
 });
 /* tools */
     /* letter source */
