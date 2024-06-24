@@ -98,9 +98,9 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-6">                                 
+                <div class="col-md-4">                                 
                   <div class="form-group">                    
-                    <label>Assign(s) to: 
+                    <label>Initiator: 
                       @php
                           $assigns = array();
                       @endphp
@@ -123,9 +123,9 @@
                     
                   </div>
                 </div>
-                 <div class="col-md-6">
+                 <div class="col-md-4">
                   <div class="form-group">
-                    <label>For reference(s):</label>
+                    <label>Verification:</label>
                       @php
                           $refs = array();
                       @endphp
@@ -137,6 +137,26 @@
                       <input type="hidden" value="{{json_encode($refs)}}" id="datajsonReference">
                       <div class="input-group input-group-sm sm-3">
                         <select class="form-control form-control-sm" name="for_reference[]" id="for_reference" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
+                        </select>
+                        <div class="input-group-append">
+                          <button type="button" class="btn btn-sm btn-info btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'2'])}}" title="copy email list for reference(s)"><i class="fas fa-copy"></i></button>
+                        </div>
+                      </div>
+                  </div>
+                 </div>
+                 <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Confirmation:</label>
+                      @php
+                          $refs = array();
+                      @endphp
+                      @foreach ($data->references as $ref)
+                      @php
+                          $refs[]=['id'=>$ref->engineer_id,'text'=>$ref->engineer->full_name];
+                      @endphp    
+                      @endforeach                     
+                      <div class="input-group input-group-sm sm-3">
+                        <select class="form-control form-control-sm" name="confirmation[]" id="confirmation" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
                         </select>
                         <div class="input-group-append">
                           <button type="button" class="btn btn-sm btn-info btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'2'])}}" title="copy email list for reference(s)"><i class="fas fa-copy"></i></button>

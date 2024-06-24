@@ -8,6 +8,16 @@ $(document).ready(function(){
     const base_url=$('meta[name="base_url"').attr('content');
     toastr.options={"showDuration":100,"hideDuration": 300};
 
+/* for general */
+$(document).on('click','#btnRefresh',function(){
+  window.location.href=$(this).attr('data-url');
+});
+/* end for */
+
+/* log activity */
+$('#data-log').DataTable();
+/* end log activity */
+
 
     /* data user disini */
     
@@ -323,12 +333,14 @@ $(document).on('click','#btnCreate',function(){
           $('#datamodal').modal('show');
           /* find element */
           $('.modal-body').find('.control-select2').select2({theme:'bootstrap4'});
+          CKEDITOR.replace('description');
 
 
-          const attrID=document.querySelectorAll('.text-area');
-          for (let i = 0; i < attrID.length; i++) {
+          
+          /* const attrID=document.querySelectorAll('.text-area');
+           for (let i = 0; i < attrID.length; i++) {
             $.fn.createCkeditor(`#${attrID[i].id}`);
-          }
+          } */
           $('.first-focus').focus();
 
         },error:function(){
@@ -757,9 +769,7 @@ $(document).on('submit','#formposition',function(e){
           return false;
       });
   });
-  $(document).on('click','#btnRefreshPosition',function(){
-    window.location.href=$(this).attr('data-url');
-  });
+  
 
   $(document).on('submit','#formWorkItem',function(e){
     let originButton=$('#formposition button[type="submit"]').html();
@@ -1563,6 +1573,26 @@ var $references=$('#for_reference').select2({
   allowClear: true,
   ajax:{
     url:$('#for_reference').attr('data-url'),
+    dataType:'json',
+    method:'POST',
+    data:function(params){
+      var query={
+        search:params.term
+      }
+      return query;
+    },
+    processResults:function(data){
+      return {
+        results:data
+      }
+    },
+    cache:true
+}});
+var $confirmation=$('#confirmation').select2({
+  theme: 'classic',
+  allowClear: true,
+  ajax:{
+    url:$('#confirmation').attr('data-url'),
     dataType:'json',
     method:'POST',
     data:function(params){
