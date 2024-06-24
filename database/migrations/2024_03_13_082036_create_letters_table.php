@@ -17,7 +17,7 @@ class CreateLettersTable extends Migration
             $table->uuid('id')->primary();
             $table->char('package_id',40);
             $table->enum('type',['IN','OUT'])->index();
-            $table->string('from');
+            $table->char('letter_source_id',60);
             $table->char('correspondence_type_id');
             $table->string('document_no')->index();
             $table->string('letter_ref_no')->nullable();
