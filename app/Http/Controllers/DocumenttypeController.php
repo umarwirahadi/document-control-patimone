@@ -16,7 +16,7 @@ class DocumenttypeController extends Controller
     public function index()
     {
         try {
-            return view('components.documenttype.index',['title'=>'Document type']);
+            return view('components.documenttype.index',['title'=>'Master','title2'=>'Utility','title3'=>'Document type']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -36,7 +36,7 @@ class DocumenttypeController extends Controller
             $validated =$this->validate($request,[
                 'document_type_name'=>['required',Rule::unique('documenttypes')->where(function($query) use ($request){
                     return $query->where('document_type_name',$request->document_type_name)->Where('package_id',$request->package_id);
-                })]]);                
+                })]]);
             if($validated){
                 $documentType=Documenttype::create($request->all());
                 return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$documentType],200);

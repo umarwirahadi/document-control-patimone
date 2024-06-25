@@ -14,7 +14,7 @@ class AddTemplateToCorrespondenceType extends Migration
     public function up()
     {
         Schema::table('correspondence_types', function (Blueprint $table) {
-            $table->string('content_template')->after('correspondence_type')->nullable();
+            $table->string('content_template')->after('description')->nullable();
         });
     }
 

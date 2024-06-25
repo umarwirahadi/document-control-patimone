@@ -30,7 +30,7 @@ class LetterController extends Controller
         try {
             $data=auth()->user();
             $data->load('access');
-            return view('letters.index',['title'=>'Incoming','data'=>$data]);
+            return view('letters.index',['title'=>'Correspondence','title2'=>'Incoming','title3'=>'List','data'=>$data]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -44,14 +44,18 @@ class LetterController extends Controller
                 activity()->performedOn($letter)->log('create');
                 Session::put('letter_id', $letter['id']);
             }
+
+
             $packages=auth()->user()->load('access');
-            foreach ($packages->access as $val) {
-                $datapackage[]=[$val->package_id];
+            if(count($packages->access) > 0 ){
+                foreach ($packages->access as $val) {
+                    $datapackage[]=[$val->package_id];
+                }
             }
             $refferences=Letter::find(Session::get('letter_id'));
-            $refferences->load('assignments.engineer');
+            // $refferences->load('assignments.engineer');
             $engineers=Engineer::engineer()->get();
-            return view('letters.create',['title'=> 'Letters','engineers'=>$engineers,'lettersource'=>LetterSource::active()->whereIn('package_id',$datapackage)->get(),'correspondencetype'=>CorrespondenceType::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
+            return view('letters.create',['title'=>'Correspondence','title2'=>'Incoming','title3'=>'Create','engineers'=>$engineers,'lettersource'=>LetterSource::active()->whereIn('package_id',$datapackage)->get(),'correspondencetype'=>CorrespondenceType::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -63,7 +67,7 @@ class LetterController extends Controller
             $letter=Letter::create(['type'=>$data['type'],
                 'letter_source_id'=>'-',
                 'package_id'=>'-',
-                'correspondence_type'=>'',
+                'correspondence_type_id'=>'-',
                 'document_no'=>'000000',
                 'letter_date'=>date('Y-m-d'),
                 'attention_to'=>'',
@@ -433,7 +437,18 @@ class LetterController extends Controller
     }
 
     public function destroy($id){
-
+        try {
+            if(!request()->ajax() && request()->method() <> 'DELETE') return redirect()->route('letter.index');
+                    $letter=Letter::findOrFail($id);
+                    $result=$letter->delete();
+                    if($result){
+                        Session::forget('letter_id');
+                        return response()->json(['success'=>true,'message'=>'Data deleted..!','data'=>null],200);
+                    }
+                    return response()->json(['success'=>false,'message'=>'Failed to delete data..!, please check first','data'=>null],200);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
     }
 
     public function copyAssignTo($letter_id,$type){
@@ -499,8 +514,8 @@ class LetterController extends Controller
             ->addColumn('action',function($row){
                 $edit=route('letter.edit',$row->id??'');
                 $destroy=route('letter.destroy',$row->id);
-                $btn= '<a href="'.$edit.'" class="btn btn-info btn-sm rounded-0" ><i class="fas fa-pencil-alt"></i></a>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
+                $btn= '<a href="'.$edit.'" class="btn btn-info btn-sm rounded-2 btn-table" ><i class="fas fa-pencil-alt"></i></a>
+                       <button type="button" class="btn btn-danger btn-sm rounded-2 btn-table delete-data" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
             })->rawColumns(['action','status'])->make(true);
 

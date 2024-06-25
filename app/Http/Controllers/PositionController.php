@@ -16,7 +16,7 @@ class PositionController extends Controller
     public function index()
     {
         try {
-            return view('position.index',['title'=>'Position']);
+            return view('position.index',['title'=>'Master','title2'=>'Data','title3'=>'Position']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -102,8 +102,8 @@ class PositionController extends Controller
             return Datatables::of($position)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('position.edit',$row->id??'');
                 $destroy=route('position.destroy',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-primary btn-sm rounded-0 btn-custom edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-edit"></i> Edit</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 btn-custom delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $btn= '<button type="button" data-toggle="tooltip" title="Edit data" data-url="'.$edit.'" class="btn btn-primary btn-sm rounded-0 btn-table edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-edit"></i></button>
+                       <button type="button" data-toggle="tooltip" title="Delete data" class="btn btn-danger btn-sm rounded-0 btn-table delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
             })->rawColumns(['action'])->make(true);
 

@@ -8,7 +8,13 @@
       <div class="container-fluid">
           <div class="row mb-2">
               <div class="col-sm-6">
-                  <h4 class="m-0 text-dark"> {{ $title ?? '' }}</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="#">{{$title ?? ''}}</a></li>
+                      <li class="breadcrumb-item" aria-current="page">{{$title2 ?? ''}}</li>
+                      <li class="breadcrumb-item active" aria-current="page">{{$title3 ?? ''}}</li>
+                    </ol>
+                  </nav>
               </div>
               <div class="col-sm-6">
                   <div class="float-right">

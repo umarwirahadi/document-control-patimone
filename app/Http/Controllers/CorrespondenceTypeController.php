@@ -15,7 +15,7 @@ class CorrespondenceTypeController extends Controller
     }
     public function index(){
         try {
-            return view('corres-type.index',['title'=>'Correspondence type']);
+            return view('corres-type.index',['title'=>'Master','title2'=>'Utility','title3'=>'Correspondence type']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -33,7 +33,7 @@ class CorrespondenceTypeController extends Controller
     public function store(Request $request){
         try {
             if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('corres-type.index');
-            /* make validation for two or more conditions with custom unique column */           
+            /* make validation for two or more conditions with custom unique column */
             $validated =$this->validate($request,[
                 'correspondence_type'=>['required',Rule::unique('correspondence_types')->where(function($query) use ($request){
                     return $query->where('correspondence_type',$request->correspondence_type)->Where('type',$request->type);
@@ -60,12 +60,13 @@ class CorrespondenceTypeController extends Controller
         }
     }
 
-    public function update(Request $request, $id){        
+    public function update(Request $request, $id){
         try {
             if(!$request->ajax() && $request->method() <> 'PUT') return redirect()->route('corres-type.index');
                 $request->validate(
                     ['type'=>'required','correspondence_type']);
                     $correspondenceType=CorrespondenceType::findOrFail($id);
+                    $correspondenceType->package_id= $request->package_id;
                     $correspondenceType->correspondence_type= $request->correspondence_type;
                     $correspondenceType->type= $request->type;
                     $correspondenceType->description= $request->description;
@@ -103,6 +104,8 @@ class CorrespondenceTypeController extends Controller
                 return $btn;
             })->editColumn('description',function($row){
                 return strip_tags($row->description);
+            })->editColumn('package_name',function($row){
+                return strip_tags($row->package->package_name ?? '-');
             })
             ->editColumn('status',function($data){
                 if($data->status==1){
@@ -112,7 +115,7 @@ class CorrespondenceTypeController extends Controller
                 }
                 return $status;
             })
-            ->rawColumns(['action','status','description'])->make(true);
+            ->rawColumns(['action','status','description','package_name'])->make(true);
 
         } catch (\Throwable $th) {
             throw $th;

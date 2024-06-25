@@ -22,9 +22,9 @@
     width: 200px !important;
     /* height: 400px !important; */
     }
-    .btn-custom {
+    /* .btn-custom {
         width: 100px !important;
-    }
+    } */
     .ck-editor__editable_inline {
     height: 150px;
     }
@@ -34,5 +34,8 @@
 
     .ui-front {
         z-index: 2000 !important;
+    }
+    .btn-table {
+        width: 50px !important;
     }
 </style>

@@ -9,7 +9,7 @@
                 </div>
                 <div class="modal-body">
                     @csrf
-                  
+
                         <div class="mb-3">
                             <label class="form-label">Package name</label>
                             <input type="text" class="form-control" placeholder="Package name" name="package_name">

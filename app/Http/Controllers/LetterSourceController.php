@@ -15,7 +15,7 @@ class LetterSourceController extends Controller
     }
     public function index(){
         try {
-            return view('lettersource.index',['title'=>'Letter source']);
+            return view('lettersource.index',['title'=>'Master','title2'=>'Utility','title3'=>'Letter source']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -34,8 +34,7 @@ class LetterSourceController extends Controller
     public function store(Request $request){
         try {
             if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('letter-source.index');
-            $validated =$this->validate($request,['source_name'=>'required|unique:letter_sources,source_name',
-            'unit'=>'required']);
+            $validated =$this->validate($request,['source_name'=>'required|unique:letter_sources,source_name','source_code'=>'required|unique:letter_sources,source_code']);
             if($validated){
                 $lettersource=LetterSource::create($request->all());
                 return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$lettersource],200);
@@ -57,7 +56,7 @@ class LetterSourceController extends Controller
         }
     }
 
-    public function update(Request $request, $id){        
+    public function update(Request $request, $id){
         try {
             if(!$request->ajax() && $request->method() <> 'PUT') return redirect()->route('letter-source.index');
                 $request->validate(

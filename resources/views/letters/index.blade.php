@@ -5,7 +5,13 @@
       <div class="container-fluid">
           <div class="row mb-2">
               <div class="col-sm-6">
-                  <h4 class="m-0 text-dark"> {{ $title ?? '' }}</h4>
+                  <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="#">{{$title ?? ''}}</a></li>
+                      <li class="breadcrumb-item" aria-current="page">{{$title2 ?? ''}}</li>
+                      <li class="breadcrumb-item active" aria-current="page">{{$title3 ?? ''}}</li>
+                    </ol>
+                  </nav>
                   @error('type')
                   <div class="alert alert-danger alert-dismissible fade show">
                     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -19,11 +25,11 @@
                       @csrf
                       <input type="hidden" name="type" value="IN">
                       <input type="hidden" name="package_id" value="{{auth()->user()->package_id}}">
-                    </form>                    
+                    </form>
                       <a href="javascript:void(0)" class="btn btn-sm btn-primary btn-custom rounded-0" onclick="event.preventDefault();document.getElementById('formCreateLetter').submit()"><i
-                              class="fas fa-plus-circle"></i> 
+                              class="fas fa-plus-circle"></i>
                               @if (\Session::has('letter_id'))
-                                Continue                                  
+                                Continue
                               @else
                                 Create
                               @endif
@@ -32,10 +38,10 @@
                               class="fas fa-history"></i> Refresh</a>
                   </div>
               </div>
-             
+
           </div>
       </div>
-  </div> 
+  </div>
   <div class="content">
       <div class="container-fluid">
 
@@ -78,7 +84,7 @@
                         <th style="width: 10%;">Action</th>
                       </tr>
                     </thead>
-                    <tbody class="table-tbody">                        
+                    <tbody class="table-tbody">
                     </tbody>
                   </table>
                 </div>
@@ -97,7 +103,7 @@
                         <th>Action</th>
                       </tr>
                     </thead>
-                    <tbody class="table-tbody">                        
+                    <tbody class="table-tbody">
                     </tbody>
                   </table>
                 </div>
@@ -110,11 +116,11 @@
               </div>
             </div>
           </div>
-        </div>      
+        </div>
       </div>
   </div>
 </div>
 <div class="modal fade" id="datamodal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  
+
 </div>
-@endsection 
+@endsection

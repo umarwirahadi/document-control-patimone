@@ -15,7 +15,7 @@ class MasterItemController extends Controller
     public function index()
     {
         try {
-            return view('item.index',['title'=>'Master of items']);
+            return view('item.index',['title'=>'Master','title2'=>'Utility','title3'=>'items']);
         } catch (\Throwable $th) {
             throw $th;
         }

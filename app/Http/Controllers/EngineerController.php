@@ -21,7 +21,7 @@ class EngineerController extends Controller
     public function index()
     {
         try {
-            return view('engineer.index',['title'=>'Engineer']);
+            return view('engineer.index',['title'=>'Master','title2'=>'Data','title3'=>'Engineers']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -48,7 +48,7 @@ class EngineerController extends Controller
             if($validated){
                 $engineer=Engineer::create($request->all());
                 if($engineer) {
-                    return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$engineer],200);             
+                    return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$engineer],200);
                 }
             }
             return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
@@ -159,7 +159,7 @@ class EngineerController extends Controller
             if($validated){
                 $assignment=Assignment::create($request->all());
                 if($assignment) {
-                    return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$assignment],200);             
+                    return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$assignment],200);
                 }
             }
             return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
@@ -179,10 +179,10 @@ class EngineerController extends Controller
                 $destroy=route('engineer.destroy',$row->id);
                 $addEmail=route('engineer.show.email',$row->id);
                 $assignment= route('engineer.assignment',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-info btn-sm rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
-                       <button type="button" class="btn btn-warning btn-sm rounded-0 add-email" data-url="'.$addEmail.'" id="show'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-location-arrow"></i> Add email</button>
-                       <button type="button" class="btn btn-success btn-sm rounded-0 assignment" data-url="'.$assignment.'" id="assignment'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-check-circle"></i> Assignment</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-info btn-sm rounded-2 btn-table edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i></button>
+                       <button type="button" class="btn btn-warning btn-sm rounded-2 btn-table add-email" data-url="'.$addEmail.'" id="show'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-envelope-square"></i></button>
+                       <button type="button" class="btn btn-success btn-sm rounded-2 btn-table assignment" data-url="'.$assignment.'" id="assignment'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-check-circle"></i></button>
+                       <button type="button" class="btn btn-danger btn-sm rounded-2 btn-table delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
             })->editColumn('full_name',function($row){
                 $show=route('engineer.show',$row->id);
@@ -198,9 +198,9 @@ class EngineerController extends Controller
     }
 
 
-    /* for email */ 
+    /* for email */
     public function createEmail($engineer_id){
-        try {            
+        try {
             $html=view('engineer.email.create',['engineer_id'=>$engineer_id])->render();
             return response()->json($html);
         } catch (\Throwable $th) {
@@ -209,7 +209,7 @@ class EngineerController extends Controller
     }
 
     public function createEmail2($engineer_id){
-        try {            
+        try {
             $html=view('engineer.email.show',['engineer_id'=>$engineer_id,'emails'=>Email::where('engineer_id',$engineer_id)->get()])->render();
             return response()->json($html);
         } catch (\Throwable $th) {
@@ -294,7 +294,7 @@ class EngineerController extends Controller
                 <td>
                     <button type="button" class="btn btn-xs btn-primary rounded-0 edit-form" data-id="" data-url="'.$edit.'"><i class="fas fa-pencil-alt"></i> edit</button>
                     <button type="button" class="btn btn-xs btn-danger rounded-0 delete" id="destroy'.$value->id.'" data-url="'.$destroy.'" data-id="'.$value->id.'"><i class="fas fa-times"></i> delete</button>
-                </td>                
+                </td>
                 </tr>';
             }
             return $HTML;
@@ -308,7 +308,7 @@ class EngineerController extends Controller
         return $email;
     }
 
-    public function select2(Request $request){        
+    public function select2(Request $request){
         if($request->ajax() && $request->method() <> 'POST') return false;
         if($request->search == ''){
             $engineers=Engineer::engineer()->get();
@@ -330,7 +330,7 @@ class EngineerController extends Controller
             $engineer=Engineer::findOrFail($id);
             if($engineer){
                 $engineer->email;
-                
+
 /*                 foreach ($engineer->email as $email) {
                     $email=$email->email;
                 } */

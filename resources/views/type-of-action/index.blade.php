@@ -22,7 +22,7 @@
       <div class="container-fluid">
           <div class="row">
               <div class="col-md-12">
-                  <div class="card card-default">                      
+                  <div class="card card-primary card-outline">
                       <div class="card-body">
                         <div class="table-responsivesss">
                           <table class="table table-sm table-hover" id="data-type-of-action" data-url="{{route('action-type.fetch')}}">
@@ -36,7 +36,7 @@
                                 <th>Action</th>
                               </tr>
                             </thead>
-                            <tbody class="table-tbody">                        
+                            <tbody class="table-tbody">
                             </tbody>
                           </table>
                         </div>

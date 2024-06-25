@@ -15,8 +15,8 @@ class CreateTriggerLetter extends Migration
     public function up()
     {
         DB::unprepared('
-        CREATE TRIGGER auto_insert_letter AFTER INSERT ON patimone_incoming_letters FOR EACH ROW BEGIN INSERT INTO patimone_letter_files(number,subject,date,category,status)
-        VALUES (NEW.incoming_ref_no,NEW.subject,NEW.date_of_letter,NEW.incoming_letter_type,1); 
+        CREATE TRIGGER auto_insert_letter AFTER INSERT ON ptmbn_incoming_letters FOR EACH ROW BEGIN INSERT INTO ptmbn_letter_files(number,subject,date,category,status)
+        VALUES (NEW.incoming_ref_no,NEW.subject,NEW.date_of_letter,NEW.incoming_letter_type,1);
         END');
     }
 

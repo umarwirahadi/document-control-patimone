@@ -14,17 +14,17 @@ class LetterSource extends Model
     use SoftDeletes;
 
     protected $table='letter_sources';
-    protected $fillable=['source_name','unit','description','package_id','status'];
+    protected $fillable=['source_code','source_name','description','package_id','status'];
     protected $keyType = 'string';
 
-    public $incrementing = false;  
-    protected $casts = ['id'=>'string'];  
+    public $incrementing = false;
+    protected $casts = ['id'=>'string'];
 
     public static function boot(){
         parent::boot();
         static::creating(function($data){
             $data->id=Uuid::uuid4()->toString();
-            $data->created_by=Auth::user()->id;           
+            $data->created_by=Auth::user()->id;
         });
 
         static::updating(function($data){
@@ -35,11 +35,15 @@ class LetterSource extends Model
     public function scopeActive($query)
     {
         return $query->where('status','1');
-        
+
     }
 
     public function package(){
         return $this->belongsTo(Package::class);
+    }
+
+    public function correspondences(){
+        return $this->hasMany(CorrespondenceType::class);
     }
 
 }
