@@ -46,16 +46,21 @@ class LetterController extends Controller
             }
 
 
-            $packages=auth()->user()->load('access');
-            if(count($packages->access) > 0 ){
-                foreach ($packages->access as $val) {
-                    $datapackage[]=[$val->package_id];
+            $userPackages=auth()->user();
+
+
+
+            if(count($userPackages->access) > 0 ){
+                foreach ($userPackages->access as $val) {
+                    $datapackage=[$val->package_id];
                 }
             }
-            $refferences=Letter::find(Session::get('letter_id'));
+            $refferences=Letter::with(['source','source.package','correstype'])->find(Session::get('letter_id'));
             // $refferences->load('assignments.engineer');
             $engineers=Engineer::engineer()->get();
-            return view('letters.create',['title'=>'Correspondence','title2'=>'Incoming','title3'=>'Create','engineers'=>$engineers,'lettersource'=>LetterSource::active()->whereIn('package_id',$datapackage)->get(),'correspondencetype'=>CorrespondenceType::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
+            return $refferences;
+
+            return view('letters.create',['title'=>'Correspondence','title2'=>'Incoming','title3'=>'Create','engineers'=>$engineers,'lettersource'=>LetterSource::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -90,7 +95,9 @@ class LetterController extends Controller
                 $source=LetterSource::find($request->from);
                 $corespondenceTemplate=CorrespondenceType::find($request->id);
                 $letter_date= Carbon::createFromFormat('d-M-y', $request->letter_date);
-                if($source->unit == 1) {
+                $letter_no=str_replace('YY',$letter_date->format('y'),$corespondenceTemplate->content_template);
+
+                /* if($source->unit == 1) {
                     if($corespondenceTemplate){
                         $letter_no=str_replace('YY',$letter_date->format('y'),$corespondenceTemplate->content_template);
                         return response()->json(['to_attention'=>$corespondenceTemplate->to_attention,'ref_no'=>$letter_no]);
@@ -98,7 +105,7 @@ class LetterController extends Controller
                         return response()->json();
                     }
                 } else {
-                    /* make condition by hard code */
+                    make condition by hard code
                     $source_name=$source->source_name;
                     $corres_type=$corespondenceTemplate->correspondence_type;
                     switch ($source_name) {
@@ -115,9 +122,9 @@ class LetterController extends Controller
                             # code...
                             $letter_no= '';
                             break;
-                    }
+                    } */
                     return response()->json(['to_attention'=>$corespondenceTemplate->to_attention,'ref_no'=>$letter_no]);
-                }
+                // }
 
             }
         } catch (\Throwable $th) {
@@ -351,11 +358,13 @@ class LetterController extends Controller
                 'letter_ref_no'=>'required','letter_date'=>'required','received_date'=>'required',
                 'attention_to'=>'required','subject'=>'required','response_required'],[],['letter_source_id'=>'from/source']);
                 if($validated){
+                    $package_id=CorrespondenceType::find($request->correspondence_type);
                     $letter=Letter::findOrFail($validated['letter_id']);
                     try {
                         $letter->update([
                             'letter_source_id'=>$request->letter_source_id,
-                            'correspondence_type'=>$request->correspondence_type,
+                            'package_id'=>$package_id->package_id,
+                            'correspondence_type_id'=>$request->correspondence_type,
                             'document_no'=>'1',
                             'letter_ref_no'=>$request->letter_ref_no,
                             'letter_date'=>Carbon::createFromFormat('d-M-y', $request->letter_date)->format('Y-m-d'),
@@ -493,7 +502,7 @@ class LetterController extends Controller
         try {
             if(!request()->ajax()) return route('letter.index');
 
-            $letters=DB::table('letters')->select('letters.id','letters.document_no','letters.letter_date','letter_ref_no','letters.received_date','letters.subject','letters.rev','letters.status','letter_sources.source_name')
+            $letters=DB::table('letters')->select('letters.id','letters.document_no','letters.letter_date','letter_ref_no','letters.received_date','letters.subject','letters.rev','letters.status','letter_sources.source_code')
                      ->leftJoin('letter_sources','letter_sources.id','=','letters.letter_source_id')->get();
             return Datatables::of($letters)
             ->addIndexColumn()

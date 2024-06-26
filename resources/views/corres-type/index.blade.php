@@ -37,9 +37,9 @@
                             <thead>
                               <tr>
                                 <th>No</th>
-                                <th>Correspondence type</th>
+                                <th>Corres. type</th>
                                 <th>Type</th>
-                                <th>Description</th>
+                                <th>Template</th>
                                 <th>Package</th>
                                 <th>Status</th>
                                 <th>Action</th>

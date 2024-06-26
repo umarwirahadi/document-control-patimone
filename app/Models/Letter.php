@@ -63,5 +63,9 @@ class Letter extends Model
         return $this->belongsTo(LetterSource::class,'letter_source_id','id');
     }
 
+    public function correstype(){
+        return $this->belongsTo(CorrespondenceType::class,'correspondence_type_id');
+    }
+
 
 }

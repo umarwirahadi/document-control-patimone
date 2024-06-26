@@ -60,10 +60,10 @@ class LetterSourceController extends Controller
         try {
             if(!$request->ajax() && $request->method() <> 'PUT') return redirect()->route('letter-source.index');
                 $request->validate(
-                    ['unit'=>'required']);
+                    ['source_code'=>'required']);
                     $lettersource=LetterSource::findOrFail($id);
+                    $lettersource->source_code= $request->source_code;
                     $lettersource->source_name= $request->source_name;
-                    $lettersource->unit= $request->unit;
                     $lettersource->package_id= $request->package_id;
                     $lettersource->description= $request->description;
                     $lettersource->status= $request->status;
@@ -95,11 +95,20 @@ class LetterSourceController extends Controller
             return DataTables::of($lettersources)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('letter-source.edit',$row->id??'');
                 $destroy=route('letter-source.destroy',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-primary btn-sm rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $btn= '<button type="button" data-toggle="tooltip" title="Edit data" data-url="'.$edit.'" class="btn btn-primary btn-table rounded-2 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i></button>
+                       <button type="button" data-toggle="tooltip" title="Delete data" class="btn btn-danger btn-table rounded-2 delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
-            })->editColumn('description',function($row){
+            })->editColumn('source_code',function($data){
+                $getByID=route('letter-source.getdetailcorres',$data->id);
+
+                return '<a href="'.$getByID.'" class="text text-primary-emphasis" >'.$data->source_code.'</a>';
+            })
+            ->editColumn('description',function($row){
                 return strip_tags($row->description);
+            })
+            ->editColumn('package_name',function($data){
+
+                return $data->package->package_name;
             })
             ->editColumn('status',function($data){
                 if($data->status==1){
@@ -109,8 +118,35 @@ class LetterSourceController extends Controller
                 }
                 return $status;
             })
-            ->rawColumns(['action','status','description'])->make(true);
+            ->rawColumns(['action','status','description','package_name','source_code'])->make(true);
 
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function getDetailCorresTypeByID($id){
+        try {
+            $data=LetterSource::with('correspondences')->find($id);
+            return view('lettersource.detail-corres-type',['title'=>'Master','title2'=>'Utility','title3'=>'Letter source - Detail Correspondence Type','data'=>$data]);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function getSelectCorresTypeById($lettersourceid=null){
+        try {
+            $data=LetterSource::with('correspondences')->find($lettersourceid);
+            $HTML='';
+            if(isset($data->correspondences)) {
+                $HTML .='<option selected>Select</option>';
+                foreach ($data->correspondences as $key => $value) {
+                    $HTML .='<option value="'.$value->id.'">'.$value->corres_type.'</option>';
+                }
+            } else {
+                $HTML .='<option selected>Select</option>';
+            }
+            return response()->json($HTML);
         } catch (\Throwable $th) {
             throw $th;
         }

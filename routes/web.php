@@ -163,6 +163,9 @@ Route::get('/document-transmittal/create',[App\Http\Controllers\TransmittalContr
 /* Letters for incoming*/
 Route::get('incoming',[App\Http\Controllers\LetterController::class,'index'])->name('letter.index');
 Route::post('letters/create',[App\Http\Controllers\LetterController::class,'create'])->name('letter.create');
+Route::get('get-correspondence-type-by-id-letter-source/{lettersourceid?}',[App\Http\Controllers\LetterSourceController::class,'getSelectCorresTypeById'])->name('get.corres.type.bylettersource.id');
+Route::post('get-letter-content-template',[App\Http\Controllers\LetterController::class,'getContentTemplate'])->name('letter.get.content.template');
+
 Route::post('letters/store',[App\Http\Controllers\LetterController::class,'store'])->name('letter.store');
 Route::get('letters/edit/{id}',[App\Http\Controllers\LetterController::class,'edit'])->name('letter.edit');
 Route::put('letters/update/{id}',[App\Http\Controllers\LetterController::class,'update'])->name('letter.update');
@@ -191,7 +194,7 @@ Route::delete('letter/attachment/{id}',[App\Http\Controllers\LetterController::c
 /* copy list of email */
 Route::get('letter/copy/assignment/{letter_id}/{type}',[App\Http\Controllers\LetterController::class,'copyAssignTo'])->name('letter.copy.email.assign');
 
-Route::post('letter-get-content-template',[App\Http\Controllers\LetterController::class,'getContentTemplate'])->name('letter.get.content.template');
+
 
 
 Route::post('letter/{letter_id}/close',[App\Http\Controllers\LetterController::class,'closeLetter'])->name('letter.close');
@@ -225,6 +228,7 @@ Route::prefix('utility')->group(function(){
         Route::put('letter-source/{id}',[App\Http\Controllers\LetterSourceController::class,'update'])->name('letter-source.update');
         Route::delete('letter-source/{id}',[App\Http\Controllers\LetterSourceController::class,'destroy'])->name('letter-source.destroy');
         Route::get('letter-source-fetch',[App\Http\Controllers\LetterSourceController::class,'fetch'])->name('letter-source.fetch');
+        Route::get('letter-source-detail-correspondence-type/{id}',[App\Http\Controllers\LetterSourceController::class,'getDetailCorresTypeByID'])->name('letter-source.getdetailcorres');
     /* end letter source */
 
     /* correnpondence-type */

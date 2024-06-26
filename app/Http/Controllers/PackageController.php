@@ -107,7 +107,7 @@ class PackageController extends Controller
                 }
                 return $status;
             })
-            ->rawColumns(['action','status'])->make(true);
+            ->rawColumns(['action','status','description'])->make(true);
 
         } catch (\Throwable $th) {
             throw $th;

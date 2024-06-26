@@ -65,9 +65,10 @@
                 <div class="col-md-2">
                   <div class="form-group">
                     <label class="form-label">From:</label>
-                    <select name="letter_source_id" id="letter_source_id" class="form-control form-control-sm">
+                    <select name="letter_source_id" id="letter_source_id" class="form-control form-control-sm" data-url="{{route('get.corres.type.bylettersource.id')}}">
+                        <option selected>select</option>
                         @foreach ($lettersource as $item)
-                            <option value="{{$item->id}}">{{$item->source_name}}</option>
+                            <option value="{{$item->id}}">{{$item->source_code}}</option>
                         @endforeach
                     </select>
                   </div>
@@ -76,16 +77,14 @@
                   <div class="form-group">
                     <label class="form-label">Correspondence type:</label>
                     <select name="correspondence_type" id="correspondence_type" class="form-control form-control-sm" data-url="{{route('letter.get.content.template')}}">
-                      @foreach ($correspondencetype as $item)
-                          <option value="{{$item->id}}">{{$item->correspondence_type}}</option>
-                      @endforeach
+                        <option>Select</option>
                     </select>
                   </div>
                 </div>
                 <div class="col-md-2">
                     <div class="form-group">
                       <label>To/attention:</label>
-                      <input type="text" name="attention_to" id="attention_to" class="form-control form-control-sm" placeholder="type the name specified" value="{{$data->attention_to ?? ''}}">
+                      <input type="text" name="attention_to" id="attention_to" class="form-control form-control-sm"  value="{{$data->attention_to ?? ''}}">
                     </div>
                   </div>
                 <div class="col-md-3">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CorrespondenceType;
+use App\Models\LetterSource;
 use Illuminate\Http\Request;
 use Datatables;
 use Illuminate\Validation\Rule;
@@ -35,12 +36,22 @@ class CorrespondenceTypeController extends Controller
             if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('corres-type.index');
             /* make validation for two or more conditions with custom unique column */
             $validated =$this->validate($request,[
-                'correspondence_type'=>['required',Rule::unique('correspondence_types')->where(function($query) use ($request){
-                    return $query->where('correspondence_type',$request->correspondence_type)->Where('type',$request->type);
+                'corres_type'=>['required',Rule::unique('correspondence_types')->where(function($query) use ($request){
+                    return $query->where('letter_source_id','=',$request->letter_source_id)->where('corres_type','=',$request->corres_type)->Where('type',$request->type);
                 })],
-                'type'=>'required']);
+                'type'=>'required','letter_source_id']);
                 if($validated){
-                    $lettersource=CorrespondenceType::create($request->all());
+                    $letterSource=LetterSource::find($request->letter_source_id);
+                    $lettersource=CorrespondenceType::create([
+                        'corres_type'=>$request->corres_type,
+                        'description'=>$request->description,
+                        'content_template'=>$request->content_template,
+                        'type'=>$request->type,
+                        'letter_source_id'=>$request->letter_source_id,
+                        'package_id'=>$letterSource->package_id ?? '-',
+                        'to_attention'=>$request->to_attention,
+                        'status'=>'1',
+                    ]);
                     return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$lettersource],200);
                 }
             return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);

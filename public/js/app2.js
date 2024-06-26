@@ -4,7 +4,7 @@ $(document).ready(function(){
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    var loadingIndicator='<div class="spinner-border spinner-border-sm"></div> loading';
+    var loadingIndicator='<div class="spinner-border spinner-border-sm"></div>';
     const base_url=$('meta[name="base_url"').attr('content');
     toastr.options={"showDuration":100,"hideDuration": 300};
 
@@ -364,9 +364,9 @@ $(document).on('submit','#formChangePassword',function(e){
       ajax: $('#data-correspondence-type').attr('data-url'),
       columns: [
           {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
-          {data: 'correspondence_type', name: 'correspondence_type'},
+          {data: 'corres_type', name: 'corres_type'},
           {data: 'type', name: 'type'},
-          {data: 'description', name: 'description',searchable:false},
+          {data: 'content_template', name: 'content_template',searchable:false},
           {data: 'package_name', name: 'package_name',searchable:false},
           {data: 'status', name: 'status',searchable:false},
           {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -433,9 +433,9 @@ var tableLetterSource = $('#data-letter-source').DataTable({
   ajax: $('#data-letter-source').attr('data-url'),
   columns: [
       {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
+      {data: 'source_code', name: 'source_code'},
       {data: 'source_name', name: 'source_name'},
-      {data: 'unit', name: 'unit'},
-      {data: 'package.package_name', name: 'package_name'},
+      {data: 'package_name', name: 'package_name'},
       {data: 'description', name: 'description',searchable:false},
       {data: 'status', name: 'status',searchable:false},
       {data: 'action', name: 'action', orderable: false, searchable: false},
@@ -494,9 +494,10 @@ $(document).on('click','#data-letter-source .edit-form',function(){
       },
       complete:function(){
         const attrID=document.querySelectorAll('.text-area');
-        for (let i = 0; i < attrID.length; i++) {
+        CKEDITOR.replace('description');
+       /*  for (let i = 0; i < attrID.length; i++) {
           $.fn.createCkeditor(`#${attrID[i].id}`);
-        }
+        } */
           $("button[id='edit"+buttonID+"']").html(originButton);
       }
     });
@@ -1486,7 +1487,7 @@ var tableLetter = $('#incoming-letter').DataTable({
   columns: [
     // {data: 'DT_RowIndex', name: 'DT_RowIndex'},
     {data: 'letter_ref_no', name: 'letter_ref_no'},
-    {data: 'source_name', name: 'source_name',searchable:false},
+    {data: 'source_code', name: 'source_name',searchable:false},
     {data: 'letter_date', name: 'letter_date'},
     {data: 'subject', name: 'subject'},
     {data: 'status', name: 'status'},
@@ -1697,8 +1698,34 @@ var $confirmation=$('#confirmation').select2({
     },
     cache:true
 }});
+$(document).on('select change','#letter_source_id',function(e){
+    e.preventDefault();
+    let lettersourceid=$(this).val();
+    $.ajax({
+        url: $(this).attr('data-url')+'/'+lettersourceid,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            $('#correspondence_type').html('').append(data);
+            $('#letter_ref_no').val('');
+            $('#attention_to').val('');
+        },
+        error: function (a) {
+          if(a.status==422){
+              $.each(a.responseJSON.errors, function (i, v) {
+                toastr.error(v);
+              })
+            } else {
+              toastr.error('Error..!');
+            }
+        },
+      });
+
+})
 $(document).on('select change','#correspondence_type',function(e){
   e.preventDefault();
+  $('#letter_ref_no').val('');
+  $('#attention_to').val('');
   $.ajax({
     url: $(this).attr('data-url'),
     type: 'POST',

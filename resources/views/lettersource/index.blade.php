@@ -35,8 +35,8 @@
                             <thead>
                               <tr>
                                 <th>No</th>
+                                <th>Code</th>
                                 <th>Name</th>
-                                <th>Unit</th>
                                 <th>Package name</th>
                                 <th>Description</th>
                                 <th>Status</th>

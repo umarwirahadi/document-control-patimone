@@ -11,12 +11,12 @@
                 @csrf
                 @method('put')
                     <div class="mb-3">
-                        <label class="form-label">Source name</label>
-                        <input type="text" class="form-control data-focus" placeholder="Letter source name" name="source_name" value="{{$source_name ?? ''}}">
+                        <label class="form-label">Source code</label>
+                        <input type="text" class="form-control data-focus" placeholder="source code" name="source_code" value="{{$source_code ?? ''}}">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Unit</label>
-                        <input type="text" class="form-control" placeholder="unit name" name="unit" value="{{$unit ?? ''}}">
+                        <label class="form-label">Source name</label>
+                        <input type="text" class="form-control data-focus" placeholder="source name name" name="source_name" value="{{$source_name ?? ''}}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Package</label>
@@ -34,7 +34,7 @@
                             <option value="1" {{$status == 1 ? 'selected':''}}>Active</option>
                             <option value="0" {{$status == 0 ? 'selected':''}}>InActive</option>
                         </select>
-                    </div>                    
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-sm btn-primary rounded-0"><i class='fas fa-save'></i> Update</button>
