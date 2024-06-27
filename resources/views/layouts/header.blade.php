@@ -38,4 +38,9 @@
     .btn-table {
         width: 50px !important;
     }
+    td {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 </style>

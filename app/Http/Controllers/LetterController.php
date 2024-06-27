@@ -58,7 +58,7 @@ class LetterController extends Controller
             $refferences=Letter::with(['source','source.package','correstype'])->find(Session::get('letter_id'));
             // $refferences->load('assignments.engineer');
             $engineers=Engineer::engineer()->get();
-            return $refferences;
+            // return $refferences;
 
             return view('letters.create',['title'=>'Correspondence','title2'=>'Incoming','title3'=>'Create','engineers'=>$engineers,'lettersource'=>LetterSource::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
         } catch (\Throwable $th) {
@@ -520,13 +520,17 @@ class LetterController extends Controller
             })->editColumn('letter_date',function($row){
                 return Carbon::createFromFormat('Y-m-d', $row->letter_date)->format('d-M-Y');
             })
+            ->editColumn('subject',function($row){
+                $str=substr($row->subject,0,100);
+                return $str;
+            })
             ->addColumn('action',function($row){
                 $edit=route('letter.edit',$row->id??'');
                 $destroy=route('letter.destroy',$row->id);
                 $btn= '<a href="'.$edit.'" class="btn btn-info btn-sm rounded-2 btn-table" ><i class="fas fa-pencil-alt"></i></a>
                        <button type="button" class="btn btn-danger btn-sm rounded-2 btn-table delete-data" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
-            })->rawColumns(['action','status'])->make(true);
+            })->rawColumns(['action','status','subject'])->make(true);
 
         } catch (\Throwable $th) {
             throw $th;

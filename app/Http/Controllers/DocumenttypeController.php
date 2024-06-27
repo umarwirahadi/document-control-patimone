@@ -47,10 +47,30 @@ class DocumenttypeController extends Controller
         }
     }
     public function edit($id){
-
+        try {
+            if(!request()->ajax() && request()->method()<>'POST') return redirect()->route('documenttype.index');
+            $documentType=Documenttype::findOrFail($id);
+            $html=view('components.documenttype.edit',$documentType)->render();
+            return response()->json($html);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
     public function update(Request $request,$id){
-
+        try {
+            if(!$request->ajax() && $request->method()<>'PUT') return redirect()->route('action-type.index');
+            $request->validate(['document_type_name'=>'required','package_id'=>'required','category_id'=>'required']);
+                    $documentType = Documenttype::findOrFail($id);
+                    $documentType->document_type_name=$request->document_type_name;
+                    $documentType->category_id=$request->category_id;
+                    $documentType->description=$request->description;
+                    $documentType->package_id=$request->package_id;
+                    $documentType->status=$request->status;
+                    $documentType->save();
+                return response()->json(['success'=>true,'message'=>'Data Updated..!','data'=>$documentType],200);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
     }
     public function destroy($id){
 

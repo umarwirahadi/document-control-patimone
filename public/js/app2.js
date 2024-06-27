@@ -2444,7 +2444,7 @@ $(document).on('submit','#formDocumentType',function(e){
     }
   });
 });
-$(document).on('click','#data-type-of-action .edit-form',function(){
+$(document).on('click','#data-document-type .edit-form',function(){
   let originButton=$(this).html();
   let buttonID=$(this).attr('data-id');
   $.ajax({
@@ -2461,11 +2461,12 @@ $(document).on('click','#data-type-of-action .edit-form',function(){
           $("button[id='edit"+buttonID+"']").html(originButton);
       },
       complete:function(){
-          $("button[id='edit"+buttonID+"']").html(originButton);
+        CKEDITOR.replace('description');
+        $("button[id='edit"+buttonID+"']").html(originButton);
       }
     });
 });
-$(document).on('click','#data-type-of-action .delete',function(){
+$(document).on('click','#data-document-type .delete',function(){
   let url=$(this).attr('data-url');
   Swal.fire({
       title: 'Are you sure?',
