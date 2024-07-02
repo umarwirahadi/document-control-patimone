@@ -52,7 +52,7 @@ class LetterController extends Controller
 
             if(count($userPackages->access) > 0 ){
                 foreach ($userPackages->access as $val) {
-                    $datapackage=[$val->package_id];
+                    $datapackage[]=[$val->package_id];
                 }
             }
             $refferences=Letter::with(['source','source.package','correstype'])->find(Session::get('letter_id'));

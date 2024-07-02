@@ -63,6 +63,7 @@ class PackageController extends Controller
                     'status'=>'required']);
                     $package=Package::findOrFail($id);
                     $package->package_name=$request->package_name;
+                    $package->package_code=$request->package_code;
                     $package->total_days=$request->total_days;
                     $package->start_date=$request->start_date;
                     $package->end_date=$request->end_date;

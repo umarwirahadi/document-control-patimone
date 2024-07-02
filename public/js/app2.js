@@ -387,7 +387,11 @@ $(document).on('click','#btnCreate',function(){
           $('#datamodal').modal('show');
           /* find element */
           $('.modal-body').find('.control-select2').select2({theme:'bootstrap4'});
-          CKEDITOR.replace('description');
+            var DescriptionID=document.getElementById('description');
+            if(DescriptionID){
+                CKEDITOR.replace(DescriptionID);
+                // CKEDITOR.replace('description');
+            }
 
 
 
@@ -1368,6 +1372,7 @@ var tablePackage = $('#data-package').DataTable({
   ajax: $('#data-package').attr('data-url'),
   columns: [
     {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+    {data: 'package_code', name: 'package_code'},
     {data: 'package_name', name: 'package_name'},
     {data: 'total_days', name: 'total_days'},
     {data: 'description', name: 'description'},
@@ -2498,5 +2503,131 @@ $(document).on('click','#data-document-type .delete',function(){
     });
 });
 /* end document type */
+
+/* Equipment */
+var tableEqProductCategory = $('#data-eq-product-category').DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: false,
+    scrollY:'500px',
+    lengthMenu:[[25,50,-1],[25,50,'All']],
+    scrollCollapse:true,
+    ajax: $('#data-eq-product-category').attr('data-url'),
+    columns: [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false,width:'5%'},
+        {data: 'category_code', name: 'category_code',width:'15%'},
+        {data: 'category_name', name: 'category_name',width:'15%'},
+        {data: 'category_description', name: 'category_description',width:'45%'},
+        {data: 'category_status', name: 'category_status',width:'10%'},
+        {data: 'action', name: 'action', orderable: false, searchable: false,width:'10%'},
+    ]
+  });
+  $(document).on('submit','#formEqCategoryProduct',function(e){
+    let originButton=$('#formItem button[type="submit"]').html();
+    e.preventDefault();
+    $.ajax({
+      url: $(this).attr('action'),
+      type: $(this).attr('method'),
+      data: $(this).serialize(),
+      dataType: 'json',
+      beforeSend:function(){
+        $('#formItem button[type="submit"]').html(loadingIndicator);
+      },
+      success: function (data) {
+        tableEqProductCategory.ajax.reload();
+          Swal.fire('Success',data.message,data.success ? 'success' :'warning')
+          $('#datamodal').modal('toggle');
+      },
+      error: function (a) {
+        if(a.status==422){
+            $.each(a.responseJSON.errors, function (i, v) {
+              toastr.error(v);
+            })
+          } else {
+            toastr.error('Error..!');
+          }
+      },
+      complete:function(){
+        $('#formItem button[type="submit"]').html(originButton);
+      }
+    });
+  });
+  $(document).on('click','#data-eq-product-category .edit-form',function(){
+    let originButton=$(this).html();
+    let buttonID=$(this).attr('data-id');
+    $.ajax({
+        url:$(this).attr('data-url'),
+        type:'GET',
+        dataType:'json',
+        beforeSend:function(){
+            $("button[id='edit"+buttonID+"']").html(loadingIndicator);
+        },
+        success:function(data){
+          $("#datamodal").html(data);
+          $('#datamodal').modal('show');
+        },error:function(){
+            $("button[id='edit"+buttonID+"']").html(originButton);
+        },
+        complete:function(){
+          var descriptionID=document.getElementById('description');
+          if(descriptionID){
+              CKEDITOR.replace('description');
+          }
+          $("button[id='edit"+buttonID+"']").html(originButton);
+        }
+      });
+  });
+  $(document).on('click','#data-eq-product-category .delete',function(){
+    let url=$(this).attr('data-url');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You want to delete this data, please ensure...!",
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+        showConfirmButton:true,
+      }).then((isConfirmed) => {
+        if (isConfirmed.value) {
+            $.ajax({
+                url:url,
+                type:'DELETE',
+                dataType:'json',
+                success:function(data){
+                    Swal.fire(
+                        data.success ? 'success' : 'error',
+                        data.message,
+                        data.success ? 'success' : 'error'
+                        ).then(()=>{
+                            tableEqProductCategory.ajax.reload();
+                        })
+                }
+              });
+        }
+          return false;
+      });
+  });
+
+  var tableEqProduct = $('#data-eq-product').DataTable({
+    processing: true,
+    serverSide: true,
+    responsive: true,
+    scrollY:'500px',
+    lengthMenu:[[25,50,-1],[25,50,'All']],
+    scrollCollapse:true,
+    ajax: $('#data-eq-product').attr('data-url'),
+    columns: [
+        {data: 'DT_RowIndex', name: 'DT_RowIndex',searchable:false},
+        {data: 'code', name: 'code'},
+        {data: 'name', name: 'name'},
+        {data: 'eq_product_category_id', name: 'eq_product_category_id'},
+        {data: 'qty', name: 'qty'},
+        {data: 'package_id', name: 'package_id'},
+        {data: 'specification', name: 'specification'},
+        {data: 'action', name: 'action', orderable: false, searchable: false},
+    ]
+  });
+/* end Equipment */
 
 })

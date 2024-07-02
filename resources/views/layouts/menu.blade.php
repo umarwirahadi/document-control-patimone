@@ -57,6 +57,24 @@
                         <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> ITP</a></li>
                     </ul>
                 </li>
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" class="nav-link dropdown-toggle">Equipment</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li class="dropdown-submenu dropdown-hover w-100">
+                            <a id="dropdownSubMenu" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Utility EQ</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+                                <li><a href="{{ route('eq.product.category.index') }}" class="dropdown-item"> <span class="fas fa-users-cog"></span> EQ Category</a></li>
+                                <li class="dropdown-divider"></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{route('eq.product.index')}}" class="dropdown-item"><span class="fas fa-file-alt"></span> EQ Product </a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Distribution</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Handover</a></li>
+                    </ul>
+                </li>
 
 
                 <li class="nav-item dropdown">

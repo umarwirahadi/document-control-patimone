@@ -15,6 +15,7 @@ class Package extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->string('package_code',50)->nullable();
             $table->string('package_name');
             $table->integer('total_days')->nullable();
             $table->date('start_date')->nullable();

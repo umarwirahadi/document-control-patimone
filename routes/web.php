@@ -219,6 +219,24 @@ Route::prefix('utility')->group(function(){
         Route::get('/logs-fetch',[App\Http\Controllers\LogController::class,'fetch'])->name('log.fetch');
         /* end log user */
 });
+
+Route::prefix('equipment')->group(function(){
+    /* Document type */
+    Route::get('utility/product-category',[App\Http\Controllers\EqProductCategoryController::class,'index'])->name('eq.product.category.index');
+    Route::get('utility/product-category/create',[App\Http\Controllers\EqProductCategoryController::class,'create'])->name('eq.product.category.create');
+    Route::post('utility/product-category/store',[App\Http\Controllers\EqProductCategoryController::class,'store'])->name('eq.product.category.store');
+    Route::get('utility/product-category/{id}/edit',[App\Http\Controllers\EqProductCategoryController::class,'edit'])->name('eq.product.category.edit');
+    Route::put('utility/product-category/{id}/update',[App\Http\Controllers\EqProductCategoryController::class,'update'])->name('eq.product.category.update');
+    Route::delete('utility/product-category/{id}/destroy',[App\Http\Controllers\EqProductCategoryController::class,'destroy'])->name('eq.product.category.destroy');
+    Route::delete('utility/product-category/{id}/destroy',[App\Http\Controllers\EqProductCategoryController::class,'destroy'])->name('eq.product.category.destroy');
+    Route::get('utility/product-category/fetch',[App\Http\Controllers\EqProductCategoryController::class,'fetch'])->name('eq.product.category.fetch');
+    Route::get('utility/product-category/export',[App\Http\Controllers\EqProductCategoryController::class,'export'])->name('eq.product.category.export');
+
+    ROute::get('products/index',[App\Http\Controllers\EqProductController::class,'index'])->name('eq.product.index');
+    ROute::get('products/create',[App\Http\Controllers\EqProductController::class,'create'])->name('eq.product.create');
+    ROute::post('products/store',[App\Http\Controllers\EqProductController::class,'store'])->name('eq.product.store');
+    ROute::get('products/fetch',[App\Http\Controllers\EqProductController::class,'fetch'])->name('eq.product.fetch');
+});
 /* tools */
     /* letter source */
         Route::get('letter-source',[App\Http\Controllers\LetterSourceController::class,'index'])->name('letter-source.index');
