@@ -10,17 +10,17 @@ use Ramsey\Uuid\Uuid;
 class Letter extends Model
 {
     use HasFactory;
-    protected $fillable = ['type','package_id','letter_source_id','correspondence_type','document_no','letter_ref_no','letter_date','received_date','attention_to','subject','reference','pic_letter_out','attachment','attachment_type','cc_to_letter_out','delivery_date','document_control_date','due_date','engineer_ref_no','engineer_res_date','status','description','response_required','rev','received_by'];
+    protected $fillable = ['type','package_id','letter_source_id','correspondence_type_id','document_no','letter_ref_no','letter_date','received_date','attention_to','subject','reference','pic_letter_out','attachment','attachment_type','cc_to_letter_out','delivery_date','document_control_date','due_date','engineer_ref_no','engineer_res_date','status','description','response_required','rev','received_by'];
     protected $keyType = 'string';
 
-    public $incrementing = false;  
-    protected $casts = ['id'=>'string'];   
+    public $incrementing = false;
+    protected $casts = ['id'=>'string'];
     public static function boot(){
         parent::boot();
         static::creating(function($data){
             $data->id=Uuid::uuid4()->toString();
             $data->created_by=Auth::user()->id;
-            $data->status='0'; //it's mean draft status            
+            $data->status='0'; //it's mean draft status
         });
 
         static::updating(function($data){
@@ -42,7 +42,7 @@ class Letter extends Model
 
     public function assignments(){
         /* if you want to use separatly between assignment and reference please uncomment
-            return $this->hasMany(AssignmentLetter::class,'letter_id','id')->where('action',1);        
+            return $this->hasMany(AssignmentLetter::class,'letter_id','id')->where('action',1);
         */
         return $this->hasMany(AssignmentLetter::class,'letter_id','id')->orderBy('name')->orderBy('action');
     }
@@ -57,10 +57,14 @@ class Letter extends Model
 
     public function getFatchAssignToAttribute(){
         return explode(",",$this->assign_to);
-    } 
+    }
 
     public function source(){
         return $this->belongsTo(LetterSource::class,'letter_source_id','id');
+    }
+
+    public function correstype(){
+        return $this->belongsTo(CorrespondenceType::class,'correspondence_type_id');
     }
 
 

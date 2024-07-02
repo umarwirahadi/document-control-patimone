@@ -1,4 +1,4 @@
-<div class="modal-dialog modal-xl" role="document">
+<div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
         <form action="{{ route('corres-type.update',$id) }}" method="POST" id="formCorrespondence-type">
             <div class="modal-header bg-gradient-gray-dark">
@@ -22,11 +22,17 @@
                         </select>
                     </div>
                     <div class="mb-3">
+                        <label class="form-label">Package</label>
+                        <select name="package_id" class="form-control form-control-sm">
+                            {!!packageName($package_id)!!}
+                        </select>
+                    </div>
+                    <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea class="text-area" id="description" name="description" rows="2">{{$description ?? ''}}</textarea>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Description</label>
+                        <label class="form-label">Content template</label>
                         {{-- <textarea class="text-area" id="description" name="description" rows="2">{{$description ?? ''}}</textarea> --}}
                         <input type="text" class="form-control form-control-sm" name="content_template" id="content_template" value="{{$content_template??''}}">
                     </div>
@@ -36,7 +42,7 @@
                             <option value="1" {{$status == 1 ? 'selected':''}}>Active</option>
                             <option value="0" {{$status == 0 ? 'selected':''}}>InActive</option>
                         </select>
-                    </div>                    
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-sm btn-primary rounded-0"><i class='fas fa-save'></i> Update</button>

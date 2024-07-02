@@ -10,12 +10,12 @@
             <div class="modal-body">
                 @csrf
                     <div class="mb-3">
-                        <label class="form-label">Source name</label>
-                        <input type="text" class="form-control data-focus" placeholder="Letter source name" name="source_name" >
+                        <label class="form-label">Source coude</label>
+                        <input type="text" class="form-control data-focus" placeholder="source code" name="source_code" >
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Unit</label>
-                        <input type="text" class="form-control" placeholder="unit name" name="unit">
+                        <label class="form-label">Source Name</label>
+                        <input type="text" class="form-control" placeholder="Source name" name="source_name">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Package</label>
@@ -26,7 +26,7 @@
                     <div class="mb-3">
                         <label class="form-label">Description</label>
                         <textarea class="text-area" id="description" name="description" cols="30" rows="10"></textarea>
-                    </div>                    
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-sm btn-primary rounded-0"><i class='fas fa-save'></i> Save</button>

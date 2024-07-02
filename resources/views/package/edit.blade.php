@@ -10,7 +10,10 @@
             <div class="modal-body">
                 @csrf
                 @method('put')
-              
+                <div class="mb-3">
+                    <label class="form-label">Package code</label>
+                    <input type="text" class="form-control" placeholder="Package code" name="package_code" placeholder="01" value="{{$package_code??''}}">
+                </div>
                 <div class="mb-3">
                     <label class="form-label">Package name</label>
                     <input type="text" class="form-control" placeholder="Package name" name="package_name" value="{{$package_name??''}}">
@@ -37,7 +40,7 @@
                         <option value="1" {{$status==1?'selected':''}}>Active</option>
                         <option value="0" {{$status==0?'selected':''}}>Not Active</option>
                     </select>
-                 
+
                 </div>
 
             </div>

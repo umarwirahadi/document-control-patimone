@@ -38,7 +38,7 @@ class TypeOfActionController extends Controller
             $validated =$this->validate($request,[
                 'type_of_action'=>['required',Rule::unique('type_of_action')->where(function($query) use ($request){
                     return $query->where('type_of_action',$request->type_of_action)->Where('package_id',$request->package_id);
-                })]]);                
+                })]]);
             if($validated){
 
                 $typeOfAction=TypeOfAction::create($request->all());
@@ -63,7 +63,7 @@ class TypeOfActionController extends Controller
     public function update(Request $request, $id){
         try {
             if(!$request->ajax() && $request->method()<>'PUT') return redirect()->route('action-type.index');
-            $request->validate(['type_of_action'=>'required','description'=>'required','package_id'=>'required']);               
+            $request->validate(['type_of_action'=>'required','description'=>'required','package_id'=>'required']);
                     $type=TypeOfAction::findOrFail($id);
                     $type->type_of_action=$request->type_of_action;
                     $type->description=$request->description;

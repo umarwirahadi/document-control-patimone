@@ -16,7 +16,7 @@ class DocumenttypeController extends Controller
     public function index()
     {
         try {
-            return view('components.documenttype.index',['title'=>'Document type']);
+            return view('components.documenttype.index',['title'=>'Master','title2'=>'Utility','title3'=>'Document type']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -36,7 +36,7 @@ class DocumenttypeController extends Controller
             $validated =$this->validate($request,[
                 'document_type_name'=>['required',Rule::unique('documenttypes')->where(function($query) use ($request){
                     return $query->where('document_type_name',$request->document_type_name)->Where('package_id',$request->package_id);
-                })]]);                
+                })]]);
             if($validated){
                 $documentType=Documenttype::create($request->all());
                 return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$documentType],200);
@@ -47,10 +47,30 @@ class DocumenttypeController extends Controller
         }
     }
     public function edit($id){
-
+        try {
+            if(!request()->ajax() && request()->method()<>'POST') return redirect()->route('documenttype.index');
+            $documentType=Documenttype::findOrFail($id);
+            $html=view('components.documenttype.edit',$documentType)->render();
+            return response()->json($html);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
     public function update(Request $request,$id){
-
+        try {
+            if(!$request->ajax() && $request->method()<>'PUT') return redirect()->route('action-type.index');
+            $request->validate(['document_type_name'=>'required','package_id'=>'required','category_id'=>'required']);
+                    $documentType = Documenttype::findOrFail($id);
+                    $documentType->document_type_name=$request->document_type_name;
+                    $documentType->category_id=$request->category_id;
+                    $documentType->description=$request->description;
+                    $documentType->package_id=$request->package_id;
+                    $documentType->status=$request->status;
+                    $documentType->save();
+                return response()->json(['success'=>true,'message'=>'Data Updated..!','data'=>$documentType],200);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
     }
     public function destroy($id){
 

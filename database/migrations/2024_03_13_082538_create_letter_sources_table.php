@@ -15,10 +15,10 @@ class CreateLetterSourcesTable extends Migration
     {
         Schema::create('letter_sources', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('source_name');
-            $table->string('unit')->nullable();
+            $table->string('source_code');
+            $table->string('source_name')->nullable();
             $table->text('description')->nullable();
-            $table->char('package_id',40)->nullable();
+            $table->char('package_id',60)->nullable();
             $table->string('status',1)->default('1');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

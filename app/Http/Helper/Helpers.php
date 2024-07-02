@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\CorrespondenceType;
+use App\Models\LetterSource;
 use App\Models\MasterItem;
 use App\Models\Package;
 
@@ -53,6 +54,30 @@ if(!function_exists('packageName')) {
         }
     }
 }
+if(!function_exists('getLetterSource')) {
+    function getLetterSource($default=''){
+        try {
+            $letterSources=LetterSource::with('package')->where('status','=','1')->orderBy('created_at','asc')->get();
+            $HTML = "<option>--Select--</option>";
+            if(isset($default)){
+                foreach ($letterSources as $key) {
+                    if($default==$key->id){
+                        $HTML .="<option value='".$key->id."' selected='selected'>".$key->package->package_name." - ".$key->source_code."</option>";
+                    }else{
+                        $HTML .="<option value='".$key->id."'>".$key->package->package_name." - ".$key->source_code."</option>";
+                    }
+                }
+            } else {
+                foreach ($letterSources as $key) {
+                    $HTML .="<option value='".$key->id."'>".$key->package->package_name." - ".$key->source_code."</option>";
+                }
+            }
+                return $HTML;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+}
 if(!function_exists('UserPackageNameActive')) {
     function UserPackageNameActive($package_id=''){
         try {
@@ -70,7 +95,7 @@ if(!function_exists('packageNameLabel')) {
     function packageNameLabel($default=''){
         try {
             $data=Package::findOrFail($default);
-            return $data->package_name;            
+            return $data->package_name;
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -84,7 +109,7 @@ if(!function_exists('getItem')) {
             if(!empty($cat)){
                 $items=MasterItem::Category($cat)->ItemStatus('1')->get();
                 if(isset($default)){
-                    
+
                     foreach ($items as $item) {
                         if($default==$item->item_code){
                             $HTML .="<option value='".$item->item_code."' selected='selected'>".$item->item_name."</option>";
@@ -111,7 +136,7 @@ if(!function_exists('getItem')) {
 if(!function_exists('monthToRoman')) {
     function monthToRoman($month=''){
         try {
-            $roman=['I'=>'01','II'=>'02','III'=>'03','IV'=>'04','V'=>'05','VI'=>'06','VII'=>'07','VIII'=>'08','IX'=>'09','X'=>'10','XI'=>'11','XII'=>'12'];        
+            $roman=['I'=>'01','II'=>'02','III'=>'03','IV'=>'04','V'=>'05','VI'=>'06','VII'=>'07','VIII'=>'08','IX'=>'09','X'=>'10','XI'=>'11','XII'=>'12'];
             if(in_array($month, $roman)){
                 $monthRoman=array_search($month, $roman);
             } else {

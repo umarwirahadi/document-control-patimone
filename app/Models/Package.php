@@ -12,10 +12,10 @@ class Package extends Model
 {
     use HasFactory;
     use SoftDeletes;
-    
+
 
     protected $table='packages';
-    protected $fillable=['package_name','total_days','start_date','end_date','description','status'];
+    protected $fillable=['package_name','total_days','start_date','end_date','description','status','package_code'];
     protected $casts = [
         'id' => 'string'
     ];
@@ -34,7 +34,7 @@ class Package extends Model
 
     public function scopePackageStatus($query,$param)
     {
-        return $query->where('status',$param);        
+        return $query->where('status',$param);
     }
 
 }

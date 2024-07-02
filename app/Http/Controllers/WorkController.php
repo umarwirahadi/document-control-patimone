@@ -16,7 +16,7 @@ class WorkController extends Controller
     public function index()
     {
         try {
-            return view('workitem.index',['title'=>'Work item']);
+            return view('workitem.index',['title'=>'Master','title2'=>'Data','title3'=>'Bill Items']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -35,7 +35,7 @@ class WorkController extends Controller
     public function store(Request $request)
     {
         try {
-            if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('work.index');                
+            if(!$request->ajax() && $request->method() <> 'POST') return redirect()->route('work.index');
             $request->validate(
                     ['item_no'=>'required|string|unique:works,item_no',
                     'pay_item'=>'required|string',
@@ -95,7 +95,7 @@ class WorkController extends Controller
             }
     }
 
-    
+
     public function fetch(Request $request)
     {
         try {
@@ -104,8 +104,8 @@ class WorkController extends Controller
             return Datatables::of($workItems)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('work.edit',$row->id??'');
                 $destroy=route('work.destroy',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-success btn-sm btn-custom rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 btn-custom delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $btn= '<button type="button" data-toggle="tooltip" title="Edit bill item" data-url="'.$edit.'" class="btn btn-success btn-sm btn-table rounded-2 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i></button>
+                       <button type="button" data-toggle="tooltip" title="Delete bill item" class="btn btn-danger btn-sm rounded-2 btn-table delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
             })->rawColumns(['action'])->make(true);
 
@@ -122,7 +122,7 @@ class WorkController extends Controller
             if(empty($term)) {
                 return response()->json([]);
             }
-            
+
             $workItems=Work::where('item_no','like','%'.$term.'%')
             ->orWhere('pay_item','like','%'.$term.'%')
             ->limit(10)->get();

@@ -16,8 +16,11 @@ class CreateAttachmentFilesTable extends Migration
         Schema::create('attachment_files', function (Blueprint $table) {
             $table->uuid('id')->primary();
             $table->char('letter_id',40)->index();
-            $table->text('file_name');
-            $table->text('file_link')->nullable();
+            $table->char('document_type_id',60)->index();
+            $table->text('file_name')->nullable();
+            $table->text('file_link1')->nullable();
+            $table->text('file_link2')->nullable();
+            $table->text('file_link3')->nullable();
             $table->string('type',100)->nullable();
             $table->string("description")->nullable()->nullable();
             $table->string("tags")->nullable()->nullable();

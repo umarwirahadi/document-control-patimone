@@ -19,7 +19,7 @@ class InspectorController extends Controller
     public function index()
     {
         try {
-            return view('engineer.inspector.index',['title'=>'List of inspectors']);
+            return view('engineer.inspector.index',['title'=>'inspection','title2'=>'inspector','title3'=>'list']);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -39,7 +39,7 @@ class InspectorController extends Controller
             if(!$request->ajax() && $request->method() != 'POST') return false;
             $inspectors = User::withGlobalScope('inspector',new OnlyInspectors)->get();
             $dataInspector=array();
-            foreach ($inspectors as $key => $value) {        
+            foreach ($inspectors as $key => $value) {
 
                 $dataInspector[]=Engineer::updateOrCreate(
                     ['code'=>$value->usncreated[0]],
@@ -70,10 +70,10 @@ class InspectorController extends Controller
                 $destroy=route('engineer.destroy',$row->id);
                 $addEmail=route('engineer.show.email',$row->id);
                 $assignment= route('engineer.assignment',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-info btn-sm rounded-0 edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
-                       <button type="button" class="btn btn-warning btn-sm rounded-0 add-email" data-url="'.$addEmail.'" id="show'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-location-arrow"></i> Add email</button>
-                       <button type="button" class="btn btn-success btn-sm rounded-0 assignment" data-url="'.$assignment.'" id="assignment'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-check-circle"></i> Assignment</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $btn= '<button type="button" data-toggle="tooltip" title="Edit data" data-url="'.$edit.'" class="btn btn-info btn-sm rounded-2 btn-table edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i></button>
+                       <button type="button" data-toggle="tooltip" title="Add email" class="btn btn-warning btn-sm rounded-2 btn-table add-email" data-url="'.$addEmail.'" id="show'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-envelope-square"></i></button>
+                       <button type="button" data-toggle="tooltip" title="Assign" class="btn btn-success btn-sm rounded-2 btn-table assignment" data-url="'.$assignment.'" id="assignment'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-check-circle"></i></button>
+                       <button type="button" data-toggle="tooltip" title="Delete" class="btn btn-danger btn-sm rounded-2 btn-table delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
             })->editColumn('full_name',function($row){
                 $show=route('engineer.show',$row->id);

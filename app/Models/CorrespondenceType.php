@@ -18,12 +18,13 @@ class CorrespondenceType extends Model
         'id' => 'string'
     ];
 
-    protected $fillable=['correspondence_type','content_template','type','description','status','package_id'];
+    protected $fillable=['corres_type','description','content_template','type','letter_source_id','package_id','to_attention','status'];
+
     public static function boot(){
         parent::boot();
         static::creating(function($data){
             $data->id=Uuid::uuid4()->toString();
-            $data->created_by=Auth::user()->id;           
+            $data->created_by=Auth::user()->id;
         });
 
         static::updating(function($data){
@@ -37,11 +38,15 @@ class CorrespondenceType extends Model
     public function scopeCorrespondenceTypeStatus($query,$param)
     {
         return $query->where('status',$param)->orderBy('created_at','desc');
-        
+
     }
     public function scopeActive($query)
     {
         return $query->where('status','1');
-        
+
+    }
+    public function lettersource(){
+        return $this->belongsTo(LetterSource::class);
+
     }
 }

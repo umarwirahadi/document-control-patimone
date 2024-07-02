@@ -60,14 +60,14 @@ Route::delete('/position/{id}',[App\Http\Controllers\PositionController::class,'
 Route::get('/position/fetch',[App\Http\Controllers\PositionController::class,'fetch'])->name('position.fetch');
 
 
-Route::get('/work-item',[App\Http\Controllers\WorkController::class,'index'])->name('work.index');
-Route::get('/work-item/create',[App\Http\Controllers\WorkController::class,'create'])->name('work.create');
-Route::post('/work-item',[App\Http\Controllers\WorkController::class,'store'])->name('work.store');
-Route::get('/work-item/edit/{id}',[App\Http\Controllers\WorkController::class,'edit'])->name('work.edit');
-Route::put('/work-item/{id}',[App\Http\Controllers\WorkController::class,'update'])->name('work.update');
-Route::delete('/work-item/{id}',[App\Http\Controllers\WorkController::class,'destroy'])->name('work.destroy');
-Route::get('/work-item/fetch',[App\Http\Controllers\WorkController::class,'fetch'])->name('work.fetch');
-Route::get('/work-item/select',[App\Http\Controllers\WorkController::class,'find'])->name('work.select');
+Route::get('/bill-item',[App\Http\Controllers\WorkController::class,'index'])->name('work.index');
+Route::get('/bill-item/create',[App\Http\Controllers\WorkController::class,'create'])->name('work.create');
+Route::post('/bill-item',[App\Http\Controllers\WorkController::class,'store'])->name('work.store');
+Route::get('/bill-item/edit/{id}',[App\Http\Controllers\WorkController::class,'edit'])->name('work.edit');
+Route::put('/bill-item/{id}',[App\Http\Controllers\WorkController::class,'update'])->name('work.update');
+Route::delete('/bill-item/{id}',[App\Http\Controllers\WorkController::class,'destroy'])->name('work.destroy');
+Route::get('/bill-item/fetch',[App\Http\Controllers\WorkController::class,'fetch'])->name('work.fetch');
+Route::get('/bill-item/select',[App\Http\Controllers\WorkController::class,'find'])->name('work.select');
 
 
 Route::get('/request-for-inspection',[App\Http\Controllers\RfiController::class,'index'])->name('rfi.index');
@@ -163,6 +163,9 @@ Route::get('/document-transmittal/create',[App\Http\Controllers\TransmittalContr
 /* Letters for incoming*/
 Route::get('incoming',[App\Http\Controllers\LetterController::class,'index'])->name('letter.index');
 Route::post('letters/create',[App\Http\Controllers\LetterController::class,'create'])->name('letter.create');
+Route::get('get-correspondence-type-by-id-letter-source/{lettersourceid?}',[App\Http\Controllers\LetterSourceController::class,'getSelectCorresTypeById'])->name('get.corres.type.bylettersource.id');
+Route::post('get-letter-content-template',[App\Http\Controllers\LetterController::class,'getContentTemplate'])->name('letter.get.content.template');
+
 Route::post('letters/store',[App\Http\Controllers\LetterController::class,'store'])->name('letter.store');
 Route::get('letters/edit/{id}',[App\Http\Controllers\LetterController::class,'edit'])->name('letter.edit');
 Route::put('letters/update/{id}',[App\Http\Controllers\LetterController::class,'update'])->name('letter.update');
@@ -188,10 +191,10 @@ Route::get('letter/attachment/{id}',[App\Http\Controllers\LetterController::clas
 Route::put('letter/attachment/{id}/edit',[App\Http\Controllers\LetterController::class,'updateAttachment'])->name('letter.update.attachment');
 Route::delete('letter/attachment/{id}',[App\Http\Controllers\LetterController::class,'destroyAttachment'])->name('letter.destroy.attachment');
 
-/* copy list of email */ 
+/* copy list of email */
 Route::get('letter/copy/assignment/{letter_id}/{type}',[App\Http\Controllers\LetterController::class,'copyAssignTo'])->name('letter.copy.email.assign');
 
-Route::post('letter-get-content-template',[App\Http\Controllers\LetterController::class,'getContentTemplate'])->name('letter.get.content.template');
+
 
 
 Route::post('letter/{letter_id}/close',[App\Http\Controllers\LetterController::class,'closeLetter'])->name('letter.close');
@@ -216,6 +219,24 @@ Route::prefix('utility')->group(function(){
         Route::get('/logs-fetch',[App\Http\Controllers\LogController::class,'fetch'])->name('log.fetch');
         /* end log user */
 });
+
+Route::prefix('equipment')->group(function(){
+    /* Document type */
+    Route::get('utility/product-category',[App\Http\Controllers\EqProductCategoryController::class,'index'])->name('eq.product.category.index');
+    Route::get('utility/product-category/create',[App\Http\Controllers\EqProductCategoryController::class,'create'])->name('eq.product.category.create');
+    Route::post('utility/product-category/store',[App\Http\Controllers\EqProductCategoryController::class,'store'])->name('eq.product.category.store');
+    Route::get('utility/product-category/{id}/edit',[App\Http\Controllers\EqProductCategoryController::class,'edit'])->name('eq.product.category.edit');
+    Route::put('utility/product-category/{id}/update',[App\Http\Controllers\EqProductCategoryController::class,'update'])->name('eq.product.category.update');
+    Route::delete('utility/product-category/{id}/destroy',[App\Http\Controllers\EqProductCategoryController::class,'destroy'])->name('eq.product.category.destroy');
+    Route::delete('utility/product-category/{id}/destroy',[App\Http\Controllers\EqProductCategoryController::class,'destroy'])->name('eq.product.category.destroy');
+    Route::get('utility/product-category/fetch',[App\Http\Controllers\EqProductCategoryController::class,'fetch'])->name('eq.product.category.fetch');
+    Route::get('utility/product-category/export',[App\Http\Controllers\EqProductCategoryController::class,'export'])->name('eq.product.category.export');
+
+    ROute::get('products/index',[App\Http\Controllers\EqProductController::class,'index'])->name('eq.product.index');
+    ROute::get('products/create',[App\Http\Controllers\EqProductController::class,'create'])->name('eq.product.create');
+    ROute::post('products/store',[App\Http\Controllers\EqProductController::class,'store'])->name('eq.product.store');
+    ROute::get('products/fetch',[App\Http\Controllers\EqProductController::class,'fetch'])->name('eq.product.fetch');
+});
 /* tools */
     /* letter source */
         Route::get('letter-source',[App\Http\Controllers\LetterSourceController::class,'index'])->name('letter-source.index');
@@ -225,6 +246,7 @@ Route::prefix('utility')->group(function(){
         Route::put('letter-source/{id}',[App\Http\Controllers\LetterSourceController::class,'update'])->name('letter-source.update');
         Route::delete('letter-source/{id}',[App\Http\Controllers\LetterSourceController::class,'destroy'])->name('letter-source.destroy');
         Route::get('letter-source-fetch',[App\Http\Controllers\LetterSourceController::class,'fetch'])->name('letter-source.fetch');
+        Route::get('letter-source-detail-correspondence-type/{id}',[App\Http\Controllers\LetterSourceController::class,'getDetailCorresTypeByID'])->name('letter-source.getdetailcorres');
     /* end letter source */
 
     /* correnpondence-type */
@@ -237,7 +259,7 @@ Route::prefix('utility')->group(function(){
         Route::get('correspondence-type-fetch',[App\Http\Controllers\CorrespondenceTypeController::class,'fetch'])->name('corres-type.fetch');
     /* end correnpondence-type */
 
-   
+
 
     /* type of action */
     Route::get('type-of-action',[App\Http\Controllers\TypeOfActionController::class,'index'])->name('action-type.index');
@@ -246,7 +268,7 @@ Route::prefix('utility')->group(function(){
     Route::get('type-of-action/{id}/edit',[App\Http\Controllers\TypeOfActionController::class,'edit'])->name('action-type.edit');
     Route::put('type-of-action/{id}/update',[App\Http\Controllers\TypeOfActionController::class,'update'])->name('action-type.update');
     Route::delete('type-of-action/{id}',[App\Http\Controllers\TypeOfActionController::class,'destroy'])->name('action-type.destroy');
-    
+
     Route::get('type-of-action-fetch',[App\Http\Controllers\TypeOfActionController::class,'fetch'])->name('action-type.fetch');
 
     /* end type of action */

@@ -13,8 +13,8 @@
             <ul class="navbar-nav">
                 <li class="nav-item">
                     <a href="/" class="nav-link">Home</a>
-                </li>           
-                
+                </li>
+
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false" class="nav-link dropdown-toggle">Correspondence</a>
@@ -42,7 +42,7 @@
                         <li><a href="{{route('inspector.index')}}" class="dropdown-item"><span class="fas fa-users"></span> Inspectors</a></li>
                         <li><a href="#" class="dropdown-item"><span class="fas fa-balance-scale"></span> RFI</a></li>
                         <li><a href="#" class="dropdown-item"><span class="fas fa-briefcase"></span> Schadule </a></li>
-                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Shop Drawings</a></li>                       
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Shop Drawings</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -54,20 +54,38 @@
                         <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Shop Drawings</a></li>
                         <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> MoM</a></li>
                         <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Code and Standards</a></li>
-                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> ITP</a></li>                      
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> ITP</a></li>
                     </ul>
                 </li>
-              
-              
+                <li class="nav-item dropdown">
+                    <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
+                        aria-expanded="false" class="nav-link dropdown-toggle">Equipment</a>
+                    <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
+                        <li class="dropdown-submenu dropdown-hover w-100">
+                            <a id="dropdownSubMenu" href="#" role="button" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false"
+                                class="dropdown-item dropdown-toggle"><span class="fa fa-angle-right"></span> Utility EQ</a>
+                            <ul aria-labelledby="dropdownSubMenu2" class="dropdown-menu border-0 shadow">
+                                <li><a href="{{ route('eq.product.category.index') }}" class="dropdown-item"> <span class="fas fa-users-cog"></span> EQ Category</a></li>
+                                <li class="dropdown-divider"></li>
+                            </ul>
+                        </li>
+                        <li><a href="{{route('eq.product.index')}}" class="dropdown-item"><span class="fas fa-file-alt"></span> EQ Product </a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Distribution</a></li>
+                        <li><a href="#" class="dropdown-item"><span class="fas fa-file-alt"></span> Handover</a></li>
+                    </ul>
+                </li>
+
+
                 <li class="nav-item dropdown">
                     <a id="dropdownSubMenu1" href="#" data-toggle="dropdown" aria-haspopup="true"
                         aria-expanded="false" class="nav-link dropdown-toggle">Master</a>
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="{{ route('contact.index') }}" class="dropdown-item"><span class="fa fa-angle-right"></span> Contact </a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Full teams</a></li>                       
+                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Full teams</a></li>
                         @role(['admin','dc'])
-                        <li class="dropdown-divider"></li>                     
+                        <li class="dropdown-divider"></li>
                         <li class="dropdown-submenu dropdown-hover w-100">
                             <a id="dropdownSubMenu" href="#" role="button" data-toggle="dropdown"
                                 aria-haspopup="true" aria-expanded="false"
@@ -79,7 +97,7 @@
                                 <li class="dropdown-divider"></li>
                                 <li><a href="{{ route('position.index') }}" class="dropdown-item"> <span class="fas fa-user-check"></span> Position</a></li>
                                 <li class="dropdown-divider"></li>
-                                <li><a href="{{route('work.index')}}" class="dropdown-item"> <span class="fas fa-handshake"></span> Pay items</a></li>                             
+                                <li><a href="{{route('work.index')}}" class="dropdown-item"> <span class="fas fa-handshake"></span> Bill Items</a></li>
                                 <li class="dropdown-divider"></li>
                                 <li><a href="{{route('package.index')}}" class="dropdown-item"><span class="fas fa-box-open"></span> Packages</a></li>
                                 <li class="dropdown-divider"></li>
@@ -113,8 +131,8 @@
                     <ul aria-labelledby="dropdownSubMenu1" class="dropdown-menu border-0 shadow">
                         <li><a href="#" class="dropdown-item"><span class="fas fa-file-medical-alt"></span> Outstanding letters </a></li>
                         <li class="dropdown-divider"></li>
-                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Full teams</a></li>                       
-                        
+                        <li><a href="{{route('engineer.index')}}" class="dropdown-item"> <span class="fa fa-angle-right"></span> Full teams</a></li>
+
                         <li class="dropdown-divider"></li>
                         <li class="dropdown-submenu dropdown-hover w-100">
                             <a id="dropdownSubMenu2" href="#" role="button" data-toggle="dropdown"
@@ -127,7 +145,7 @@
                                 <li class="dropdown-divider"></li>
                                 <li><a href="{{ route('position.index') }}" class="dropdown-item"> <span class="fas fa-user-check"></span> Position</a></li>
                                 <li class="dropdown-divider"></li>
-                                <li><a href="{{route('work.index')}}" class="dropdown-item"> <span class="fas fa-handshake"></span> Pay items</a></li>                             
+                                <li><a href="{{route('work.index')}}" class="dropdown-item"> <span class="fas fa-handshake"></span> Pay items</a></li>
                                 <li class="dropdown-divider"></li>
                                 <li><a href="{{route('package.index')}}" class="dropdown-item"><span class="fas fa-box-open"></span> Packages</a></li>
                                 <li class="dropdown-divider"></li>

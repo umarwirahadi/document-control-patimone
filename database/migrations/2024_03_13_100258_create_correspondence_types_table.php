@@ -15,9 +15,12 @@ class CreateCorrespondenceTypesTable extends Migration
     {
         Schema::create('correspondence_types', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->string('correspondence_type');
+            $table->string('corres_type');
             $table->text('description')->nullable();
             $table->enum('type',['IN','OUT'])->default('IN');
+            $table->char('letter_source_id',60);
+            $table->string('package_id')->nullable();
+            $table->string('to_attention')->nullable();
             $table->string('status',1)->default('1');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

@@ -2,13 +2,19 @@
 @section('content')
 <div class="content-wrapper">
   <form action="{{route('letter.store')}}" method="POST" id="formSubmitLetter">
-    @csrf    
+    @csrf
     <input type="hidden" name="letter_id" value="{{session('letter_id')}}">
   <div class="content-header">
       <div class="container-fluid">
           <div class="row mb-2">
               <div class="col-sm-6">
-                  <h4 class="m-0 text-dark"> {{ $title ?? '' }}</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="#">{{$title ?? ''}}</a></li>
+                      <li class="breadcrumb-item" aria-current="page">{{$title2 ?? ''}}</li>
+                      <li class="breadcrumb-item active" aria-current="page">{{$title3 ?? ''}}</li>
+                    </ol>
+                  </nav>
               </div>
               <div class="col-sm-6">
                   <div class="float-right">
@@ -23,7 +29,7 @@
           </div>
       </div>
   </div>
-  <div class="content">    
+  <div class="content">
     <div class="container-fluid">
         <div class="card card-default">
             <div class="card-header">
@@ -35,21 +41,21 @@
             </div>
             <div class="card-body">
               <div class="row">
-                <input type="hidden" name="package_id" value="">                                          
+                <input type="hidden" name="package_id" value="">
                 <div class="col-md-1">
-                  <div class="form-group">                    
+                  <div class="form-group">
                     <label class="form-label">Doc. date</label>
                     <input type="text" name="letter_date" class="form-control form-control-sm date-picker" placeholder="--select--" id="letter_date" value="{{Carbon\carbon::parse($data->letter_date)->format('d-M-y')}}">
                   </div>
                 </div>
                 <div class="col-md-1">
-                  <div class="form-group">                    
+                  <div class="form-group">
                     <label class="form-label">Receive date</label>
                     <input type="text" name="received_date" class="form-control form-control-sm date-picker" placeholder="--select--" value="{{Carbon\carbon::parse($data->received_date)->format('d-M-y')}}">
                   </div>
-                </div> 
+                </div>
                 <div class="col-md-1">
-                  <div class="form-group">                    
+                  <div class="form-group">
                     <label class="form-label">Receive by</label>
                     <select name="received_by" id="received_by" class="form-control form-control-sm">
                       {!!getItem('receive-letter-by',$data->received_by)!!}
@@ -57,34 +63,33 @@
                   </div>
                 </div>
                 <div class="col-md-2">
-                  <div class="form-group">                    
+                  <div class="form-group">
                     <label class="form-label">From:</label>
-                    <select name="letter_source_id" id="letter_source_id" class="form-control form-control-sm">
+                    <select name="letter_source_id" id="letter_source_id" class="form-control form-control-sm" data-url="{{route('get.corres.type.bylettersource.id')}}">
+                        <option selected>select</option>
                         @foreach ($lettersource as $item)
-                            <option value="{{$item->id}}">{{$item->source_name}}</option>
+                            <option value="{{$item->id}}">{{$item->source_code}}</option>
                         @endforeach
                     </select>
                   </div>
                 </div>
                 <div class="col-md-2">
-                  <div class="form-group">                    
+                  <div class="form-group">
                     <label class="form-label">Correspondence type:</label>
                     <select name="correspondence_type" id="correspondence_type" class="form-control form-control-sm" data-url="{{route('letter.get.content.template')}}">
-                      @foreach ($correspondencetype as $item)
-                          <option value="{{$item->id}}">{{$item->correspondence_type}}</option>
-                      @endforeach
+                        <option>Select</option>
                     </select>
                   </div>
-                </div>                               
+                </div>
                 <div class="col-md-2">
-                    <div class="form-group">                      
+                    <div class="form-group">
                       <label>To/attention:</label>
-                      <input type="text" name="attention_to" id="attention_to" class="form-control form-control-sm" placeholder="type the name specified" value="{{$data->attention_to ?? ''}}">
+                      <input type="text" name="attention_to" id="attention_to" class="form-control form-control-sm"  value="{{$data->attention_to ?? ''}}">
                     </div>
                   </div>
                 <div class="col-md-3">
-                    <div class="form-group">                      
-                      <label>Letter Ref. no:</label>                      
+                    <div class="form-group">
+                      <label>Letter Ref. no:</label>
                       <input type="text" name="letter_ref_no" class="form-control form-control-sm" value="{{$data->letter_ref_no ?? ''}}" id="letter_ref_no">
                     </div>
                   </div>
@@ -98,9 +103,9 @@
                 </div>
               </div>
               <div class="row">
-                <div class="col-md-4">                                 
-                  <div class="form-group">                    
-                    <label>Initiator: 
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label>Initiator:
                       @php
                           $assigns = array();
                       @endphp
@@ -108,19 +113,19 @@
                       @if ($item->action == '1')
                         @php
                             $assigns[]=['id'=>$item->engineer_id,'text'=>$item->engineer->full_name];
-                        @endphp                              
+                        @endphp
                       @endif
                       @endforeach
                       <input type="hidden" value="{{json_encode($assigns)}}" id="datajsonAssign">
                     </label>
                     <div class="input-group input-group-sm mb-3">
-                      <select class="form-control form-control-sm" name="assign_to[]" id="assign_to" multiple="multiple" data-url="{{route('engineer.select2')}}">                  
-                      </select> 
+                      <select class="form-control form-control-sm" name="assign_to[]" id="assign_to" multiple="multiple" data-url="{{route('engineer.select2')}}">
+                      </select>
                       <div class="input-group-append">
                         <button type="button" class="btn btn-sm btn-primary btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'1'])}}" title="copy email list for action"><i class="fas fa-copy"></i></button>
                       </div>
                       </div>
-                    
+
                   </div>
                 </div>
                  <div class="col-md-4">
@@ -132,11 +137,11 @@
                       @foreach ($data->references as $ref)
                       @php
                           $refs[]=['id'=>$ref->engineer_id,'text'=>$ref->engineer->full_name];
-                      @endphp    
+                      @endphp
                       @endforeach
                       <input type="hidden" value="{{json_encode($refs)}}" id="datajsonReference">
                       <div class="input-group input-group-sm sm-3">
-                        <select class="form-control form-control-sm" name="for_reference[]" id="for_reference" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
+                        <select class="form-control form-control-sm" name="for_reference[]" id="for_reference" multiple="multiple" data-url="{{route('engineer.select2')}}">
                         </select>
                         <div class="input-group-append">
                           <button type="button" class="btn btn-sm btn-info btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'2'])}}" title="copy email list for reference(s)"><i class="fas fa-copy"></i></button>
@@ -153,10 +158,10 @@
                       @foreach ($data->references as $ref)
                       @php
                           $refs[]=['id'=>$ref->engineer_id,'text'=>$ref->engineer->full_name];
-                      @endphp    
-                      @endforeach                     
+                      @endphp
+                      @endforeach
                       <div class="input-group input-group-sm sm-3">
-                        <select class="form-control form-control-sm" name="confirmation[]" id="confirmation" multiple="multiple" data-url="{{route('engineer.select2')}}">                     
+                        <select class="form-control form-control-sm" name="confirmation[]" id="confirmation" multiple="multiple" data-url="{{route('engineer.select2')}}">
                         </select>
                         <div class="input-group-append">
                           <button type="button" class="btn btn-sm btn-info btnCopyAssign" data-url="{{route('letter.copy.email.assign',[session('letter_id'),'2'])}}" title="copy email list for reference(s)"><i class="fas fa-copy"></i></button>
@@ -203,11 +208,11 @@
                       <label>Description:</label>
                       <input type="text" name="description" id="description" class="form-control form-control-sm">
                     </div>
-                  </div>                                           
-                </div> 
+                  </div>
+                </div>
               <div class="row">
                 <div class="col-md-12">
-                  <button type="button" class="btn btn-sm bg-gradient-olive rounded-4 mb-2" id="btnAddReference" data-url="{{route('letter.add.reference')}}"><span class="fas fa-plus-circle"></span> Reference</button>                    
+                  <button type="button" class="btn btn-sm bg-gradient-olive rounded-4 mb-2" id="btnAddReference" data-url="{{route('letter.add.reference')}}"><span class="fas fa-plus-circle"></span> Reference</button>
                   <div>
                     <div class="table-responsive">
                       <table class="table table-sm table-bordered table-hover table-striped">
@@ -220,27 +225,30 @@
                             <th style="width:8%">Action</th>
                           </tr>
                         </thead>
-                        <tbody id="document-reference">                        
-                          @foreach ($data->referencesDoc as $key => $reference)
-                          <tr>
-                            <td>{{$key+1}}</td>
-                            <td><a href="#" class="link">{{$reference->reference_number}}</a></td>
-                            <td>{{$reference->subject}}</td>
-                            <td>{!!$reference->source == 'CTR' ? '<span class="badge badge-danger">CTR</span>':(($reference->source == 'ENG') ? '<span class="badge badge-success">ENG</span>': '<span class="badge badge-info">EMP</span>')!!}</td>
-                            <td>
-                              <button type="button" data-id="{{$reference->id}}" id="view_{{$reference->id}}" data-url="{{route('letter.edit.reference',$reference->id)}}" class="btn btn-xs btn-info btn-view-reference" title="view document"><span class="fas fa-search"></span></button>
-                              <button type="button" data-id="{{$reference->id}}" id="edit_{{$reference->id}}" data-url="{{route('letter.edit.reference',$reference->id)}}" class="btn btn-xs btn-primary btn-edit-reference" title="edit reference"><span class="far fa-edit"></span></button>
-                              <button type="button" data-id="{{$reference->id}}" id="destroy_{{$reference->id}}" data-url="{{route('letter.destroy.reference',$reference->id)}}" class="btn btn-xs btn-danger btn-delete-reference" title="delete reference"><span class="fas fa-times"></span></button>
-                            </td>                          
-                          </tr>
-                              
-                          @endforeach
+                        <tbody id="document-reference">
+                           {{--  @if ($data->referencesDoc)
+                            @foreach ($data->referencesDoc as $key => $reference)
+                            <tr>
+                              <td>{{$key+1}}</td>
+                              <td><a href="#" class="link">{{$reference->reference_number}}</a></td>
+                              <td>{{$reference->subject}}</td>
+                              <td>{!!$reference->source == 'CTR' ? '<span class="badge badge-danger">CTR</span>':(($reference->source == 'ENG') ? '<span class="badge badge-success">ENG</span>': '<span class="badge badge-info">EMP</span>')!!}</td>
+                              <td>
+                                <button type="button" data-id="{{$reference->id}}" id="view_{{$reference->id}}" data-url="{{route('letter.edit.reference',$reference->id)}}" class="btn btn-xs btn-info btn-view-reference" title="view document"><span class="fas fa-search"></span></button>
+                                <button type="button" data-id="{{$reference->id}}" id="edit_{{$reference->id}}" data-url="{{route('letter.edit.reference',$reference->id)}}" class="btn btn-xs btn-primary btn-edit-reference" title="edit reference"><span class="far fa-edit"></span></button>
+                                <button type="button" data-id="{{$reference->id}}" id="destroy_{{$reference->id}}" data-url="{{route('letter.destroy.reference',$reference->id)}}" class="btn btn-xs btn-danger btn-delete-reference" title="delete reference"><span class="fas fa-times"></span></button>
+                              </td>
+                            </tr>
+
+                            @endforeach
+
+                            @endif --}}
                         </tbody>
                       </table>
                     </div>
                   </div>
                 </div>
-              </div>                                                      
+              </div>
                 <div class="row">
                   <div class="col-md-12">
                     <button type="button" class="btn btn-sm bg-gradient-primary rounded-4 mb-2" id="btnAddAttachment" data-url="{{route('letter.add.attachment')}}"><span class="fas fa-link"></span> Attachment</button>
@@ -277,12 +285,12 @@
                                   <button type="button" data-id="{{$attachment->id}}" id="destroy_{{$attachment->id}}" data-url="{{route('letter.destroy.attachment',$attachment->id)}}" class="btn btn-xs btn-danger btn-delete-attachment" title="delete attachment"><span class="fas fa-trash"></span></button>
                                 </td>
                               </tr>
-                          @endforeach                         
+                          @endforeach
                         </tbody>
                       </table>
                     </div>
                   </div>
-                </div>                           
+                </div>
             </div>
             <div class="card-footer">
             </div>
@@ -292,7 +300,7 @@
 </form>
 </div>
 <div class="modal fade" id="datamodal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  
+
 </div>
 
 @endsection
@@ -302,7 +310,7 @@
 var assignTo=document.getElementById('datajsonAssign').value;
 var forReferences=document.getElementById('datajsonReference').value;
 
-  $(document).ready(function(){    
+  $(document).ready(function(){
  /*  ClassicEditor
           .create( document.querySelector( '#contractor_notes' ),{
             toolbar: {
@@ -320,5 +328,5 @@ var forReferences=document.getElementById('datajsonReference').value;
           } );
         */
       })
-  </script>    
+  </script>
 @endsection

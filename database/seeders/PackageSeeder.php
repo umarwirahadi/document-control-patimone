@@ -16,7 +16,7 @@ class PackageSeeder extends Seeder
     public function run()
     {
         $data=[
-            ["id"=>'fbecdd8f-a431-4c6d-b3db-9d61ee0f8ae6',"package_name"=>"Package 1","total_days"=>"1000","start_date"=>"2018-01-01","end_date"=>"2021-12-31","description"=>"","status"=>0,'created_by'=>'f46d2647-0ad1-448e-b800-a88e080c9fb8'],
+            ["id"=>'fbecdd8f-a431-4c6d-b3db-9d61ee0f8ae9',"package_name"=>"Package 1","total_days"=>"1000","start_date"=>"2018-01-01","end_date"=>"2021-12-31","description"=>"","status"=>0,'created_by'=>'f46d2647-0ad1-448e-b800-a88e080c9fb8'],
             ["id"=>'92c1e486-5bad-458f-beca-2138c0ed1ea6',"package_name"=>"Package 2","total_days"=>"1000","start_date"=>"2018-01-01","end_date"=>"2021-12-31","description"=>"","status"=>0,'created_by'=>'f46d2647-0ad1-448e-b800-a88e080c9fb8'],
             ["id"=>'ce2194fd-cf80-41fe-a363-9cb596e48515',"package_name"=>"Package 3","total_days"=>"500","start_date"=>"2019-01-01","end_date"=>"2021-12-31","description"=>"","status"=>0,'created_by'=>'f46d2647-0ad1-448e-b800-a88e080c9fb8'],
             ["id"=>'e197936d-0279-414e-b718-8797b9a29603',"package_name"=>"Package 4","total_days"=>"0","start_date"=>"2019-01-01","end_date"=>"2021-12-31","description"=>"","status"=>0,'created_by'=>'f46d2647-0ad1-448e-b800-a88e080c9fb8'],

@@ -5,7 +5,13 @@
       <div class="container-fluid">
           <div class="row mb-2">
               <div class="col-sm-6">
-                  <h4 class="m-0 text-dark"> {{ $title ?? '' }}</h4>
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a href="#">{{$title ?? ''}}</a></li>
+                      <li class="breadcrumb-item" aria-current="page">{{$title2 ?? ''}}</li>
+                      <li class="breadcrumb-item active" aria-current="page">{{$title3 ?? ''}}</li>
+                    </ol>
+                  </nav>
               </div>
               <div class="col-sm-6">
                   <div class="float-right">
@@ -22,22 +28,22 @@
       <div class="container-fluid">
           <div class="row">
               <div class="col-md-12">
-                  <div class="card card-default">                      
+                  <div class="card card-primary card-outline">
                       <div class="card-body">
                         <div class="table-responsivesss">
                           <table class="table table-sm table-hover" id="data-letter-source" data-url="{{route('letter-source.fetch')}}">
                             <thead>
                               <tr>
                                 <th>No</th>
+                                <th>Code</th>
                                 <th>Name</th>
-                                <th>Unit</th>
                                 <th>Package name</th>
                                 <th>Description</th>
                                 <th>Status</th>
                                 <th>Action</th>
                               </tr>
                             </thead>
-                            <tbody class="table-tbody">                        
+                            <tbody class="table-tbody">
                             </tbody>
                           </table>
                         </div>

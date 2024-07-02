@@ -30,32 +30,41 @@ class LetterController extends Controller
         try {
             $data=auth()->user();
             $data->load('access');
-            return view('letters.index',['title'=>'Incoming','data'=>$data]);
+            return view('letters.index',['title'=>'Correspondence','title2'=>'Incoming','title3'=>'List','data'=>$data]);
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-   
+
     public function create(Request $request){
         try {
             if(!Session::has('letter_id')){
-                $this->validate($request,['type'=> 'required']);              
+                $this->validate($request,['type'=> 'required']);
                 $letter = $this->generateLetter($request->all());
                 activity()->performedOn($letter)->log('create');
                 Session::put('letter_id', $letter['id']);
             }
-            $packages=auth()->user()->load('access');
-            foreach ($packages->access as $val) {
-                $datapackage[]=[$val->package_id];
-            }            
-            $refferences=Letter::find(Session::get('letter_id'));
+
+
+            $userPackages=auth()->user();
+
+
+
+            if(count($userPackages->access) > 0 ){
+                foreach ($userPackages->access as $val) {
+                    $datapackage[]=[$val->package_id];
+                }
+            }
+            $refferences=Letter::with(['source','source.package','correstype'])->find(Session::get('letter_id'));
+            // $refferences->load('assignments.engineer');
             $engineers=Engineer::engineer()->get();
-            $refferences->load('assignments.engineer');
-            return view('letters.create',['title'=> 'Letters','engineers'=>$engineers,'lettersource'=>LetterSource::active()->whereIn('package_id',$datapackage)->get(),'correspondencetype'=>CorrespondenceType::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
+            // return $refferences;
+
+            return view('letters.create',['title'=>'Correspondence','title2'=>'Incoming','title3'=>'Create','engineers'=>$engineers,'lettersource'=>LetterSource::whereIn('package_id',$datapackage)->get(),'data'=>$refferences,'letter_id'=>Session::get('letter_id')]);
         } catch (\Throwable $th) {
             throw $th;
         }
-    }  
+    }
 
     private function generateLetter($data=null){
         try {
@@ -63,7 +72,7 @@ class LetterController extends Controller
             $letter=Letter::create(['type'=>$data['type'],
                 'letter_source_id'=>'-',
                 'package_id'=>'-',
-                'correspondence_type'=>'',
+                'correspondence_type_id'=>'-',
                 'document_no'=>'000000',
                 'letter_date'=>date('Y-m-d'),
                 'attention_to'=>'',
@@ -86,7 +95,9 @@ class LetterController extends Controller
                 $source=LetterSource::find($request->from);
                 $corespondenceTemplate=CorrespondenceType::find($request->id);
                 $letter_date= Carbon::createFromFormat('d-M-y', $request->letter_date);
-                if($source->unit == 1) {
+                $letter_no=str_replace('YY',$letter_date->format('y'),$corespondenceTemplate->content_template);
+
+                /* if($source->unit == 1) {
                     if($corespondenceTemplate){
                         $letter_no=str_replace('YY',$letter_date->format('y'),$corespondenceTemplate->content_template);
                         return response()->json(['to_attention'=>$corespondenceTemplate->to_attention,'ref_no'=>$letter_no]);
@@ -94,7 +105,7 @@ class LetterController extends Controller
                         return response()->json();
                     }
                 } else {
-                    /* make condition by hard code */
+                    make condition by hard code
                     $source_name=$source->source_name;
                     $corres_type=$corespondenceTemplate->correspondence_type;
                     switch ($source_name) {
@@ -106,15 +117,15 @@ class LetterController extends Controller
                                 $letter_no='';
                             }
                             break;
-                        
+
                         default:
                             # code...
                             $letter_no= '';
                             break;
-                    }
+                    } */
                     return response()->json(['to_attention'=>$corespondenceTemplate->to_attention,'ref_no'=>$letter_no]);
-                }
-                
+                // }
+
             }
         } catch (\Throwable $th) {
             throw $th;
@@ -132,7 +143,7 @@ class LetterController extends Controller
 
     public function autoCompleteSearchRefNumber(Request $request){
         try {
-            if(!$request->ajax() && $request->method()!='POST') return false;            
+            if(!$request->ajax() && $request->method()!='POST') return false;
             $request->validate(['term'=>'required|string']);
             $keyword='%'.$request->term.'%';
             $results=Letter::select('id','letter_ref_no','letter_date','subject')->where('letter_ref_no','like',$keyword)->orWhere('subject','like',$keyword)->limit(50)->get();
@@ -150,11 +161,11 @@ class LetterController extends Controller
 
     public function storeReference(Request $request){
         try {
-            if(!$request->ajax() && $request->method()!='POST') return false;            
+            if(!$request->ajax() && $request->method()!='POST') return false;
             $request->validate(['letter_id'=>'required|string','letter_id_reference'=>'required','autocomplete_select_reference'=>'required','source'=>'required']);
             /*
-            *** 
-            get original data from letter table 
+            ***
+            get original data from letter table
             ***
             */
             $letter=Letter::findOrFail($request->letter_id_reference);
@@ -197,7 +208,7 @@ class LetterController extends Controller
             }
     }
 
-    public function destroyReference($letter_id){        
+    public function destroyReference($letter_id){
         try {
             if(!request()->ajax() && request()->method() <> 'DELETE') return redirect()->route('letter.index');
             $documentRef=DocumentReference::findOrFail($letter_id);
@@ -215,7 +226,7 @@ class LetterController extends Controller
     }
 
     private function getTemplateReference($data){
-        /* 
+        /*
         generate HTML template for JS, easy to you to manage route from PHP
         */
         $HTML='';
@@ -233,7 +244,7 @@ class LetterController extends Controller
                 <button type="button" data-id="' . $reference->id.'" id="view_'.$reference->id.'" data-url="'.$view_data.'" class="btn btn-xs btn-info btn-view-reference" title="view document"><span class="fas fa-search"></span></button>
                 <button type="button" data-id="' . $reference->id.'" id="edit_'.$reference->id.'" data-url="'.$edit_data.'" class="btn btn-xs btn-primary btn-edit-reference" title="edit reference"><span class="far fa-edit"></span></button>
                 <button type="button" data-id="' . $reference->id.'" id="destroy_'.$reference->id.'" data-url="'.$destroy_data.'" class="btn btn-xs btn-danger btn-delete-reference" title="delete reference"><span class="fas fa-times"></span></button>
-              </td>                          
+              </td>
             </tr>';
         }
         return $HTML;
@@ -251,8 +262,8 @@ class LetterController extends Controller
 
     public function storeAttachment(Request $request){
         try {
-            if(!$request->ajax() && $request->method()!='POST') return false;            
-            $request->validate(['letter_id'=>'required|string','file_name'=>'required']);            
+            if(!$request->ajax() && $request->method()!='POST') return false;
+            $request->validate(['letter_id'=>'required|string','file_name'=>'required']);
             $attachment=AttachmentFile::create(['letter_id'=>$request->letter_id,'document_type_id'=>$request->document_type_id,'file_name'=>$request->file_name,'file_link1'=>$request->file_link1,'file_link2'=>$request->file_link2,'file_link3'=>$request->file_link3,'description'=>$request->description,'type'=>$request->type]);
             $attachments=AttachmentFile::where('letter_id',$attachment->letter_id)->get();
             if($attachment) {
@@ -313,7 +324,7 @@ class LetterController extends Controller
     }
 
     private function getTemplateAttachment($attachments){
-        /* 
+        /*
         generate HTML template for JS, easy to you to manage route from PHP
         */
         $HTML='';
@@ -331,13 +342,13 @@ class LetterController extends Controller
               <td>'.$attachment->file_name.'</td>
               <td>'.$attachment->documentType->document_type_name.'</td>
               <td>'.$links.'</td>
-              <td>                
+              <td>
                 <button type="button" data-id="' . $attachment->id.'" id="edit_'.$attachment->id.'" data-url="'.$edit_data.'" class="btn btn-xs btn-primary btn-edit-attachment" title="edit attachment"><span class="far fa-edit"></span></button>
                 <button type="button" data-id="' . $attachment->id.'" id="destroy_'.$attachment->id.'" data-url="'.$destroy_data.'" class="btn btn-xs btn-danger btn-delete-attachment" title="delete attachment"><span class="fas fa-trash"></span></button>
-              </td>                          
+              </td>
             </tr>';
         }
-        return $HTML;      
+        return $HTML;
     }
 
     public function store(Request $request){
@@ -347,11 +358,13 @@ class LetterController extends Controller
                 'letter_ref_no'=>'required','letter_date'=>'required','received_date'=>'required',
                 'attention_to'=>'required','subject'=>'required','response_required'],[],['letter_source_id'=>'from/source']);
                 if($validated){
+                    $package_id=CorrespondenceType::find($request->correspondence_type);
                     $letter=Letter::findOrFail($validated['letter_id']);
                     try {
                         $letter->update([
                             'letter_source_id'=>$request->letter_source_id,
-                            'correspondence_type'=>$request->correspondence_type,
+                            'package_id'=>$package_id->package_id,
+                            'correspondence_type_id'=>$request->correspondence_type,
                             'document_no'=>'1',
                             'letter_ref_no'=>$request->letter_ref_no,
                             'letter_date'=>Carbon::createFromFormat('d-M-y', $request->letter_date)->format('Y-m-d'),
@@ -375,18 +388,18 @@ class LetterController extends Controller
                             'rev'=>$request->rev,
                             'status'=>'1',
                             'description'=>$request->description
-                        ]);                       
+                        ]);
 
                         /* put data id into variable */
                         $letter_id=$letter->id;
 
                         /* create assignment for letter as action and reference */
-                        /* take for action */ 
+                        /* take for action */
                         if(isset($request->assign_to)){
                             foreach ($request->assign_to as $key => $value) {
                                 AssignmentLetter::updateOrCreate(['engineer_id'=>$value,'letter_id'=>$letter_id],['id'=>Uuid::uuid4()->toString(),'action'=>'1','priority'=>$key+1,'status'=>'1','created_by'=>auth()->user()->id,'name'=>'assign']);
                             }
-                        }                       
+                        }
 
                         /* take for reference */
                         if(isset($request->for_reference)){
@@ -394,17 +407,17 @@ class LetterController extends Controller
                                 AssignmentLetter::updateOrCreate(['engineer_id'=>$value,'letter_id'=>$letter_id],['id'=>Uuid::uuid4()->toString(),'action'=>'2','priority'=>$key + 1,'status'=>'1','created_by'=>auth()->user()->id,'name'=>'reference']);
                             }
                         }
-                        /* 
-                        release session id letter if success 
+                        /*
+                        release session id letter if success
 
                         to be confirmd, if letter status equal with 1 than release
-                        
+
                         */
                         // Session::forget('letter_id');
                         return response()->json(['success'=>true,'message'=>'Record was Created/Updated','data'=>$letter],200);
                     } catch ( \Illuminate\Database\QueryException $e) {
                         return response()->json(['success'=>false,'message'=>'Ups...! something goes wrong, create data failed..!','data'=>$e->getMessage()],200);
-                    }                    
+                    }
                 }
             return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
         } catch (\Throwable $th) {
@@ -412,7 +425,7 @@ class LetterController extends Controller
         }
     }
     public function edit($id){
-        try {           
+        try {
             $packages=auth()->user()->load('access');
             foreach ($packages->access as $val) {
                 $datapackage[]=[$val->package_id];
@@ -433,7 +446,18 @@ class LetterController extends Controller
     }
 
     public function destroy($id){
-
+        try {
+            if(!request()->ajax() && request()->method() <> 'DELETE') return redirect()->route('letter.index');
+                    $letter=Letter::findOrFail($id);
+                    $result=$letter->delete();
+                    if($result){
+                        Session::forget('letter_id');
+                        return response()->json(['success'=>true,'message'=>'Data deleted..!','data'=>null],200);
+                    }
+                    return response()->json(['success'=>false,'message'=>'Failed to delete data..!, please check first','data'=>null],200);
+            } catch (\Throwable $th) {
+                throw $th;
+            }
     }
 
     public function copyAssignTo($letter_id,$type){
@@ -450,12 +474,12 @@ class LetterController extends Controller
         }
         $newString=rtrim($string,',');
         return response()->json($newString);
-    }   
+    }
 
     public function generatePDF($letter_id){
         try {
             $letter=Letter::find($letter_id);
-            $engineers=Engineer::withPositionAssignment()->orderBy('engineers.created_at')->get();           
+            $engineers=Engineer::withPositionAssignment()->orderBy('engineers.created_at')->get();
             $pdf=PDF::loadView('letters.pdf.letterin',compact('engineers','letter'));
             return $pdf->download();
         } catch (\Throwable $th) {
@@ -470,7 +494,7 @@ class LetterController extends Controller
             return response()->json(['success'=>true,'message'=>'Document closed..!','data'=>null],200);
         } else {
             return response()->json(['success'=>false,'message'=>'Document still open..!','data'=>null],200);
-        }         
+        }
     }
 
     public function fetchLetter()
@@ -478,10 +502,10 @@ class LetterController extends Controller
         try {
             if(!request()->ajax()) return route('letter.index');
 
-            $letters=DB::table('letters')->select('letters.id','letters.document_no','letters.letter_date','letter_ref_no','letters.received_date','letters.subject','letters.rev','letters.status','letter_sources.source_name')
+            $letters=DB::table('letters')->select('letters.id','letters.document_no','letters.letter_date','letter_ref_no','letters.received_date','letters.subject','letters.rev','letters.status','letter_sources.source_code')
                      ->leftJoin('letter_sources','letter_sources.id','=','letters.letter_source_id')->get();
             return Datatables::of($letters)
-            ->addIndexColumn()           
+            ->addIndexColumn()
             ->editColumn('status',function($data){
                 if($data->status == 1 ){
                     $status='<span class="badge badge-primary">open</span>';
@@ -496,13 +520,17 @@ class LetterController extends Controller
             })->editColumn('letter_date',function($row){
                 return Carbon::createFromFormat('Y-m-d', $row->letter_date)->format('d-M-Y');
             })
+            ->editColumn('subject',function($row){
+                $str=substr($row->subject,0,100);
+                return $str;
+            })
             ->addColumn('action',function($row){
                 $edit=route('letter.edit',$row->id??'');
                 $destroy=route('letter.destroy',$row->id);
-                $btn= '<a href="'.$edit.'" class="btn btn-info btn-sm rounded-0" ><i class="fas fa-pencil-alt"></i></a>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
+                $btn= '<a href="'.$edit.'" class="btn btn-info btn-sm rounded-2 btn-table" ><i class="fas fa-pencil-alt"></i></a>
+                       <button type="button" class="btn btn-danger btn-sm rounded-2 btn-table delete-data" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
-            })->rawColumns(['action','status'])->make(true);          
+            })->rawColumns(['action','status','subject'])->make(true);
 
         } catch (\Throwable $th) {
             throw $th;

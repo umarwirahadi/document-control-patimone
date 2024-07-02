@@ -15,7 +15,7 @@ class PackageController extends Controller
     public function index()
     {
         try {
-            return view('package.index',['title'=>'Package','data'=>Package::all()]);
+            return view('package.index',['title'=>'Master','title2'=>'Data','title3'=>'Packages','data'=>Package::all()]);
         } catch (\Throwable $th) {
             throw $th;
         }
@@ -37,7 +37,7 @@ class PackageController extends Controller
             if($validated){
                 $package=Package::create($request->all());
                 return response()->json(['success'=>true,'message'=>'Data created..!','data'=>$package],200);
-            }  
+            }
             return response()->json(['success'=>false,'message'=>'Create data failed..!','data'=>null],200);
             } catch (\Throwable $th) {
                 throw $th;
@@ -63,6 +63,7 @@ class PackageController extends Controller
                     'status'=>'required']);
                     $package=Package::findOrFail($id);
                     $package->package_name=$request->package_name;
+                    $package->package_code=$request->package_code;
                     $package->total_days=$request->total_days;
                     $package->start_date=$request->start_date;
                     $package->end_date=$request->end_date;
@@ -96,8 +97,8 @@ class PackageController extends Controller
             return Datatables::of($pkg)->addIndexColumn()->addColumn('action',function($row){
                 $edit=route('package.edit',$row->id??'');
                 $destroy=route('package.destroy',$row->id);
-                $btn= '<button type="button" data-url="'.$edit.'" class="btn btn-info btn-sm rounded-0 btn-custom edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i> Edit</button>
-                       <button type="button" class="btn btn-danger btn-sm rounded-0 btn-custom delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i> Delete</button>';
+                $btn= '<button type="button" data-url="'.$edit.'" data-toggle="tooltip" title="Edit package" class="btn btn-info btn-sm rounded-2 btn-table edit-form" id="edit'.$row->id.'" data-id="'.$row->id.'"><i class="fas fa-pencil-alt"></i></button>
+                       <button type="button" data-toggle="tooltip" title="Delete package" class="btn btn-danger btn-sm rounded-2 btn-table delete" data-url="'.$destroy.'" id="destroy'.$row->id.'" data-id="'.$row->id.'"><i class="far fa-trash-alt"></i></button>';
                 return $btn;
             })->editColumn('status',function($data){
                 if($data->status==1){
@@ -107,12 +108,12 @@ class PackageController extends Controller
                 }
                 return $status;
             })
-            ->rawColumns(['action','status'])->make(true);
+            ->rawColumns(['action','status','description'])->make(true);
 
         } catch (\Throwable $th) {
             throw $th;
         }
     }
-    
-    
+
+
 }

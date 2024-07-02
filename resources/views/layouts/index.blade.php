@@ -7,7 +7,7 @@
 
 <body class="hold-transition layout-top-nav">
     <script src="{{ asset('dist/js/jquery.min.js') }}"></script>
-    
+
     <div class="wrapper">
         @include('layouts.menu')
         <div class="mt-5 pt-2">
